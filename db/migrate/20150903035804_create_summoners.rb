@@ -6,6 +6,7 @@ class CreateSummoners < ActiveRecord::Migration
     	t.integer :summonerId
     	t.integer :summonerLevel
     	t.string :profileIconId
+      t.integer :elo
 
       t.timestamps null: false
     end

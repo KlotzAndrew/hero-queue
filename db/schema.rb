@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903035940) do
+ActiveRecord::Schema.define(version: 20150903200448) do
+
+  create_table "summoner_teams", force: :cascade do |t|
+    t.integer  "team_id"
+    t.integer  "summoner_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "summoner_teams", ["summoner_id"], name: "index_summoner_teams_on_summoner_id"
+  add_index "summoner_teams", ["team_id"], name: "index_summoner_teams_on_team_id"
 
   create_table "summoners", force: :cascade do |t|
     t.string   "summonerName"
@@ -19,6 +29,13 @@ ActiveRecord::Schema.define(version: 20150903035940) do
     t.integer  "summonerId"
     t.integer  "summonerLevel"
     t.string   "profileIconId"
+    t.integer  "elo"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.integer  "tournament_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
