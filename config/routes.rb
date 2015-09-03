@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :tickets
+  resources :summoners
   root 'static_pages#home'
 
   get 'static_pages/about'
