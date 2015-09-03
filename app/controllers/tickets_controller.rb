@@ -79,6 +79,6 @@ class TicketsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ticket_params
-      params[:ticket]
+      params.require(:ticket).permit(:summonerName, :contact_email, :contact_first_name, :contact_last_name, :tournament_id)
     end
 end

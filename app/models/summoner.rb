@@ -1,6 +1,7 @@
 class Summoner < ActiveRecord::Base
 	def find_or_create
 		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
+		Rails.logger.info "summoner_ref: #{summoner_ref}"
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner
@@ -14,6 +15,7 @@ class Summoner < ActiveRecord::Base
 		begin
 			summoner_data = open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}).read
 			summoner_hash = JSON.parse(summoner_data)
+			Rails.logger.info "summoner_hash: #{summoner_hash}"
 			data = summoner_hash["#{summoner_ref}"]
 			Rails.logger.info "data: #{data}"
 			summoner = Summoner.create(

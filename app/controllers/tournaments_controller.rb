@@ -10,6 +10,8 @@ class TournamentsController < ApplicationController
   # GET /tournaments/1
   # GET /tournaments/1.json
   def show
+    @ticket = Ticket.new(tournament_id: @tournament.id)
+    @summoner = Summoner.new
   end
 
   # GET /tournaments/new
