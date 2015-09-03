@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   resources :summoners
   root 'static_pages#home'
 
-  get 'static_pages/about'
-  get 'static_pages/faq'
-  get 'static_pages/rules'
+  get 'faq' => 'static_pages#faq'
+  get 'about' => 'static_pages/about'
+  get 'contact' => 'static_pages/contact'
 
   resources :tournaments, only: [:index, :show]
 

@@ -24,12 +24,16 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.json
   def create
+    summoner = Summoner.new(summonerName: params[:ticket][:summonerName])
+    @summoner = summoner.find_or_create
     @ticket = Ticket.new(ticket_params)
+    @ticket.update(summoner_id: @summoner.id)
 
     respond_to do |format|
       if @ticket.save
         format.html { redirect_to @ticket, notice: 'Ticket was successfully created.' }
         format.json { render :show, status: :created, location: @ticket }
+        format.js { @ticket }
       else
         format.html { render :new }
         format.json { render json: @ticket.errors, status: :unprocessable_entity }
@@ -40,10 +44,16 @@ class TicketsController < ApplicationController
   # PATCH/PUT /tickets/1
   # PATCH/PUT /tickets/1.json
   def update
+    summoner = Summoner.new(summonerName: params[:ticket][:summonerName])
+    @summoner = summoner.find_or_create
+    @ticket = Ticket.new(ticket_params)
+    @ticket.update(summoner_id: @summoner.id)
+
     respond_to do |format|
       if @ticket.update(ticket_params)
         format.html { redirect_to @ticket, notice: 'Ticket was successfully updated.' }
         format.json { render :show, status: :ok, location: @ticket }
+        format.js { @ticket }
       else
         format.html { render :edit }
         format.json { render json: @ticket.errors, status: :unprocessable_entity }

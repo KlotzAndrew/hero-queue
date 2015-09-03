@@ -1,0 +1,29 @@
+<%= Time.now.to_i  %>
+
+<% if @ticket.id %>
+	<h3><%= @ticket.tournament_id%></h3>
+	<h3><%= @ticket.summoner.summonerName %></h3>
+
+	<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
+		<%= hidden_field_tag :cmd, "_s-xclick" %>
+		<%= hidden_field_tag :encrypted, @ticket.paypal_encrypted(root_url, root_url) %>
+		<%= submit_tag "Form submit, encrypted" %>
+	<% end %>
+
+<% else %>
+	<%= form_for(@ticket, remote: true) do |f|  %>
+		<%= f.hidden_field :tournament_id, :value => @tournament.id %>
+		<%= f.label "summoner name" %>
+		<%= f.text_field :summonerName %>
+
+		<%= f.label "Email" %>
+		<%= f.text_field :contact_email %>
+
+		<%= f.label "First" %>
+		<%= f.text_field :contact_first_name %>
+
+		<%= f.label "Last" %>
+		<%= f.text_field :contact_last_name %>
+		<%= f.submit "Add Summoner & Contact Info"  %>
+	<% end %>
+<% end %>

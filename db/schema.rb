@@ -11,7 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903031558) do
+ActiveRecord::Schema.define(version: 20150903035940) do
+
+  create_table "summoners", force: :cascade do |t|
+    t.string   "summonerName"
+    t.string   "summoner_ref"
+    t.integer  "summonerId"
+    t.integer  "summonerLevel"
+    t.string   "profileIconId"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.integer  "summoner_id"
+    t.integer  "tournament_id"
+    t.string   "contact_email"
+    t.string   "contact_first_name"
+    t.string   "contact_last_name"
+    t.text     "notification_params"
+    t.string   "transaction_id"
+    t.datetime "purchased_at"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
