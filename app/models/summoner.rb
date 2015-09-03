@@ -4,7 +4,6 @@ class Summoner < ActiveRecord::Base
 
 	def find_or_create
 		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
-		Rails.logger.info "summoner_ref: #{summoner_ref}"
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner

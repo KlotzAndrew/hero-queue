@@ -3,7 +3,7 @@ class Ticket < ActiveRecord::Base
 	belongs_to :summoner
 	belongs_to :duo, :class_name => "Summoner", :foreign_key => "duo_id"
 
-	attr_accessor :summonerName
+	attr_accessor :summonerName, :duoName
 
 	def paypal_encrypted(return_url, notify_url)
 	  values = {

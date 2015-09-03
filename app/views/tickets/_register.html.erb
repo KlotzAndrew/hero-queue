@@ -5,6 +5,9 @@
 	<%= f.label "summoner name" %>
 	<%= f.text_field :summonerName %>
 
+	<%= f.label "duo name" %>
+	<%= f.text_field :duoName %>
+
 	<%= f.label "Email" %>
 	<%= f.text_field :contact_email %>
 
@@ -18,7 +21,8 @@
 
 <% if @ticket.id %>
 	<h3><%= @ticket.tournament_id %></h3>
-	<h3><%= @ticket %></h3>
+	<h3><%= @ticket.summoner.summonerName %></h3>
+	<h3><%= @ticket.duo.summonerName %></h3>
 
 	<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
 		<%= hidden_field_tag :cmd, "_s-xclick" %>
