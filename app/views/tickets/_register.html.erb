@@ -1,33 +1,41 @@
-<%= Time.now.to_i  %>
+<div class="col-md-4 col-md-offset-4 text-center">
+	<div class="well">
+		<%= form_for(@ticket, remote: true, html: {class: ""}) do |f|  %>
+			<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
+			<h4>Summoner Name (required)</h4>
+			<div class="form-group">
+				<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
+			</div>
+			<div class="form-group">
+				<%= f.text_field :duoName, :placeholder => "Duo Name" %>
+			</div>
 
-<%= form_for(@ticket, remote: true) do |f|  %>
-	<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
-	<%= f.label "summoner name" %>
-	<%= f.text_field :summonerName %>
+			<h4>Contact Info (optional)</h4>
+			<div class="form-group">
+				<%= f.text_field :contact_email, :placeholder => "Email" %>
+			</div>
 
-	<%= f.label "duo name" %>
-	<%= f.text_field :duoName %>
+			<div class="form-group">
+				<%= f.text_field :contact_first_name, :placeholder => "First Name" %>
+			</div>
 
-	<%= f.label "Email" %>
-	<%= f.text_field :contact_email %>
+			<div class="form-group">
+				<%= f.text_field :contact_last_name, :placeholder => "Last Name" %>
+			</div>
 
-	<%= f.label "First" %>
-	<%= f.text_field :contact_first_name %>
+			<%= f.submit "Add Summoner & Contact Info"  %>
+		<% end %>
 
-	<%= f.label "Last" %>
-	<%= f.text_field :contact_last_name %>
-	<%= f.submit "Add Summoner & Contact Info"  %>
-<% end %>
+		<% if @ticket.id %>
+			<p>Tournament: <%= @ticket.tournament.name %></p>
+			<p>Summoner: <%= @ticket.summoner.summonerName %></p>
+			<p>Duo: <%= if !@ticket.duo.nil? then @ticket.duo.summonerName end %></p>
 
-<% if @ticket.id %>
-	<h3><%= @ticket.tournament_id %></h3>
-	<h3><%= @ticket.summoner.summonerName %></h3>
-	<h3><%= @ticket.duo.summonerName %></h3>
-
-	<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
-		<%= hidden_field_tag :cmd, "_s-xclick" %>
-		<%= hidden_field_tag :encrypted, @ticket.paypal_encrypted(root_url, root_url) %>
-		<%= submit_tag "Form submit, encrypted" %>
-	<% end %>
-
-<% end %>
+			<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
+				<%= hidden_field_tag :cmd, "_s-xclick" %>
+				<%= hidden_field_tag :encrypted, @ticket.paypal_encrypted(root_url, root_url) %>
+				<%= submit_tag "Buy Ticket" %>
+			<% end %>
+		<% end %>
+	</div>
+</div>

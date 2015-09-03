@@ -1,5 +1,6 @@
 <h1>Solo Queue Tournaments</h1>
 
-<p> <%= @tournament.name %></p>
+<p><%= @tournament.name %></p>
+<p><%= @tournament.location %></p>
 <p>Registered: <%= @tournament.tickets.count %>/<%= @tournament.total_players %></p>
-<%= link_to "Join!", tournament_path(@tournament) %>
+<%= link_to "Join!", tournament_path(@tournament), :class => "btn btn-default" %>
