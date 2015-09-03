@@ -1,4 +1,7 @@
 class Summoner < ActiveRecord::Base
+	has_many :tickets
+	has_many :duo_partners, :class_name => "Ticket", :foreign_key => "duo_id"
+
 	def find_or_create
 		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		Rails.logger.info "summoner_ref: #{summoner_ref}"

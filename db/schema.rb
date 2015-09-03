@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20150903035940) do
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "summoner_id"
+    t.integer  "duo_id"
     t.integer  "tournament_id"
     t.string   "contact_email"
     t.string   "contact_first_name"

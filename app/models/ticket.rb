@@ -1,6 +1,7 @@
 class Ticket < ActiveRecord::Base
 	belongs_to :tournament
 	belongs_to :summoner
+	belongs_to :duo, :class_name => "Summoner", :foreign_key => "duo_id"
 
 	attr_accessor :summonerName
 

@@ -2,6 +2,7 @@ class CreateTickets < ActiveRecord::Migration
   def change
     create_table :tickets do |t|
     	t.integer :summoner_id
+      t.integer :duo_id
     	t.integer :tournament_id
     	t.string :contact_email
     	t.string :contact_first_name
