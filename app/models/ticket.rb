@@ -24,9 +24,15 @@ class Ticket < ActiveRecord::Base
 	  encrypt_for_paypal(values)
 	end
 
-	PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")
-	APP_CERT_PEM = File.read("#{Rails.root}/certs/app_cert.pem")
-	APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
+	if Rails.env.production?
+		PAYPAL_CERT_PEM = Rails.application.secrets.paypal_cert
+		APP_CERT_PEM = Rails.application.secrets.app_cert
+		APP_KEY_PEM = Rails.application.secrets.app_key
+	else
+		PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")
+		APP_CERT_PEM = File.read("#{Rails.root}/certs/app_cert.pem")
+		APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
+	end
 
 	def encrypt_for_paypal(values)
 		signed = OpenSSL::PKCS7::sign(OpenSSL::X509::Certificate.new(APP_CERT_PEM), OpenSSL::PKey::RSA.new(APP_KEY_PEM, ''), values.map { |k, v| "#{k}=#{v}" }.join("\n"), [], OpenSSL::PKCS7::BINARY)
