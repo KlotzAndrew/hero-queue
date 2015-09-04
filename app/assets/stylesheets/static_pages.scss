@@ -6,9 +6,12 @@
 #home {
 	background: url("teambuilder-wallpaper.jpg") no-repeat center center fixed;
 	min-height: 550px;
-	.leaderbox {
+	.semi_transparent {
 	  background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
 	  color: black;
+	  margin-top: 50px;
+	}
+	.well {
 	  margin-top: 50px;
 	  h1 {
 	  	text-align: center;
