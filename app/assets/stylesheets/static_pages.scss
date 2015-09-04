@@ -1,3 +1,40 @@
 // Place all the styles related to the static_pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#home {
+	background: url("teambuilder-wallpaper.jpg") no-repeat center center fixed;
+	min-height: 550px;
+	.leaderbox {
+	  background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
+	  color: black;
+	  margin-top: 50px;
+	  h1 {
+	  	text-align: center;
+	  }
+	  h2 {
+	  	text-align: center;	
+	  }
+	  h3 {
+	  	text-align: center;	
+	  }
+	  h4 {
+	  	text-align: center;	
+	  }
+	  h5 {
+	  	text-align: center;	
+	  }
+	  .row {
+	  	margin-top:25px;
+	  }
+	  .btn-success {
+	  	color: white;
+	  	width: 250px;
+
+	  }
+	  .tourney_register {
+	  	text-align: center;	
+	  }
+	}
+}
