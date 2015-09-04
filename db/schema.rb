@@ -59,11 +59,13 @@ ActiveRecord::Schema.define(version: 20150903200448) do
     t.string   "game"
     t.integer  "total_players"
     t.integer  "total_teams"
-    t.string   "start_date"
-    t.string   "location"
+    t.datetime "start_date"
+    t.string   "location_name"
+    t.string   "location_url"
+    t.string   "location_address"
     t.string   "facebook_url"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
 end

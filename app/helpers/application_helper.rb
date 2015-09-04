@@ -7,4 +7,8 @@ module ApplicationHelper
 			page_title + " | " + base_title
 	    end
 	end	
+
+	def human_time(time)
+		time.strftime("%B %-d, %l:00%P") + " - " + (time + 8.hours).strftime("%l:00%P")
+	end
 end

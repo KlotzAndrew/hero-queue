@@ -4,17 +4,20 @@
 		<div class="col-md-8 col-md-offset-2">
 			<div class="well leaderbox">
 				<h1>Live Solo/Duo Queue Tournaments</h1>
-				<h4>Teambalancing + Computers Provided</h4>
+				<h5>Teambalancing + Computers Provided</h5>
+				<h4>First timers welcome! Bronze to Challenger</h4>
 
 			</div>
 			<div class="well leaderbox">
-				<h2>Upcoming Tournament</h2>
-				<h4>First timers welcome!</h4>
+				<h2><u>Coming Up</u></h2>
 				<div class="row">
 					<div class="col-md-6">
 						<p><%= @tournament.name %></p>
-						<p><%= @tournament.location %></p>
-						<p><%= @tournament.start_date %></p>
+						<p><%= human_time(@tournament.start_date) %></p>
+						<p><a href="<%= @tournament.facebook_url %>">Check out the facebook event</a></p>
+						<p><%= @tournament.location_name %>, <%= @tournament.location_address %></p>
+						<p></p>
+						<p><a href="<%= @tournament.location_url %>"><%= @tournament.location_url %></a></p>
 					</div>
 					<div class="col-md-6">
 						<h3>Registered: <%= @tournament.tickets.count %>/<%= @tournament.total_players %></h3>
