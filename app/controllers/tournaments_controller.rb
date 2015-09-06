@@ -4,7 +4,9 @@ class TournamentsController < ApplicationController
   # GET /tournaments
   # GET /tournaments.json
   def index
-    @tournaments = Tournament.all
+    @upcoming = Tournament.all.where("start_date > ?", Time.now)
+    @past = Tournament.all.where("start_date < ?", Time.now)
+    @legacy_tours = Tournament.legacy
   end
 
   # GET /tournaments/1

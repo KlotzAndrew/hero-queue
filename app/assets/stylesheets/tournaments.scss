@@ -45,4 +45,35 @@
 	  .tourney_register {
 	  	text-align: center;	
 	  }
+	.register_title {
+		text-align: center;
+		margin-top: 0px;
+		margin-bottom: 20px
+	}
+}
+
+#tournaments_index {
+	background: url("teambuilder-wallpaper.jpg") no-repeat center center fixed;
+	min-height: 550px;
+	.semi_transparent {
+	  background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
+	  color: black;
+	  margin-top: 50px;
+	}
+	h1 {
+	  	text-align: center;
+	  }
+	th {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	.btn-success {
+	  	color: white;
+	}
+	.btn-danger {
+	  	color: white;
+	}
+	table tr td {
+		margin-bottom: 50px;
+	}
 }

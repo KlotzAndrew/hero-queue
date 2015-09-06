@@ -1,4 +1,5 @@
 <div class="well">
+	<h1 class="register_title"><u>Register</u></h1>
 	<% if @ticket.id %>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
@@ -9,7 +10,7 @@
 					<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
 						<%= hidden_field_tag :cmd, "_s-xclick" %>
 						<%= hidden_field_tag :encrypted, @ticket.paypal_encrypted(root_url, root_url) %>
-						<%= submit_tag "Register", :class => "btn btn-lg btn-success" %>
+						<%= submit_tag "Buy Ticket", :class => "btn btn-lg btn-success" %>
 					<% end %>
 					<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
 				</div>
