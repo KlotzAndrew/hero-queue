@@ -1,23 +1,29 @@
-<p id="notice"><%= notice %></p>
+<% provide(:title, "Teams") %>
+<section id="teams_index">
+  <div class="container">
+    <p id="notice"><%= notice %></p>
 
-<h1>Listing Teams</h1>
+    <div class="col-md-8 col-md-offset-2">
+      <div class="well semi_transparent">
+        <h1><u>Listing Teams</u></h1>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
 
-  <tbody>
-    <% @teams.each do |team| %>
-      <tr>
-        <td><%= link_to 'Show', team %></td>
-
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
+          <tbody>
+            <% @teams.each do |team| %>
+              <tr>
+                <%= team.id  %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
   

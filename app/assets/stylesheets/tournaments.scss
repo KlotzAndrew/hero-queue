@@ -9,7 +9,7 @@
 	.semi_transparent {
 	  background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
 	  color: black;
-	  margin-top: 50px;
+	  margin-top: 25px;
 	  h1 {
 	  	text-align: center;
 	  }
@@ -33,18 +33,25 @@
 	  	margin-top: 15px;
 	  }
 	}
-	  .btn-success {
-	  	color: white;
-	  	width: 250px;
-	  }
-	  .btn-warning {
-	  	color: white;
-	  	width: 150px;
-	  	margin-top: 15px;
-	  }
-	  .tourney_register {
-	  	text-align: center;	
-	  }
+	.btn-success {
+		color: white;
+		width: 250px;
+	}
+	.btn-primary {
+		color: white;
+		width: 250px;
+	}
+	.btn-default {
+		width: 250px;
+	}
+	.btn-warning {
+		color: white;
+		width: 150px;
+		margin-top: 15px;
+	}
+	.tourney_register {
+		text-align: center;	
+}
 	.register_title {
 		text-align: center;
 		margin-top: 0px;
