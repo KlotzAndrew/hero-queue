@@ -14,7 +14,6 @@ class TournamentsController < ApplicationController
   def show
     @ticket = Ticket.new(tournament_id: @tournament.id)
     @summoner = Summoner.new
-    @throttle_league = Summoner.read_throttle
   end
 
   # GET /tournaments/new

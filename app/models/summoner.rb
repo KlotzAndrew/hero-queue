@@ -4,27 +4,19 @@ class Summoner < ActiveRecord::Base
 	has_many :summoner_teams
 	has_many :teams, :through => :summoner_teams
 	
-
 	cattr_accessor :throttle_league do
 	    []
  	end
 
-
-	def self.read_throttle
-		Rails.logger.info "throttle_league: #{@@throttle_league}"
-		@@throttle_league
-	end
-
 	def find_or_create
-		Rails.logger.info "throttle_league: #{@@throttle_league}"
-		@@throttle_league << Time.now.to_i
-		Rails.logger.info "throttle_league: #{@@throttle_league}"
 		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner
 		else
-			create_summoner(summoner_ref, self.summonerName)
+			if check_throttle(9)
+				create_summoner(summoner_ref, self.summonerName)
+			end
 		end
 	end
 
@@ -45,6 +37,26 @@ class Summoner < ActiveRecord::Base
 			return summoner
 		rescue
 			return Summoner.new
+		end
+	end
+
+	def self.check_throttle(throttle_limit)
+		Rails.logger.info "@@throttle_league.count: #{@@throttle_league.count}"
+		adjust_throttle(10)
+		if @@throttle_league.count < throttle_limit
+			@@throttle_league << Time.now.to_i
+			return true
+		else
+			return false
+		end
+	end
+
+	def self.adjust_throttle(time_span)
+		if !!@@throttle_league.first && @@throttle_league.first < (Time.now.to_i - time_span)
+			@@throttle_league = @@throttle_league.drop(1)
+		end
+		if !!@@throttle_league.first
+			Rails.logger.info "throttle_clear in: #{@@throttle_league.first - (Time.now.to_i - 10)}"
 		end
 	end
 end
