@@ -3,8 +3,22 @@ class Summoner < ActiveRecord::Base
 	has_many :duo_partners, :class_name => "Ticket", :foreign_key => "duo_id"
 	has_many :summoner_teams
 	has_many :teams, :through => :summoner_teams
+	
+
+	cattr_accessor :throttle_league do
+	    []
+ 	end
+
+
+	def self.read_throttle
+		Rails.logger.info "throttle_league: #{@@throttle_league}"
+		@@throttle_league
+	end
 
 	def find_or_create
+		Rails.logger.info "throttle_league: #{@@throttle_league}"
+		@@throttle_league << Time.now.to_i
+		Rails.logger.info "throttle_league: #{@@throttle_league}"
 		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner

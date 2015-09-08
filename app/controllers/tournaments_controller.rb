@@ -9,11 +9,12 @@ class TournamentsController < ApplicationController
     @legacy_tours = Tournament.legacy
   end
 
-  # GET /tournaments/1
+  # GET /tournaments/1  
   # GET /tournaments/1.json
   def show
     @ticket = Ticket.new(tournament_id: @tournament.id)
     @summoner = Summoner.new
+    @throttle_league = Summoner.read_throttle
   end
 
   # GET /tournaments/new
