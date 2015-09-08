@@ -3,8 +3,49 @@ class Ticket < ActiveRecord::Base
 	belongs_to :summoner
 	belongs_to :duo, :class_name => "Summoner", :foreign_key => "duo_id"
 
+	validates :summoner_id, presence: true
+
 	attr_accessor :summonerName, :duoName
 
+	def self.new_with_summoner(ticket_params)
+	    ticket = Ticket.new(ticket_params)
+	    ticket.add_summoner(ticket_params[:summonerName])
+	    ticket.add_duo(ticket_params[:duoName])
+
+	    return ticket
+	end
+
+	def add_summoner(summonerName)
+		summoner = Summoner.find_or_create(summonerName)
+		Rails.logger.info "summoner: #{summoner.inspect}"
+		self.transfer_errors(summoner)
+		if !!summoner.id 
+			self.summoner_id = summoner.id
+		end
+	end
+
+	def add_duo(duoName)
+	    if duoName.length > 1
+	    	duo = Summoner.find_or_create(duoName)
+	    	self.transfer_errors(duo)
+	    	if !!duo.id
+	      		self.duo_id = duo.id 
+	    	end
+	    end		
+	end
+
+	def transfer_errors(object)
+		Rails.logger.info "object: #{object.inspect}"
+		Rails.logger.info "errors: #{object.errors.messages}"
+		if object.errors.any?
+			object.errors.messages.each do |x,y|
+				self.errors.add(:x, y)
+			end
+		end
+	end
+
+
+	#paypal logic doesn't belong here
 	def paypal_encrypted(return_url, notify_url)
 	  values = {
 	    :business => Rails.application.secrets.paypal_email,

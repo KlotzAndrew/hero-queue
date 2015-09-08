@@ -8,14 +8,16 @@ class Summoner < ActiveRecord::Base
 	    []
  	end
 
-	def find_or_create
-		summoner_ref = self.summonerName.mb_chars.downcase.gsub(' ', '').to_s
+	def self.find_or_create(summonerName)
+		summoner_ref = summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner
 		else
-			if check_throttle(9)
-				create_summoner(summoner_ref, self.summonerName)
+			if check_throttle(1)
+				Summoner.new.create_summoner(summoner_ref, summonerName)
+			else
+				return Summoner.new
 			end
 		end
 	end
@@ -28,16 +30,16 @@ class Summoner < ActiveRecord::Base
 			Rails.logger.info "summoner_hash: #{summoner_hash}"
 			data = summoner_hash["#{summoner_ref}"]
 			Rails.logger.info "data: #{data}"
-			summoner = Summoner.create(
+			self.update(
 				summonerId: data["id"],
 				summonerName: name,
 				summoner_ref: summoner_ref,
 				summonerLevel: data["summonerLevel"],
 				profileIconId: data["profileIconId"])
-			return summoner
 		rescue
-			return Summoner.new
+			self.errors.add(:summoner, "name cannot be found! Double check the spelling")
 		end
+		return self
 	end
 
 	def self.check_throttle(throttle_limit)
@@ -47,6 +49,7 @@ class Summoner < ActiveRecord::Base
 			@@throttle_league << Time.now.to_i
 			return true
 		else
+			errors.add(:league_servers, "did not respond, try again in a few seconds")
 			return false
 		end
 	end

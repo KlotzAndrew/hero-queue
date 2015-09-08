@@ -24,15 +24,7 @@ class TicketsController < ApplicationController
   # POST /tickets
   # POST /tickets.json
   def create
-    summoner = Summoner.new(summonerName: params[:ticket][:summonerName])
-    @ticket = Ticket.new(ticket_params)
-    @summoner = summoner.find_or_create
-    if params[:ticket][:duoName].length > 1
-      duo = Summoner.new(summonerName: params[:ticket][:duoName])
-      @duo = duo.find_or_create
-      @ticket.update(duo_id: @duo.id)
-    end
-    @ticket.update(summoner_id: @summoner.id)
+    @ticket = Ticket.new_with_summoner(ticket_params)
 
     respond_to do |format|
       if @ticket.save
@@ -42,6 +34,7 @@ class TicketsController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @ticket.errors, status: :unprocessable_entity }
+        format.js { @ticket }
       end
     end
   end
