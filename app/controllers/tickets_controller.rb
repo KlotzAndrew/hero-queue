@@ -69,6 +69,21 @@ class TicketsController < ApplicationController
     end
   end
 
+  def hook
+    params.permit! # Permit all Paypal input params
+    status = params[:payment_status]
+    if status == "Completed"
+      @ticket = Ticket.find(params[:invoice])
+      @ticket.update_attributes(
+        notification_params: params, 
+        status: status, 
+        transaction_id: params[:txn_id], 
+        purchased_at: Time.now) 
+      @ticket.paypal_verify
+    end
+    render nothing: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ticket

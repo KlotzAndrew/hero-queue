@@ -1,17 +1,18 @@
 Rails.application.routes.draw do
+  root 'static_pages#home'
+
   resources :tickets
   resources :summoners
-  root 'static_pages#home'
+  resources :tournaments, only: [:index, :show] do
+    resources :teams, only: [:index, :show]
+  end
 
   get 'faq' => 'static_pages#faq'
   get 'about' => 'static_pages#about'
   get 'contact' => 'static_pages#contact'
   get 'rules' => 'static_pages#rules'
 
-  resources :tournaments, only: [:index, :show] do
-    resources :teams, only: [:index, :show]
-  end
-
+  post "/hook" => "tickets#hook"
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

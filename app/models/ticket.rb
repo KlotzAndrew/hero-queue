@@ -48,7 +48,7 @@ class Ticket < ActiveRecord::Base
 	end
 
 
-	#paypal logic doesn't belong here
+	#paypal logic can be moved to its own class
 	def paypal_encrypted(return_url, notify_url)
 	  values = {
 	    :business => Rails.application.secrets.paypal_email,
@@ -56,12 +56,12 @@ class Ticket < ActiveRecord::Base
 	    :upload => 1,
 	    :return => return_url,
 	    :invoice => self.id,
-	    :notify_url => notify_url,
+	    :notify_url => notify_url + 'hook',
 	    :cert_id => Rails.application.secrets.paypal_cert_hq
 	  }
 	    values.merge!({
 	      "amount_1" => 10,
-	      "item_name_1" => 'rocks-5',
+	      "item_name_1" => 'HQ-ticket',
 	      "item_number_1" => 1,
 	      "quantity_1" => 1
 	    })
