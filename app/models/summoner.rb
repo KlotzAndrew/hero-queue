@@ -50,7 +50,7 @@ class Summoner < ActiveRecord::Base
 	def self.check_throttle
 		Rails.logger.info "@@throttle_league.count: #{@@throttle_league.count}"
 		adjust_throttle(10)
-		if @@throttle_league.count < 0
+		if @@throttle_league.count < 9
 			@@throttle_league << Time.now.to_i
 			return true
 		else

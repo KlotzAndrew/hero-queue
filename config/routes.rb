@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   root 'static_pages#home'
 
   get 'faq' => 'static_pages#faq'
-  get 'about' => 'static_pages/about'
-  get 'contact' => 'static_pages/contact'
+  get 'about' => 'static_pages#about'
+  get 'contact' => 'static_pages#contact'
+  get 'rules' => 'static_pages#rules'
 
   resources :tournaments, only: [:index, :show] do
     resources :teams, only: [:index, :show]
