@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20150903200448) do
     t.string   "contact_last_name"
     t.text     "notification_params"
     t.string   "transaction_id"
+    t.string   "status"
     t.datetime "purchased_at"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false

@@ -4,7 +4,9 @@ module TournamentsHelper
 	end
 
 	def tickets_sold(tournament)
-		"#{tournament.tickets.count}/#{tournament.total_players}"
+		tickets = tournament.tickets.where("status = ?", "Completed").count
+		players = tournament.total_players
+		"#{tickets}/#{players}"
 	end
 
 	def tournaments_link(tournament)

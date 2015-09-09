@@ -82,4 +82,17 @@ class Ticket < ActiveRecord::Base
 		uri = URI.parse('https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
 		response = Net::HTTP.post_form(uri, raw_body)
 	end
+
+	def self.check_paypal_ipn(params)
+		status = params[:payment_status]
+	    if status == "Completed"
+	      ticket = Ticket.find(params[:invoice])
+	      ticket.update_attributes(
+	        notification_params: params, 
+	        status: status, 
+	        transaction_id: params[:txn_id], 
+	        purchased_at: Time.now) 
+	      ticket.paypal_verify
+	    end
+	end
 end

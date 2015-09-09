@@ -10,6 +10,7 @@ class CreateTickets < ActiveRecord::Migration
     	
     	t.text :notification_params
     	t.string :transaction_id
+      t.string :status
     	t.datetime	:purchased_at
 
       t.timestamps null: false
