@@ -1,3 +1,3 @@
-$('#register').html("<%= escape_javascript render(:partial => 'tickets/register') %>");
+$('#register').html("<%= escape_javascript render(:partial => 'tickets/register', :object => @ticket) %>");
 
-$('#errors').html("<%= escape_javascript render(:partial => 'tickets/errors') %>");
+$('#errors').html("<%= escape_javascript render(:partial => 'tickets/errors', :object => @ticket) %>");

@@ -14,12 +14,17 @@ class Summoner < ActiveRecord::Base
 		if existing_summoner
 			return existing_summoner
 		else
-			if check_throttle(1)
+			if check_throttle
 				Summoner.new.create_summoner(summoner_ref, summonerName)
 			else
-				return Summoner.new
+				Summoner.new.throttle_limit
 			end
 		end
+	end
+
+	def throttle_limit
+		self.errors.add(:league_servers, "did not respond, try again in a few seconds")
+		return self
 	end
 
 	def create_summoner(summoner_ref, name)
@@ -37,19 +42,18 @@ class Summoner < ActiveRecord::Base
 				summonerLevel: data["summonerLevel"],
 				profileIconId: data["profileIconId"])
 		rescue
-			self.errors.add(:summoner, "name cannot be found! Double check the spelling")
+			self.errors.add(:cant_find, "your summoner name! Double check the spelling")
 		end
 		return self
 	end
 
-	def self.check_throttle(throttle_limit)
+	def self.check_throttle
 		Rails.logger.info "@@throttle_league.count: #{@@throttle_league.count}"
 		adjust_throttle(10)
-		if @@throttle_league.count < throttle_limit
+		if @@throttle_league.count < 0
 			@@throttle_league << Time.now.to_i
 			return true
 		else
-			errors.add(:league_servers, "did not respond, try again in a few seconds")
 			return false
 		end
 	end

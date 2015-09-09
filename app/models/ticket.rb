@@ -7,18 +7,21 @@ class Ticket < ActiveRecord::Base
 
 	attr_accessor :summonerName, :duoName
 
+
 	def self.new_with_summoner(ticket_params)
 	    ticket = Ticket.new(ticket_params)
 	    ticket.add_summoner(ticket_params[:summonerName])
 	    ticket.add_duo(ticket_params[:duoName])
 
-	    return ticket
+	    Rails.logger.info "errors final1: #{ticket.errors.full_messages}"
+	    return ticket 
 	end
 
 	def add_summoner(summonerName)
 		summoner = Summoner.find_or_create(summonerName)
 		Rails.logger.info "summoner: #{summoner.inspect}"
 		self.transfer_errors(summoner)
+		Rails.logger.info "errors after: #{self.errors.messages}"
 		if !!summoner.id 
 			self.summoner_id = summoner.id
 		end
@@ -34,12 +37,12 @@ class Ticket < ActiveRecord::Base
 	    end		
 	end
 
-	def transfer_errors(object)
-		Rails.logger.info "object: #{object.inspect}"
-		Rails.logger.info "errors: #{object.errors.messages}"
-		if object.errors.any?
-			object.errors.messages.each do |x,y|
-				self.errors.add(:x, y)
+	def transfer_errors(obj)
+		Rails.logger.info "obj: #{obj.inspect}"
+		Rails.logger.info "errors: #{obj.errors.messages}"
+		if obj.errors.any?
+			obj.errors.messages.each do |x,y|
+				self.errors.add(:"#{x}", y.first)
 			end
 		end
 	end
