@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  resources :tickets
-  resources :summoners
+  resources :tickets, only: [:create]
   resources :tournaments, only: [:index, :show] do
     resources :teams, only: [:index, :show]
   end

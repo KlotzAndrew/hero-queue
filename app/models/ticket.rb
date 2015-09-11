@@ -28,7 +28,7 @@ class Ticket < ActiveRecord::Base
 	end
 
 	def add_duo(duoName)
-	    if duoName.length > 1
+	    if duoName && duoName.length > 1
 	    	duo = Summoner.find_or_create(duoName)
 	    	self.transfer_errors(duo)
 	    	if !!duo.id
