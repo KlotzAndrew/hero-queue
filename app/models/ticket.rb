@@ -60,7 +60,7 @@ class Ticket < ActiveRecord::Base
 	    :cert_id => Rails.application.secrets.paypal_cert_hq
 	  }
 	    values.merge!({
-	      "amount_1" => 10,
+	      "amount_1" => self.tournament.price.to_i,
 	      "item_name_1" => 'HQ-ticket',
 	      "item_number_1" => 1,
 	      "quantity_1" => 1

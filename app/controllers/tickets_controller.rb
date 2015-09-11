@@ -1,5 +1,6 @@
 class TicketsController < ApplicationController
   before_action :set_ticket, only: [:show, :edit, :update, :destroy]
+  protect_from_forgery except: [:hook]
 
   # GET /tickets
   # GET /tickets.json
