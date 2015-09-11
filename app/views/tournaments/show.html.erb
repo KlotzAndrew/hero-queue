@@ -12,6 +12,7 @@
 					<div class="col-md-6">
 						<p><%= tournament_duration(@tournament.start_date) %></p>
 						<p><a href="<%= @tournament.facebook_url %>">Check out the facebook event</a></p>
+						<p>Tickets: <%= number_to_currency(@tournament.price)  %></p>
 					</div>
 					<div class="col-md-6">
 						<p><%= @tournament.location_name %>, <%= @tournament.location_address %></p>

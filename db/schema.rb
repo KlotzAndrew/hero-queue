@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150903200448) do
     t.string   "game"
     t.integer  "total_players"
     t.integer  "total_teams"
+    t.decimal  "price"
     t.datetime "start_date"
     t.string   "location_name"
     t.string   "location_url"
