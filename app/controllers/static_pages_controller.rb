@@ -11,4 +11,7 @@ class StaticPagesController < ApplicationController
 
   def rules
   end
+
+  def format
+  end
 end

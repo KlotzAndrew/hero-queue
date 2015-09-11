@@ -62,6 +62,7 @@ class Ticket < ActiveRecord::Base
 	  }
 	    values.merge!({
 	      "amount_1" => self.tournament.price.to_f,
+	      "currency_code" => "CAD",
 	      "item_name_1" => "HQ-ticket (#{self.summoner.summonerName + duo})",
 	      "item_number_1" => 1,
 	      "quantity_1" => 1,
