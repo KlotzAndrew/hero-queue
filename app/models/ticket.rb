@@ -50,6 +50,7 @@ class Ticket < ActiveRecord::Base
 
 	#paypal logic can be moved to its own class
 	def paypal_encrypted(return_url, notify_url)
+		if self.duo then duo = ", duo: #{self.duo.summonerName}" else duo = "" end
 	  values = {
 	    :business => Rails.application.secrets.paypal_email,
 	    :cmd => '_cart',
@@ -61,9 +62,9 @@ class Ticket < ActiveRecord::Base
 	  }
 	    values.merge!({
 	      "amount_1" => self.tournament.price.to_f,
-	      "item_name_1" => 'HQ-ticket',
+	      "item_name_1" => "HQ-ticket (#{self.summoner.summonerName + duo})",
 	      "item_number_1" => 1,
-	      "quantity_1" => 1
+	      "quantity_1" => 1,
 	    })
 	  encrypt_for_paypal(values)
 	end
