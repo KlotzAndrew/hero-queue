@@ -5,6 +5,7 @@ class TeamsController < ApplicationController
   # GET /teams.json
   def index
     @teams = Team.all.where("tournament_id = ?", params["tournament_id"])
+    # @summoners = Tournament.find(params["tournament_id"]).tickets.where(status: "Completed").map { |ticket| ticket.summoner.summonerName }
   end
 
   # GET /teams/1
