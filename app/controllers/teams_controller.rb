@@ -11,9 +11,9 @@ class TeamsController < ApplicationController
       @teams = Team.all.where("tournament_id = ?", params["tournament_id"])
     end
 
-    def set_team
-      @team = Team.find(params[:id])
-    end
+    # def set_team
+    #   @team = Team.find(params[:id])
+    # end
 
     def team_params
       params[:team]

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :tickets, only: [:create]
   resources :tournaments, only: [:index, :show] do
-    resources :teams, only: [:index, :show]
+    resources :teams, only: [:index]
   end
 
   root 'static_pages#home'
