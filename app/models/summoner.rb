@@ -8,13 +8,13 @@ class Summoner < ActiveRecord::Base
 	    []
  	end
 
-	def self.find_or_create(summonerName)
+	def self.find_or_create(summonerName, max_throttle = 9)
 		summoner_ref = summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner
 		else
-			if check_throttle
+			if check_throttle(max_throttle)
 				Summoner.new.create_summoner(summoner_ref, summonerName)
 			else
 				Summoner.new.throttle_limit
@@ -47,10 +47,10 @@ class Summoner < ActiveRecord::Base
 		return self
 	end
 
-	def self.check_throttle
+	def self.check_throttle(max_throttle)
 		Rails.logger.info "@@throttle_league.count: #{@@throttle_league.count}"
-		adjust_throttle(10)
-		if @@throttle_league.count < 9
+		adjust_throttle
+		if @@throttle_league.count < max_throttle
 			@@throttle_league << Time.now.to_i
 			return true
 		else
@@ -58,7 +58,7 @@ class Summoner < ActiveRecord::Base
 		end
 	end
 
-	def self.adjust_throttle(time_span)
+	def self.adjust_throttle(time_span = 10)
 		if !!@@throttle_league.first && @@throttle_league.first < (Time.now.to_i - time_span)
 			@@throttle_league = @@throttle_league.drop(1)
 		end

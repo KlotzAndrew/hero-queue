@@ -5,8 +5,8 @@
 	
 	<div id="active_ticket" class="row">
 		<div class="col-md-6 col-md-offset-3">
-			<h4>Summoner: <%= @ticket.summoner.summonerName %></h4>
-			<h4>Duo: <%= if !@ticket.duo.nil? then @ticket.duo.summonerName end %></h4>
+			<h4 id="summonerName">Summoner: <%= @ticket.summoner.summonerName %></h4>
+			<h4 id="duoName">Duo: <%= if !@ticket.duo.nil? then @ticket.duo.summonerName end %></h4>
 
 			<div class="tourney_register">
 				<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
