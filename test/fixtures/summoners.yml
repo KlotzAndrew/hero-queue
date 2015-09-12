@@ -4,8 +4,23 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+boxstripe:
+  summonerName: boxstripe
+  summoner_ref: boxstripe
+  summonerId: 51189734
+  summonerLevel: 30
+  profileIconId: 6
+
+hukkk:
+  summonerName: hukkk
+  summoner_ref: hukkk
+  summonerId: 45302408
+  summonerLevel: 10
+  profileIconId: -1
+
+1sttimedraven:
+  summonerName: "1st time draven"
+  summoner_ref: 1sttimedraven
+  summonerId: 19767256
+  summonerLevel: 30
+  profileIconId: 745

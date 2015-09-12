@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
 
     respond_to do |format|
       if @ticket.save
-        format.html { redirect_to tournaments_path(@ticket.tournament.id), notice: 'Ticket was successfully created.' }
+        format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
         format.js
       else
         format.html { render :new }
