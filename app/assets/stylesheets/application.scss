@@ -16,3 +16,8 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+body section {
+	min-height: 100vh;
+	margin-top: 50px;
+}
