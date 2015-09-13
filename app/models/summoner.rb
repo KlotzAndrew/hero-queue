@@ -41,8 +41,17 @@ class Summoner < ActiveRecord::Base
 				summoner_ref: summoner_ref,
 				summonerLevel: data["summonerLevel"],
 				profileIconId: data["profileIconId"])
-		rescue
+		# rescue Exception => ex
+		# 	code = ex.message.match(/.*?- (\d+): (.*)/)[1]
+		# 	case code
+		# 	when '404'
+		# 		self.errors.add(:cant_find, "your summoner name! Double check the spelling")
+		# 	end
+		rescue Timeout::Error
+			self.errors.add(:timeout, "the league servers are not responding! Try again in a few minutes")
+		rescue => e
 			self.errors.add(:cant_find, "your summoner name! Double check the spelling")
+			Rails.logger.info "league API unknown error: #{e}"
 		end
 		return self
 	end
