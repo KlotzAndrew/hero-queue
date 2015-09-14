@@ -23,12 +23,11 @@
 
 	<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
 		<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
-		<h4>Summoner Name (required)</h4>
 		<div class="form-group">
 			<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
 		</div>
 		<div class="form-group">
-			<%= f.text_field :duoName, :placeholder => "Duo Name" %>
+			<%= f.text_field :duoName, :placeholder => "Duo Name (optional)" %>
 		</div>
 
 		<h4>Contact Info (optional)</h4>

@@ -17,7 +17,7 @@ class SummonerTest < ActiveSupport::TestCase
   test "api call responds to throttle limit" do
     name_summoner = "theoddone"
     assert_difference('Summoner.all.count', 0) do
-	    summoner = Summoner.find_or_create(name_summoner, 0)
+	    summoner = Summoner.find_or_create(name_summoner, "summoner name", 0)
 	    assert_equal :league_servers, summoner.errors.messages.first.first
     end
   end

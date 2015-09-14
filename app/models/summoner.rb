@@ -8,14 +8,14 @@ class Summoner < ActiveRecord::Base
 	    []
  	end
 
-	def self.find_or_create(summonerName, max_throttle = 9)
+	def self.find_or_create(summonerName, is_duo = "summoner name", max_throttle = 9)
 		summoner_ref = summonerName.mb_chars.downcase.gsub(' ', '').to_s
 		existing_summoner = Summoner.where("summoner_ref = ?", summoner_ref).first
 		if existing_summoner
 			return existing_summoner
 		else
 			if check_throttle(max_throttle)
-				Summoner.new.create_summoner(summoner_ref, summonerName)
+				Summoner.new.create_summoner(summoner_ref, summonerName, is_duo)
 			else
 				Summoner.new.throttle_limit
 			end
@@ -27,7 +27,7 @@ class Summoner < ActiveRecord::Base
 		return self
 	end
 
-	def create_summoner(summoner_ref, name)
+	def create_summoner(summoner_ref, name, is_duo)
 		url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/#{summoner_ref}?api_key=" + Rails.application.secrets.league_api_key
 		begin
 			summoner_data = open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}).read
@@ -41,17 +41,18 @@ class Summoner < ActiveRecord::Base
 				summoner_ref: summoner_ref,
 				summonerLevel: data["summonerLevel"],
 				profileIconId: data["profileIconId"])
-		# rescue Exception => ex
-		# 	code = ex.message.match(/.*?- (\d+): (.*)/)[1]
-		# 	case code
-		# 	when '404'
-		# 		self.errors.add(:cant_find, "your summoner name! Double check the spelling")
-		# 	end
 		rescue Timeout::Error
 			self.errors.add(:timeout, "the league servers are not responding! Try again in a few minutes")
+		rescue OpenURI::HTTPError => code
+			if code.message.scan(/\d/).join('') == "404"
+				self.errors.add(:cant_find, "your #{is_duo}! Double check the spelling")
+			else 
+				self.errors.add(:no_response, "the league servers are not responding! Try again in a few minutes")
+				Rails.logger.info "league_API_error HTTPError: #{code}"
+			end
 		rescue => e
-			self.errors.add(:cant_find, "your summoner name! Double check the spelling")
-			Rails.logger.info "league API unknown error: #{e}"
+			self.errors.add(:unknown_error, "happened! Refresh the page and try again in a few minutes")
+			Rails.logger.info "league_API_error unknown: #{e}"
 		end
 		return self
 	end

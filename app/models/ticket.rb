@@ -11,7 +11,10 @@ class Ticket < ActiveRecord::Base
 	def self.new_with_summoner(ticket_params)
 	    ticket = Ticket.new(ticket_params)
 	    ticket.add_summoner(ticket_params[:summonerName])
-	    ticket.add_duo(ticket_params[:duoName])
+
+	    if ticket_params[:duoName]
+	    	ticket.add_duo(ticket_params[:duoName])
+	    end
 
 	    Rails.logger.info "errors final1: #{ticket.errors.full_messages}"
 	    return ticket 
@@ -29,7 +32,7 @@ class Ticket < ActiveRecord::Base
 
 	def add_duo(duoName)
 	    if duoName && duoName.length > 1
-	    	duo = Summoner.find_or_create(duoName)
+	    	duo = Summoner.find_or_create(duoName, "duo name")
 	    	self.transfer_errors(duo)
 	    	if !!duo.id
 	      		self.duo_id = duo.id 
