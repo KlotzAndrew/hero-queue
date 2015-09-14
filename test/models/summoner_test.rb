@@ -7,9 +7,13 @@ class SummonerTest < ActiveSupport::TestCase
 		    to_return(status: 200, body: '{"theoddone":{"id":60783,"name":"TheOddOne","profileIconId":752,"summonerLevel":30,"revisionDate":1437870268000}}', 
 		    headers: {})
 
-		stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/make_an_error_plz?api_key=' + Rails.application.secrets.league_api_key).
+		stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/summoner_404?api_key=' + Rails.application.secrets.league_api_key).
 		    to_return(status: 404, 
 		    headers: {})
+
+    stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/invalid_name?api_key=' + Rails.application.secrets.league_api_key).
+        to_return(status: 400, 
+        headers: {})
 
 	    stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/timeout?api_key=' + Rails.application.secrets.league_api_key).to_timeout
    	end
@@ -22,11 +26,19 @@ class SummonerTest < ActiveSupport::TestCase
     end
   end
 
-  test "api call responds to invalid name" do
-    name_summoner = "make_an_error_plz"
+  test "api call responds to summoner 404" do
+    name_summoner = "summoner_404"
     assert_difference('Summoner.all.count', 0) do
 	    summoner = Summoner.find_or_create(name_summoner)
 	    assert_equal :cant_find, summoner.errors.messages.first.first
+    end
+  end
+
+  test "api call responds to invalid name" do
+    name_summoner = "invalid_name"
+    assert_difference('Summoner.all.count', 0) do
+      summoner = Summoner.find_or_create(name_summoner)
+      assert_equal :invalid_name, summoner.errors.messages.first.first
     end
   end
 

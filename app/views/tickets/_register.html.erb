@@ -21,6 +21,33 @@
 
 	<% else %>
 
+	Solo
+	<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
+		<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
+		<div class="form-group">
+			<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
+		</div>
+		<div class="form-group">
+			<%= f.text_field :duoName, :placeholder => "Duo Name (optional)" %>
+		</div>
+
+		<h4>Contact Info (optional)</h4>
+		<div class="form-group">
+			<%= f.text_field :contact_email, :placeholder => "Email" %>
+		</div>
+
+		<div class="form-group">
+			<%= f.text_field :contact_first_name, :placeholder => "First Name" %>
+		</div>
+
+		<div class="form-group">
+			<%= f.text_field :contact_last_name, :placeholder => "Last Name" %>
+		</div>
+
+		<%= f.submit "Add Summoner & Contact Info", :class => "btn btn-success"  %>
+	<% end %>
+
+	Duo
 	<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
 		<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
 		<div class="form-group">

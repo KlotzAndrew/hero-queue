@@ -43,12 +43,15 @@ class Summoner < ActiveRecord::Base
 				profileIconId: data["profileIconId"])
 		rescue Timeout::Error
 			self.errors.add(:timeout, "the league servers are not responding! Try again in a few minutes")
-		rescue OpenURI::HTTPError => code
-			if code.message.scan(/\d/).join('') == "404"
+		rescue OpenURI::HTTPError => ex
+			code = ex.message.scan(/\d/).join('')
+			if code == "404"
 				self.errors.add(:cant_find, "your #{is_duo}! Double check the spelling")
+			elsif code == "400"
+				self.errors.add(:invalid_name, "double check the spelling and try again")
 			else 
 				self.errors.add(:no_response, "the league servers are not responding! Try again in a few minutes")
-				Rails.logger.info "league_API_error HTTPError: #{code}"
+				Rails.logger.info "league_API_error HTTPError: #{ex}"
 			end
 		rescue => e
 			self.errors.add(:unknown_error, "happened! Refresh the page and try again in a few minutes")
