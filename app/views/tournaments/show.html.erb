@@ -12,7 +12,7 @@
 					<div class="col-md-6">
 						<p><%= tournament_duration(@tournament.start_date) %></p>
 						<p><a href="<%= @tournament.facebook_url %>">Check out the facebook event</a></p>
-						<p>Tickets: <%= number_to_currency(@tournament.price)  %></p>
+						<p>Tickets: <%= number_to_currency(@tournament.price)%>/player</p>
 					</div>
 					<div class="col-md-6">
 						<p><%= @tournament.location_name %>, <%= @tournament.location_address %></p>
@@ -26,7 +26,7 @@
 			<div id="errors">
 				<%= render 'tickets/errors' %>
 			</div>
-			<div id="register" class="">
+			<div id="register" class="well">
 				<%= render 'tickets/register' %>
 			</div>
 			<div class="text-center" style="margin-bottom:25px;">

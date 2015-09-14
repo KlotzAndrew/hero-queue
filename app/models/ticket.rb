@@ -5,12 +5,15 @@ class Ticket < ActiveRecord::Base
 
 	validates :summoner_id, presence: true
 
-	attr_accessor :summonerName, :duoName
+	attr_accessor :summonerName, :duoName, :duo_selected
 
 
 	def self.new_with_summoner(ticket_params)
 	    ticket = Ticket.new(ticket_params)
-	    ticket.add_summoner(ticket_params[:summonerName])
+
+	    if ticket_params[:summonerName]
+		    ticket.add_summoner(ticket_params[:summonerName])
+		end
 
 	    if ticket_params[:duoName]
 	    	ticket.add_duo(ticket_params[:duoName])
@@ -50,10 +53,11 @@ class Ticket < ActiveRecord::Base
 		end
 	end
 
-
 	#paypal logic can be moved to its own class
 	def paypal_encrypted(return_url, notify_url)
-		if self.duo then duo = ", duo: #{self.duo.summonerName}" else duo = "" end
+		price = calculate_price(self)
+		item_name = summoner_name_string(self) #this can be a method routing to matching game model
+		
 	  values = {
 	    :business => Rails.application.secrets.paypal_email,
 	    :cmd => '_cart',
@@ -64,13 +68,27 @@ class Ticket < ActiveRecord::Base
 	    :cert_id => Rails.application.secrets.paypal_cert_hq
 	  }
 	    values.merge!({
-	      "amount_1" => self.tournament.price.to_f,
+	      "amount_1" => price,
 	      "currency_code" => "CAD",
-	      "item_name_1" => "HQ-ticket (#{self.summoner.summonerName + duo})",
+	      "item_name_1" => item_name,
 	      "item_number_1" => 1,
 	      "quantity_1" => 1,
 	    })
 	  encrypt_for_paypal(values)
+	end
+
+	def calculate_price(ticket)
+		if ticket.duo
+			return ticket.tournament.price.to_f*2
+		else
+			return ticket.tournament.price.to_f
+		end
+	end
+
+	def summoner_name_string(ticket)
+		if self.duo then duo = ", duo: #{ticket.duo.summonerName}" end
+		duo ||= "" 
+		return "HQ-ticket (#{ticket.summoner.summonerName + duo})"
 	end
 
 	PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")

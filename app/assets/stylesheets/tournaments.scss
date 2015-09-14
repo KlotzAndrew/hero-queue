@@ -50,11 +50,24 @@
 	}
 	.tourney_register {
 		text-align: center;	
-}
+	}
 	.register_title {
 		text-align: center;
 		margin-top: 0px;
 		margin-bottom: 20px
+	}
+	#register {
+		h1 {
+			text-align: center;
+			margin: 0px 0px 25px 0px;
+			text-decoration: underline;
+		}
+		#ticket_form {
+			text-align: center;
+		}
+		#queue_select {
+			text-align: center;
+		}
 	}
 }
 
