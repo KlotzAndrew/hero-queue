@@ -3,7 +3,7 @@ require 'test_helper'
 class TicketsControllerTest < ActionController::TestCase
   setup do
     # @ticket = tickets(:one)
-    @tournament = tournaments(:sq_one)
+    @tournament = tournaments(:tournament_unsold)
   end
 
   test "should create ticket" do

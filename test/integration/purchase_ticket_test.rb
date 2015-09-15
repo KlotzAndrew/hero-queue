@@ -2,7 +2,9 @@ require 'test_helper'
 
 class PurchaseTicketTest < ActionDispatch::IntegrationTest
   setup do
-    @tournament = tournaments(:sq_one)
+    @tournament = tournaments(:tournament_unsold)
+    @tournament_sold = tournaments(:tournament_sold)
+    @tournament_oneseat = tournaments(:tournament_oneseat)
     @summoner = summoners(:boxstripe)
     @duo = summoners(:hukkk)
 
@@ -17,6 +19,29 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/make_an_error_plz?api_key=' + Rails.application.secrets.league_api_key).
     to_return(status: 404, 
     headers: {})
+  end
+
+  test "solo needs 1 seat" do
+    get tournament_path(@tournament_sold)
+    assert_difference '@summoner.tickets.count', 0 do
+      xhr :post, tickets_path, ticket: { 
+        summonerName: @summoner.summonerName,
+        tournament_id: @tournament_sold.id }
+    end
+    ticket = assigns(:ticket)
+    assert_equal ticket.errors.first, [:sold_out, ", sorry there are no tickets left!"]
+  end
+
+  test "duo needs 2 seats" do
+    get tournament_path(@tournament_oneseat)
+    assert_difference '@summoner.tickets.count', 0 do
+      xhr :post, tickets_path, ticket: { 
+        summonerName: @summoner.summonerName,
+        duoName: @duo.summonerName,
+        tournament_id: @tournament_oneseat.id }
+    end
+     ticket = assigns(:ticket)
+      assert_equal ticket.errors.first, [:only_one, "seat left! Unable to register a duo"]
   end
 
   test "register with existing summoner and duo" do
@@ -62,9 +87,8 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
         summonerName: name_invald,
         tournament_id: @tournament.id }
     end
-    assert_select_jquery :html, '#errors' do
-      assert_select 'li', "Cant find your summoner name! Double check the spelling"
-    end
+    ticket = assigns(:ticket)
+    assert_equal ticket.errors.first, [:summoner_id, "can't be blank"]
 
     assert_difference '@summoner.tickets.count', 1 do
       xhr :post, tickets_path, ticket: { 

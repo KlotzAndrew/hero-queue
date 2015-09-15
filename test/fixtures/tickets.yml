@@ -1,11 +1,21 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+<% 28.times do |n| %>
+ticket_solo<%= n %>:
+  tournament_id: 1
+  summoner_id: <%= n %>
+  status: "Completed"
+<% end %>
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+<% 12.times do |n| %>
+ticket_duo<%= n %>:
+  tournament_id: 1
+  summoner_id: <%= n + 100 %>
+  duo_id: <%= n + 200 %>
+  status: "Completed"
+<% end %>
+
+<% 20.times do |n| %>
+ticket_unpaid<%= n %>:
+  tournament_id: 1
+  summoner_id: <%= n + 300 %>
+  duo_id: <%= n + 400 %>
+<% end %>

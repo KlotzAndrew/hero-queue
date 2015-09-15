@@ -4,7 +4,8 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-sq_one:
+tournament_sold:
+  id: 1
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
   total_players: 40
@@ -15,3 +16,29 @@ sq_one:
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
   facebook_url: "www.facebook.com"
+
+tournament_unsold:
+  id: 2
+  name: "Solo/Duo Queue League Tournament"
+  game: "League of Legends"
+  total_players: 40
+  total_teams: 8
+  price: 15.00
+  start_date:  <%= 4.weeks.from_now %>
+  location_name: "Happy Turbo Internet Cafe"
+  location_address: "5171 Yonge St."
+  location_url: "www.happyturbo.com"
+  facebook_url: "www.facebook.com"  
+
+tournament_oneseat:
+  id: 3
+  name: "Solo/Duo Queue League Tournament"
+  game: "League of Legends"
+  total_players: 1
+  total_teams: 1
+  price: 15.00
+  start_date:  <%= 4.weeks.from_now %>
+  location_name: "Happy Turbo Internet Cafe"
+  location_address: "5171 Yonge St."
+  location_url: "www.happyturbo.com"
+  facebook_url: "www.facebook.com"  

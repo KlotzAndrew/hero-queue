@@ -3,7 +3,7 @@ require 'test_helper'
 class TeamsControllerTest < ActionController::TestCase
   setup do
     # @team = teams(:one)
-    @tournament = tournaments(:sq_one)
+    @tournament = tournaments(:tournament_unsold)
   end
 
   test "should get index" do

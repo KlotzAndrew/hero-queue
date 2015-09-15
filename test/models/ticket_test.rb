@@ -3,7 +3,7 @@ require 'test_helper'
 class TicketTest < ActiveSupport::TestCase
 
 	def setup
-		@tournament = tournaments(:sq_one)
+		@tournament = tournaments(:tournament_unsold)
 
 		stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/theoddone?api_key=' + Rails.application.secrets.league_api_key).
 		to_return(status: 200, body: '{"theoddone":{"id":60783,"name":"TheOddOne","profileIconId":752,"summonerLevel":30,"revisionDate":1437870268000}}', 

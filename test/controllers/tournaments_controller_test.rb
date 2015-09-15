@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TournamentsControllerTest < ActionController::TestCase
   setup do
-    @tournament = tournaments(:sq_one)
+    @tournament = tournaments(:tournament_unsold)
   end
 
   test "should get index" do

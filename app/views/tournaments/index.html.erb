@@ -21,7 +21,7 @@
               <tr>
                 <td> <%= tournament_start(tournament.start_date) %> </td>
                 <td class="text-left"> <%= tournament.name %> </td>
-                <td class="text-center"> <%= tickets_sold(tournament) %> </td>
+                <td class="text-center"><%= seats_taken(tournament) %>/<%= tournament.total_players %></td>
                 <td class="text-right"><%= tournaments_link(tournament) %></td>
               </tr>
             <% end %>

@@ -20,7 +20,7 @@
 						<p><%= @tournament.location_name %>, <%= @tournament.location_address %></p>
 						<p></p>
 						<p><a href="<%= @tournament.location_url %>"><%= @tournament.location_url %></a></p>
-						<p>Registered: <%= tickets_sold(@tournament) %></p>
+						<p>Registered: <%= seats_taken(@tournament) %>/<%= @tournament.total_players %></p>
 					</div>
 				</div>
 

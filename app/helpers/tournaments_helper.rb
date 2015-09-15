@@ -3,14 +3,15 @@ module TournamentsHelper
 		time.strftime("%Y; %B %-d, %l%P")
 	end
 
-	def tickets_sold(tournament)
-		tickets = tournament.tickets.where("status = ?", "Completed").count
-		players = tournament.total_players
-		"#{tickets}/#{players}"
+	def seats_taken(tournament)
+		players = tournament.tickets.where("status = ?", "Completed").inject(0) do |total, player|
+			player.duo.nil? ? total + 1 : total + 2
+		end
+		return players
 	end
 
 	def tournaments_link(tournament)
-		if tournament.tickets.count < tournament.total_players
+		if seats_taken(tournament) < tournament.total_players
 			link_to 'Join!', tournament, :class => "btn btn-success"
 		else
 			link_to 'Sold Out!', tournament, :class => "btn btn-danger"
