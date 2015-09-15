@@ -21,8 +21,8 @@ tournament_unsold:
   id: 2
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
-  total_players: 40
-  total_teams: 8
+  total_players: 999
+  total_teams: 80
   price: 15.00
   start_date:  <%= 4.weeks.from_now %>
   location_name: "Happy Turbo Internet Cafe"

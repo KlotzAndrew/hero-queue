@@ -11,7 +11,7 @@
 		<div class="tourney_register">
 			<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
 				<%= hidden_field_tag :cmd, "_s-xclick" %>
-				<%= hidden_field_tag :encrypted, @ticket.paypal_encrypted(root_url, root_url) %>
+				<%= hidden_field_tag :encrypted, PaypalApi.paypal_encrypted(@ticket, root_url, root_url) %>
 				<%= submit_tag "Checkout", :class => "btn btn-lg btn-success" %>
 			<% end %>
 			<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
