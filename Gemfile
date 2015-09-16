@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 require 'open-uri'
+require 'net/http'
 
 gem 'rails', '4.2.3'
 gem 'bootstrap-sass', '~> 3.3.5'
