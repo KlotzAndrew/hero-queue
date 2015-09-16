@@ -9,6 +9,6 @@ module ApplicationHelper
 	end	
 
 	def tournament_duration(time)
-		time.strftime("%B %-d, %l:00%P") + " - " + (time + 8.hours).strftime("%l:00%P")
+		time.strftime("%A %b. %-d, %l:00%P") + " - " + (time + 8.hours).strftime("%l:00%P")
 	end
 end
