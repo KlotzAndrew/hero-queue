@@ -23,9 +23,10 @@ class TicketsController < ApplicationController
 
   def hook
     params.permit! # Permit all Paypal input params
-    Rails.logger.info "PAYPAL_IPN params: #{params}"
-    Rails.logger.info "PAYPAL_IPN request.body: #{request.body}"
     PaypalApi.check_paypal_ipn(params)
+    Rails.logger.info "PAYPAL_IPN params: #{params}"
+    Rails.logger.info "PAYPAL_IPN request.body.string: #{request.body.string}"
+    Rails.logger.info "PAYPAL_IPN request.body.string.lenght: #{request.body.string.length}"
     render nothing: true
   end
 
