@@ -10,7 +10,7 @@ class Tournament < ActiveRecord::Base
 		tickets.includes(:summoner, :duo).where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
 	end
 
-	def nokogiri_elo
+	def get_elo
 		all_sums = self.all_solos + self.all_duos.flatten
 		without_elo = all_sums.select { |x| x unless x.elo }
 		base_url = 'http://www.lolking.net/summoner/na/'
@@ -18,19 +18,22 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def nokogiri_request(without_elo, base_url)
-		without_elo.each do |x|
+		without_elo.each do |sum_id|
 			begin
-				elo = 0
-				url = base_url + x.summonerId.to_s
-				raw_data = Nokogiri::HTML(open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}))
-				elo = find_lolking_elo(raw_data).to_i
-
-				Rails.logger.info "summoner/elo: #{x.summonerName}/#{elo}"
-				x.update(elo: elo) if elo_valid?(elo)
+				url = base_url + sum_id.summonerId.to_s
+				update_summoner_elo(url)
 			rescue => e
 				Rails.logger.info "Lolking nokogiri_error: #{e}"
 			end
 		end
+	end
+
+	def update_summoner_elo(url)
+		elo = 0
+		raw_data = Nokogiri::HTML(open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}))
+		elo = find_lolking_elo(raw_data).to_i
+		Rails.logger.info "summoner/elo: #{sum_id.summonerName}/#{elo}"
+		sum_id.update(elo: elo) if elo_valid?(elo)
 	end
 
 	def find_lolking_elo(raw_data)
