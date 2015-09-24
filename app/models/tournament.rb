@@ -2,36 +2,52 @@ class Tournament < ActiveRecord::Base
 	has_many :tickets
 	has_many :teams
 
-	def nokogiri_elo
-		all_sums = self.all_solos + self.all_duos.flatten
-		without_elo = all_sums.select { |x| x unless x.elo }
-		base = 'http://www.lolking.net/summoner/na/'
-		without_elo.each do |x| 
-			elo = 0
-			url = base + x.summonerId.to_s
-			raw_data = Nokogiri::HTML(open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}))
-			
-			raw_data.css('ul.personal_ratings li').each do |rating|
-			    if rating.css('div.personal_ratings_heading').text == "Solo 5v5"
-			    	elo = rating.css('div.personal_ratings_lks').text
-			    end
-			end
-
-			Rails.logger.info "summoner/elo: #{x.summonerName}/#{elo}"
-			if elo.to_i > 0
-				x.update(elo: elo.to_i) 
-			else
-				Rails.logger.info "SCRAPER_WARNING: no match at #{url}"
-			end
-		end
-	end
-
 	def all_solos
 		tickets.includes(:summoner).where(duo_id: nil).map {|x| x.summoner}
 	end
 
 	def all_duos
 		tickets.includes(:summoner, :duo).where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
+	end
+
+	def nokogiri_elo
+		all_sums = self.all_solos + self.all_duos.flatten
+		without_elo = all_sums.select { |x| x unless x.elo }
+		base_url = 'http://www.lolking.net/summoner/na/'
+		nokogiri_request(without_elo, base_url)
+	end
+
+	def nokogiri_request(without_elo, base_url)
+		without_elo.each do |x|
+			begin
+				elo = 0
+				url = base_url + x.summonerId.to_s
+				raw_data = Nokogiri::HTML(open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}))
+				elo = find_lolking_elo(raw_data).to_i
+
+				Rails.logger.info "summoner/elo: #{x.summonerName}/#{elo}"
+				x.update(elo: elo) if elo_valid?(elo)
+			rescue => e
+				Rails.logger.info "Lolking nokogiri_error: #{e}"
+			end
+		end
+	end
+
+	def find_lolking_elo(raw_data)
+		raw_data.css('ul.personal_ratings li').each do |rating|
+		    if rating.css('div.personal_ratings_heading').text == "Solo 5v5"
+		    	return rating.css('div.personal_ratings_lks').text
+		    end
+		end
+	end
+
+	def elo_valid?(elo)
+		if elo < 4000 && elo > 0
+			return true
+		else 
+			Rails.logger.info "Lolking nokogiri_error: elo invalid #{elo}"
+			return false
+		end
 	end
 
 	def self.legacy
