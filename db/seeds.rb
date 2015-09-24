@@ -1,4 +1,5 @@
 Tournament.create!(
+	id: 1,
 	name: "Solo/Duo Queue League Tournament",
 	game: "League of Legends",
 	total_players: 40,
@@ -7,5 +8,5 @@ Tournament.create!(
 	start_date: 4.weeks.from_now,
 	location_name: "Happy Turbo Internet Cafe",
 	location_address: "5171 Yonge St.",
-	location_url: "www.happyturbo.com",
-	facebook_url: "www.facebook.com")
+	location_url: "http://www.happyturbo.com",
+	facebook_url: "https://www.facebook.com")

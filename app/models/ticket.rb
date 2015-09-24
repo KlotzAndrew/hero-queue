@@ -12,7 +12,7 @@ class Ticket < ActiveRecord::Base
 		sold = ApplicationController.helpers.seats_taken(self.tournament)
 		remaining = self.tournament.total_players
 		self.seats_for_solo?(sold, remaining)
-		if self.duo_id then self.seats_for_duo?(sold, remaining) end
+		self.seats_for_duo?(sold, remaining) if self.duo_id
 	end
 
 	def seats_for_solo?(sold, remaining)

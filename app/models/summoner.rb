@@ -16,5 +16,5 @@ class Summoner < ActiveRecord::Base
 				LolApi.throttle_limit_error(Summoner.new)
 			end
 		end
-	end
+	end 
 end
