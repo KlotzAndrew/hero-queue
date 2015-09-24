@@ -47,7 +47,7 @@ class PaypalApi
 	end
 
 	def self.paypal_verify(ticket)
-		raw_body = JSON.parse(ticket.notification_params.gsub("'",'"').gsub('=>',':'))
+		raw_body = JSON.parse(ticket.notification_params.gsub('\\','').gsub('=>',':'))
 		uri = URI.parse('https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
 		request = Net::HTTP.post_form(uri, raw_body)
 	end
@@ -58,11 +58,11 @@ class PaypalApi
 	    	# check reciever email is my paypal email
 	    	# elsif response.body == VERIFIED or INVALID
 	      ticket = Ticket.find(params[:invoice])
-	      ticket.update_attributes(
+	      ticket.update(
 	        notification_params: params, 
 	        status: status, 
 	        transaction_id: params[:txn_id], 
-	        purchased_at: Time.now) 
+	        purchased_at: Time.now)
 	      paypal_verify(ticket)
 	    end
 	end

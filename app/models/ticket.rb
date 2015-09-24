@@ -4,26 +4,31 @@ class Ticket < ActiveRecord::Base
 	belongs_to :duo, :class_name => "Summoner", :foreign_key => "duo_id"
 
 	validates :summoner_id, presence: true
-	validate :there_are_remaining_tickets
+	before_create :are_remaining_tickets?
 
 	attr_accessor :summonerName, :duoName, :duo_selected
 
-	def there_are_remaining_tickets
+	def are_remaining_tickets?
 		sold = ApplicationController.helpers.seats_taken(self.tournament)
 		remaining = self.tournament.total_players
-		self.seats_for_solo?(sold, remaining)
-		self.seats_for_duo?(sold, remaining) if self.duo_id
+		if self.duo_id
+			self.seats_for_duo?(sold, remaining) 
+		else
+			self.seats_for_solo?(sold, remaining)
+		end
 	end
 
 	def seats_for_solo?(sold, remaining)
 		if sold >= remaining
 			errors.add(:sold_out, ", sorry there are no tickets left!")
+			return false
 		end
 	end
 
 	def seats_for_duo?(sold, remaining)
 		if sold >= remaining - 1
 			errors.add(:only_one, "seat left! Unable to register a duo")
+			return false
 		end
 	end
 
