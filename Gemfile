@@ -11,7 +11,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'nokogiri', '~> 1.6.6.2'  
+gem 'nokogiri', '~> 1.6.6.2'
 
 # gem 'bcrypt', '~> 3.1.7'
 # gem 'unicorn'
@@ -30,6 +30,7 @@ group :test do
 	gem 'guard-minitest', '2.3.1'
 	gem 'mini_backtrace',     '0.1.3'
   gem 'webmock', '1.21.0'
+  gem 'vcr', '~> 2.9.3'
 end
 
 group :production do

@@ -8,17 +8,6 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     @summoner = summoners(:boxstripe)
     @duo = summoners(:hukkk)
 
-    stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/theoddone?api_key=' + Rails.application.secrets.league_api_key).
-    to_return(status: 200, body: '{"theoddone":{"id":60783,"name":"TheOddOne","profileIconId":752,"summonerLevel":30,"revisionDate":1437870268000}}', 
-    headers: {})
-
-    stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/anniebot?api_key=' + Rails.application.secrets.league_api_key).
-    to_return(status: 200, body: '{"anniebot":{"id":35590582,"name":"Annie Bot","profileIconId":7,"summonerLevel":30,"revisionDate":1442062990000}}', 
-    headers: {})
-
-    stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/make_an_error_plz?api_key=' + Rails.application.secrets.league_api_key).
-    to_return(status: 404, 
-    headers: {})
   end
 
   test "solo needs 1 seat" do
@@ -64,43 +53,47 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     name_summoner = "theoddone"
     name_duo = "Annie Bot"
 
-  	get tournament_path(@tournament)
-  	assert_difference 'Ticket.count', 1 do
-  		xhr :post, tickets_path, ticket: { 
-  			summonerName: name_summoner,
-  			duoName: name_duo,
-  			tournament_id: @tournament.id }
-  	end
-    ticket = assigns(:ticket)
-    assert_equal ticket.summoner.summonerName, name_summoner
-    assert_equal ticket.duo.summonerName, name_duo
-    assert_select_jquery :html, '#register' do
-      assert_select 'div#active_ticket'
+    VCR.use_cassette("lol_summoners") do
+    	get tournament_path(@tournament)
+    	assert_difference 'Ticket.count', 1 do
+    		xhr :post, tickets_path, ticket: { 
+    			summonerName: name_summoner,
+    			duoName: name_duo,
+    			tournament_id: @tournament.id }
+    	end
+      ticket = assigns(:ticket)
+      assert_equal ticket.summoner.summonerName, name_summoner
+      assert_equal ticket.duo.summonerName, name_duo
+      assert_select_jquery :html, '#register' do
+        assert_select 'div#active_ticket'
+      end
     end
   end
 
   test "shows error with invalid summoner information" do
-    name_invald = "make_an_error_plz"
+    name_invald = "4"
 
-    assert_difference('Ticket.count', 0) do
-      xhr :post, tickets_path, ticket: { 
-        summonerName: name_invald,
-        tournament_id: @tournament.id }
-    end
-    ticket = assigns(:ticket)
-    assert_equal ticket.errors.first, [:summoner_id, "can't be blank"]
+    VCR.use_cassette("lol_summoners") do
+      assert_difference('Ticket.count', 0) do
+        xhr :post, tickets_path, ticket: { 
+          summonerName: name_invald,
+          tournament_id: @tournament.id }
+      end
+      ticket = assigns(:ticket)
+      assert_equal ticket.errors.first, [:summoner_id, "can't be blank"]
 
-    assert_difference '@summoner.tickets.count', 1 do
-      xhr :post, tickets_path, ticket: { 
-        summonerName: @summoner.summonerName,
-        duoName: @duo.summonerName,
-        tournament_id: @tournament.id }
-    end
-    ticket = assigns(:ticket)
-    assert_equal ticket.summoner, @summoner
-    assert_equal ticket.duo, @duo
-    assert_select_jquery :html, '#register' do
-      assert_select 'div#active_ticket'
+      assert_difference '@summoner.tickets.count', 1 do
+        xhr :post, tickets_path, ticket: { 
+          summonerName: @summoner.summonerName,
+          duoName: @duo.summonerName,
+          tournament_id: @tournament.id }
+      end
+      ticket = assigns(:ticket)
+      assert_equal ticket.summoner, @summoner
+      assert_equal ticket.duo, @duo
+      assert_select_jquery :html, '#register' do
+        assert_select 'div#active_ticket'
+      end
     end
   end
 end
