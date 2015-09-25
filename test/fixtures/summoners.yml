@@ -1,10 +1,10 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+<% sumName = ["1st time draven", "OBJCorrupt", "OBJControl", "Wisecracker", "CsXploit", "Dubyaa", "Rootfifth", "GoodolJohnny", "DragonsoldierX", "EroticIntentions", "Ayfoo", "Hobowhoeatspie", "LiLiLiLLiii", "HHGundam", "ShadowTip148", "Twistblader", "DrBillyHorrible", "Axl753", "MiceGoRawr", "SSGGosu", "WilliamYe2", "9xDragonz", "Kinshu", "MandaloreIV", "SumofAllBlobs", "PaulAcaust", "FluffyPoro", "Galad15", "IdontsmurfGG", "6ftboss", "LeeFish", "TheRealCasanova", "Teixmexx", "Formulation", "GlorpBall123", "Suptnk", "808Mclovin", "Neron643", "Sooeng", "dawnbringer"]%>
+<% sumName_ref = ["1sttimedraven", "objcorrupt", "objcontrol", "wisecracker", "csxploit", "dubyaa", "rootfifth", "goodoljohnny", "dragonsoldierx", "eroticintentions", "ayfoo", "hobowhoeatspie", "lilililliii", "hhgundam", "shadowtip148", "twistblader", "drbillyhorrible", "axl753", "micegorawr", "ssggosu", "williamye2", "9xdragonz", "kinshu", "mandaloreiv", "sumofallblobs", "paulacaust", "fluffyporo", "galad15", "idontsmurfgg", "6ftboss", "leefish", "therealcasanova", "teixmexx", "formulation", "glorpball123", "suptnk", "808mclovin", "neron643", "sooeng", "dawnbringer"]
+%>
+<% sumids = [19767256, 59971, 190291, 50792756, 47524500, 33371029, 23579633, 19076808, 30086184, 26286097, 19883284, 31414894, 51061375, 20475536, 50957304, 23356830, 19962583, 23671363, 32949008, 34186865, 38800794, 30082045, 30239378, 42251623, 45720107, 65009335, 23213768, 27335174, 93004, 20398292, 33079323, 49324698, 35512658, 32524121, 30261720, 52469091, 29811963, 20183196, 27210198, 20103383] %>
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
 boxstripe:
+  id: 1
   summonerName: boxstripe
   summoner_ref: boxstripe
   summonerId: 51189734
@@ -12,22 +12,37 @@ boxstripe:
   profileIconId: 6
 
 hukkk:
+  id: 2
   summonerName: hukkk
   summoner_ref: hukkk
   summonerId: 45302408
   summonerLevel: 10
   profileIconId: -1
 
-1sttimedraven:
-  summonerName: "1st time draven"
-  summoner_ref: 1sttimedraven
-  summonerId: 19767256
-  summonerLevel: 30
-  profileIconId: 745
-
 imaqtpie:
+  id: 3
   summonerName: imaqtpie
   summoner_ref: imaqtpie
   summonerId: 19887289
   summonerLevel: 30
   profileIconId: 677
+
+<% 0.upto(15) do |n| %>
+summoner_solo<%= n %>:
+  id: <%= n+4 %>
+  summonerName: <%= sumName[n] %>
+  summoner_ref: <%= sumName_ref[n] %>
+  summonerId: <%= sumids[n] %>
+  summonerLevel: 30
+  profileIconId: 677
+<% end %>
+
+<% 16.upto(39) do |n| %>
+summoner_duo<%= n%2 %><%= n-16 %>:
+  id: <%= n+4 %>
+  summonerName: <%= sumName[n] %>
+  summoner_ref: <%= sumName_ref[n] %>
+  summonerId: <%= sumids[n] %>
+  summonerLevel: 30
+  profileIconId: 677
+<% end %> 

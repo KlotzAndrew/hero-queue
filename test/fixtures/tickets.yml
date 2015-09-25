@@ -1,21 +1,23 @@
-<% 28.times do |n| %>
+<% 16.times do |n| %>
 ticket_solo<%= n %>:
-  tournament_id: 1
-  summoner_id: <%= n %>
+  tournament: tournament_sold
+  summoner_id: <%= n+4 %>
   status: "Completed"
 <% end %>
 
 <% 12.times do |n| %>
+<% i = 4 %>
 ticket_duo<%= n %>:
-  tournament_id: 1
-  summoner_id: <%= n + 100 %>
-  duo_id: <%= n + 200 %>
+  tournament: tournament_sold
+  summoner_id: <%= i%>
+  duo_id: <%= i+1%>
   status: "Completed"
+<% i += 2 %>
 <% end %>
 
 <% 20.times do |n| %>
 ticket_unpaid<%= n %>:
-  tournament_id: 1
-  summoner_id: <%= n + 300 %>
-  duo_id: <%= n + 400 %>
+  tournament: tournament_sold
+  summoner_id: summoner_solo1
+  duo_id: summoner_solo1
 <% end %>

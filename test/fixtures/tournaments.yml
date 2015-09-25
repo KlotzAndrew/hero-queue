@@ -5,7 +5,6 @@
 # below each fixture, per the syntax in the comments below
 #
 tournament_sold:
-  id: 1
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
   total_players: 40
@@ -18,7 +17,6 @@ tournament_sold:
   facebook_url: "www.facebook.com"
 
 tournament_unsold:
-  id: 2
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
   total_players: 999
@@ -31,7 +29,6 @@ tournament_unsold:
   facebook_url: "www.facebook.com"  
 
 tournament_oneseat:
-  id: 3
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
   total_players: 1

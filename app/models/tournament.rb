@@ -2,12 +2,16 @@ class Tournament < ActiveRecord::Base
 	has_many :tickets
 	has_many :teams
 
+	# def player_count
+	# 	tickets.includes(:summoner, :duo).where(status: "Completed").inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+	# end
+
 	def all_solos
-		tickets.includes(:summoner).where(duo_id: nil).map {|x| x.summoner}
+		tickets.includes(:summoner).where(status: "Completed").where(duo_id: nil).map {|x| x.summoner}
 	end
 
 	def all_duos
-		tickets.includes(:summoner, :duo).where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
+		tickets.includes(:summoner, :duo).where(status: "Completed").where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
 	end
 
 	def get_elo
