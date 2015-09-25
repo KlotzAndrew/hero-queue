@@ -5,8 +5,8 @@ ticket_solo<%= n %>:
   status: "Completed"
 <% end %>
 
-<% 12.times do |n| %>
 <% i = 4 %>
+<% 12.times do |n| %>
 ticket_duo<%= n %>:
   tournament: tournament_sold
   summoner_id: <%= i%>
