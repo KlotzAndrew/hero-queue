@@ -2,9 +2,13 @@ class Tournament < ActiveRecord::Base
 	has_many :tickets
 	has_many :teams
 
-	# def player_count
-	# 	tickets.includes(:summoner, :duo).where(status: "Completed").inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
-	# end
+	def player_count
+		tickets.includes(:summoner, :duo).where(status: "Completed").inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+	end
+
+	def seats_left
+		self.total_players - player_count
+	end
 
 	def all_solos
 		tickets.includes(:summoner).where(status: "Completed").where(duo_id: nil).map {|x| x.summoner}
