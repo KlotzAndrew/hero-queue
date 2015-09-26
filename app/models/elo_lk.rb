@@ -4,6 +4,8 @@ class EloLk
 		get_elo(tournament)
 	end
 
+	private
+
 	def get_elo(tournament)
 		all_sums = tournament.all_solos + tournament.all_duos.flatten
 		without_elo = all_sums.select { |x| x unless x.elo }

@@ -19,15 +19,6 @@ class LolApi
 		return summoner
 	end
 
-	def self.adjust_throttle(time_span = 10)
-		if !!@@throttle_league.first && @@throttle_league.first < (Time.now.to_i - time_span)
-			@@throttle_league = @@throttle_league.drop(1)
-		end
-		if !!@@throttle_league.first
-			Rails.logger.info "throttle_clear in: #{@@throttle_league.first - (Time.now.to_i - 10)}"
-		end
-	end	
-
 	def self.create_summoner_record(summoner, summoner_ref, name, is_duo)
 		url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/#{summoner_ref}?api_key=" + Rails.application.secrets.league_api_key
 		begin
@@ -56,6 +47,17 @@ class LolApi
 		end
 		return summoner
 	end
+
+	private
+
+	def self.adjust_throttle(time_span = 10)
+		if !!@@throttle_league.first && @@throttle_league.first < (Time.now.to_i - time_span)
+			@@throttle_league = @@throttle_league.drop(1)
+		end
+		if !!@@throttle_league.first
+			Rails.logger.info "throttle_clear in: #{@@throttle_league.first - (Time.now.to_i - 10)}"
+		end
+	end	
 
 	def self.league_api_call(summoner_ref, url)
 		raw_data = open(URI.encode(url),{ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,:read_timeout=>3}).read

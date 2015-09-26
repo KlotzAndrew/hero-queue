@@ -31,6 +31,7 @@ class Ticket < ActiveRecord::Base
 		end
 	end
 
+	#this should be an instance method
 	def self.new_with_summoner(ticket_params)
 	    ticket = Ticket.new(ticket_params)
 

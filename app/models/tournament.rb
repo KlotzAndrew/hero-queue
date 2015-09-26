@@ -18,6 +18,7 @@ class Tournament < ActiveRecord::Base
 		tickets.includes(:summoner, :duo).where(status: "Completed").where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
 	end
 
+	#plan to remove this when 4+ new tournaments
 	def self.legacy
 		array = []
 		array << Tournament.new(
