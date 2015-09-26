@@ -3,20 +3,20 @@ class TicketsController < ApplicationController
   protect_from_forgery except: [:hook]
 
   def create
-    if params[:commit] == "Solo Ticket" or params[:commit] == "Solo Ticket"
-      @ticket = Ticket.new(ticket_params)
+    @ticket = Ticket.new(ticket_params)
+    if params[:commit] == "Solo Ticket" or params[:commit] == "Duo Ticket"
+      #passing params to muli-part form
     else
-      @ticket = Ticket.new_with_summoner(ticket_params)
-    end
+      @ticket.new_with_summoner(ticket_params)
 
-    @errors = @ticket.errors.full_messages
-    respond_to do |format|
-      if @ticket.save
-        format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
-        format.js
-      else
-        format.html { render :new }
-        format.js
+      respond_to do |format|
+        if @ticket.save
+          format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
+          format.js
+        else
+          format.html { render :new }
+          format.js
+        end
       end
     end
   end

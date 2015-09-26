@@ -18,7 +18,7 @@ class TicketTest < ActiveSupport::TestCase
 					contact_email: "", 
 					contact_first_name: "", 
 					contact_last_name: ""}
-				ticket = Ticket.new_with_summoner(ticket_params)
+				ticket = Ticket.new(ticket_params).new_with_summoner(ticket_params)
 				Rails.logger.info "TICKR HERE: #{ticket.inspect}"
 				assert_equal ticket.summoner.summonerName, name_summoner
 				assert_equal ticket.duo.summonerName, name_duo

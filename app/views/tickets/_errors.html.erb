@@ -1,11 +1,12 @@
-<% if defined?(@errors) && @errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@errors.count, "error") %> prohibited this ticket from being saved:</h2>
+<% if @ticket.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ticket.errors.count, "error") %> prohibited this ticket from being saved:</h2>
 
-    <ul>
-    <% @errors.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-    </ul>
-  </div>
+      <ul>
+      <% @ticket.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
 <% end %>
+

@@ -4,7 +4,7 @@ class Ticket < ActiveRecord::Base
 	belongs_to :duo, :class_name => "Summoner", :foreign_key => "duo_id"
 
 	validates :summoner_id, presence: true
-	before_create :are_remaining_tickets?
+	validate :are_remaining_tickets?
 
 	scope :paid, -> {where(status: "Completed")}
 	scope :unpaid, -> {where("status != ? OR status IS ?", "Completed", nil)}
@@ -14,14 +14,62 @@ class Ticket < ActiveRecord::Base
 
 	attr_accessor :summonerName, :duoName, :duo_selected
 
+	#this should be an instance method
+	def new_with_summoner(ticket_params)
+		Rails.logger.info "STEP1 : WE GOT HERE"
+	    if ticket_params[:summonerName]
+		    add_summoner(ticket_params[:summonerName])
+		end
+
+	    if ticket_params[:duoName]
+	    	add_duo(ticket_params[:duoName])
+	    end
+
+	    Rails.logger.info "errors final1: #{self.errors.full_messages}"
+	    return self
+	end
+
+	def add_summoner(summonerName)
+		summoner = Summoner.find_or_create(summonerName)
+		Rails.logger.info "summoner: #{summoner.inspect}"
+		# self.transfer_errors(summoner)
+		Rails.logger.info "errors after: #{self.errors.messages}"
+		if !!summoner.id 
+			self.summoner_id = summoner.id
+		end
+	end
+
+	def add_duo(duoName)
+	    if duoName && duoName.length > 1
+	    	duo = Summoner.find_or_create(duoName, "duo name")
+	    	# self.transfer_errors(duo)
+	    	if !!duo.id
+	      		self.duo_id = duo.id 
+	    	end
+	    end		
+	end
+
+	def transfer_errors(obj)
+		Rails.logger.info "obj: #{obj.inspect}"
+		Rails.logger.info "errors: #{obj.errors.messages}"
+		if obj.errors.any?
+			obj.errors.messages.each do |x,y|
+				self.errors.add(:"#{x}", y.first)
+			end
+		end
+	end
+
+	private
+
 	def are_remaining_tickets?
 		remaining = tournament.seats_left
+		Rails.logger.info "REMAINING: #{remaining}"
 		if duo_id
 			seats_for_duo?(remaining) 
 		else
 			seats_for_solo?(remaining)
 		end
-		Rails.logger.info "ticket.errors: #{self.errors.inspect}"
+		Rails.logger.info "errors: #{self.errors.inspect}"
 	end
 
 	def seats_for_solo?(remaining)
@@ -39,49 +87,4 @@ class Ticket < ActiveRecord::Base
 		end
 	end
 
-	#this should be an instance method
-	def self.new_with_summoner(ticket_params)
-	    ticket = Ticket.new(ticket_params)
-
-	    if ticket_params[:summonerName]
-		    ticket.add_summoner(ticket_params[:summonerName])
-		end
-
-	    if ticket_params[:duoName]
-	    	ticket.add_duo(ticket_params[:duoName])
-	    end
-
-	    Rails.logger.info "errors final1: #{ticket.errors.full_messages}"
-	    return ticket 
-	end
-
-	def add_summoner(summonerName)
-		summoner = Summoner.find_or_create(summonerName)
-		Rails.logger.info "summoner: #{summoner.inspect}"
-		self.transfer_errors(summoner)
-		Rails.logger.info "errors after: #{self.errors.messages}"
-		if !!summoner.id 
-			self.summoner_id = summoner.id
-		end
-	end
-
-	def add_duo(duoName)
-	    if duoName && duoName.length > 1
-	    	duo = Summoner.find_or_create(duoName, "duo name")
-	    	self.transfer_errors(duo)
-	    	if !!duo.id
-	      		self.duo_id = duo.id 
-	    	end
-	    end		
-	end
-
-	def transfer_errors(obj)
-		Rails.logger.info "obj: #{obj.inspect}"
-		Rails.logger.info "errors: #{obj.errors.messages}"
-		if obj.errors.any?
-			obj.errors.messages.each do |x,y|
-				self.errors.add(:"#{x}", y.first)
-			end
-		end
-	end
 end
