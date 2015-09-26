@@ -21,18 +21,20 @@ class Ticket < ActiveRecord::Base
 		else
 			seats_for_solo?(remaining)
 		end
+		Rails.logger.info "ticket.errors: #{self.errors.inspect}"
 	end
 
 	def seats_for_solo?(remaining)
 		if remaining <= 0
-			errors.add(:sold_out, ", sorry there are no tickets left!")
+			Rails.logger.info "we should raise solo error!"
+			self.errors.add(:sold_out, ", sorry there are no tickets left!")
 			return false
 		end
 	end
 
 	def seats_for_duo?(remaining)
 		if remaining <= 1
-			errors.add(:only_one, "seat left! Unable to register a duo")
+			self.errors.add(:only_one, "seat left! Unable to register a duo")
 			return false
 		end
 	end

@@ -41,8 +41,6 @@ class PaypalApi
 	    end
 	end
 
-	private
-
 	def self.calculate_price(ticket)
 		if ticket.duo
 			return ticket.tournament.price.to_f*2
