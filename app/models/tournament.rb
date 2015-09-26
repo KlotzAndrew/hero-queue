@@ -3,7 +3,7 @@ class Tournament < ActiveRecord::Base
 	has_many :teams
 
 	def player_count
-		tickets.includes(:summoner, :duo).where(status: "Completed").inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		tickets.includes(:summoner, :duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 	end
 
 	def seats_left
@@ -11,11 +11,11 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def all_solos
-		tickets.includes(:summoner).where(status: "Completed").where(duo_id: nil).map {|x| x.summoner}
+		tickets.includes(:summoner).paid.solo_tickets.map {|x| x.summoner}
 	end
 
 	def all_duos
-		tickets.includes(:summoner, :duo).where(status: "Completed").where.not(duo_id: nil).map {|x| [x.summoner, x.duo]}
+		tickets.includes(:summoner, :duo).paid.duo_tickets.map {|x| [x.summoner, x.duo]}
 	end
 
 	#plan to remove this when 4+ new tournaments

@@ -6,6 +6,12 @@ class Ticket < ActiveRecord::Base
 	validates :summoner_id, presence: true
 	before_create :are_remaining_tickets?
 
+	scope :paid, -> {where(status: "Completed")}
+	scope :unpaid, -> {where("status != ? OR status IS ?", "Completed", nil)}
+
+	scope :solo_tickets, -> {where(duo_id: nil)}
+	scope :duo_tickets, -> {where.not(duo_id: nil)}
+
 	attr_accessor :summonerName, :duoName, :duo_selected
 
 	def are_remaining_tickets?
