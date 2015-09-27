@@ -1,3 +1,8 @@
+openSSL:
+  id: 1
+  tournament_id: 1
+  summoner_id: 1
+
 <% 16.times do |n| %>
 ticket_solo<%= n %>:
   tournament: tournament_sold
