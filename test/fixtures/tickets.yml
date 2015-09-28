@@ -10,7 +10,7 @@ ticket_solo<%= n %>:
   status: "Completed"
 <% end %>
 
-<% i = 4 %>
+<% i = 20 %>
 <% 12.times do |n| %>
 ticket_duo<%= n %>:
   tournament: tournament_sold
