@@ -14,7 +14,6 @@ class Ticket < ActiveRecord::Base
 
 	attr_accessor :summonerName, :duoName, :duo_selected
 
-	#this should be an instance method
 	def new_with_summoner(ticket_params)
 		Rails.logger.info "STEP1 : WE GOT HERE"
 	    if ticket_params[:summonerName]
@@ -29,62 +28,49 @@ class Ticket < ActiveRecord::Base
 	    return self
 	end
 
-	def add_summoner(summonerName)
-		summoner = Summoner.find_or_create(summonerName)
-		Rails.logger.info "summoner: #{summoner.inspect}"
-		# self.transfer_errors(summoner)
-		Rails.logger.info "errors after: #{self.errors.messages}"
-		if !!summoner.id 
-			self.summoner_id = summoner.id
-		end
-	end
-
-	def add_duo(duoName)
-	    if duoName && duoName.length > 1
-	    	duo = Summoner.find_or_create(duoName, "duo name")
-	    	# self.transfer_errors(duo)
-	    	if !!duo.id
-	      		self.duo_id = duo.id 
-	    	end
-	    end		
-	end
-
-	def transfer_errors(obj)
-		Rails.logger.info "obj: #{obj.inspect}"
-		Rails.logger.info "errors: #{obj.errors.messages}"
-		if obj.errors.any?
-			obj.errors.messages.each do |x,y|
-				self.errors.add(:"#{x}", y.first)
-			end
-		end
-	end
-
 	private
 
-	def are_remaining_tickets?
-		remaining = tournament.seats_left
-		Rails.logger.info "REMAINING: #{remaining}"
-		if duo_id
-			seats_for_duo?(remaining) 
-		else
-			seats_for_solo?(remaining)
+		def add_summoner(summonerName)
+			summoner = Summoner.find_or_create(summonerName)
+			Rails.logger.info "summoner: #{summoner.inspect}"
+			Rails.logger.info "errors after: #{self.errors.messages}"
+			if !!summoner.id 
+				self.summoner_id = summoner.id
+			end
 		end
-		Rails.logger.info "errors: #{self.errors.inspect}"
-	end
 
-	def seats_for_solo?(remaining)
-		if remaining <= 0
-			Rails.logger.info "we should raise solo error!"
-			self.errors.add(:sold_out, ", sorry there are no tickets left!")
-			return false
+		def add_duo(duoName)
+		    if duoName && duoName.length > 1
+		    	duo = Summoner.find_or_create(duoName, "duo name")
+		    	if !!duo.id
+		      		self.duo_id = duo.id 
+		    	end
+		    end		
 		end
-	end
 
-	def seats_for_duo?(remaining)
-		if remaining <= 1
-			self.errors.add(:only_one, "seat left! Unable to register a duo")
-			return false
+		def are_remaining_tickets?
+			remaining = tournament.seats_left
+			Rails.logger.info "REMAINING: #{remaining}"
+			if duo_id
+				seats_for_duo?(remaining) 
+			else
+				seats_for_solo?(remaining)
+			end
+			Rails.logger.info "errors: #{self.errors.inspect}"
 		end
-	end
 
+		def seats_for_solo?(remaining)
+			if remaining <= 0
+				Rails.logger.info "we should raise solo error!"
+				self.errors.add(:sold_out, ", sorry there are no tickets left!")
+				return false
+			end
+		end
+
+		def seats_for_duo?(remaining)
+			if remaining <= 1
+				self.errors.add(:only_one, "seat left! Unable to register a duo")
+				return false
+			end
+		end
 end

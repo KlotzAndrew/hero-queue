@@ -4,26 +4,8 @@ class PaypalApi
 	APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
 
 	def self.paypal_encrypted(ticket, return_url, notify_url)
-		price = calculate_price(ticket)
-		item_name = summoner_name_string(ticket) #this can be a method routing to matching game model
-		
-	  values = {
-	    :business => Rails.application.secrets.paypal_email,
-	    :cmd => '_cart',
-	    :upload => 1,
-	    :return => return_url,
-	    :invoice => ticket.id,
-	    :notify_url => notify_url + 'hook',
-	    :cert_id => Rails.application.secrets.paypal_cert_hq
-	  }
-	    values.merge!({
-	      "amount_1" => price,
-	      "currency_code" => "CAD",
-	      "item_name_1" => item_name,
-	      "item_number_1" => 1,
-	      "quantity_1" => 1,
-	    })
-	  encrypt_for_paypal(values)
+		values = build_values(ticket, return_url, notify_url)
+		encrypt_for_paypal(values)
 	end
 
 	def self.check_paypal_ipn(params)
@@ -39,6 +21,28 @@ class PaypalApi
 	        purchased_at: Time.now)
 	      paypal_verify(ticket)
 	    end
+	end
+
+	private
+
+	def self.build_values(ticket, return_url, notify_url)
+		values = {
+	    :business => Rails.application.secrets.paypal_email,
+	    :cmd => '_cart',
+	    :upload => 1,
+	    :return => return_url,
+	    :invoice => ticket.id,
+	    :notify_url => notify_url + 'hook',
+	    :cert_id => Rails.application.secrets.paypal_cert_hq
+	  }
+	    values.merge!({
+	      "amount_1" => calculate_price(ticket),
+	      "currency_code" => "CAD",
+	      "item_name_1" => summoner_name_string(ticket),
+	      "item_number_1" => 1,
+	      "quantity_1" => 1,
+	    })
+	    return values
 	end
 
 	def self.calculate_price(ticket)
