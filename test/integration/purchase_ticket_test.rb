@@ -44,8 +44,9 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
   	ticket = assigns(:ticket)
   	assert_equal ticket.summoner, @summoner
   	assert_equal ticket.duo, @duo
-  	assert_select_jquery :html, '#register' do
+    assert_select_jquery :html, '#register' do
       assert_select 'div#active_ticket'
+      assert_select 'form[action=?]', "https://www.paypal.com/cgi-bin/webscr"
     end
   end
 
@@ -66,6 +67,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
       assert_equal ticket.duo.summonerName, name_duo
       assert_select_jquery :html, '#register' do
         assert_select 'div#active_ticket'
+        assert_select 'form[action=?]', "https://www.paypal.com/cgi-bin/webscr"
       end
     end
   end
@@ -93,6 +95,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
       assert_equal ticket.duo, @duo
       assert_select_jquery :html, '#register' do
         assert_select 'div#active_ticket'
+        assert_select 'form[action=?]', "https://www.paypal.com/cgi-bin/webscr"
       end
     end
   end
