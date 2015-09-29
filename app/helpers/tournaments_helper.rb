@@ -4,7 +4,7 @@ module TournamentsHelper
 	end
 
 	def tournaments_link(tournament)
-		if tournament.seats_left <= 0
+		if tournament.seats_left > 0
 			link_to 'Join!', tournament, :class => "btn btn-success"
 		else
 			link_to 'Sold Out!', tournament, :class => "btn btn-danger"
