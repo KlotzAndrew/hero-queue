@@ -112,7 +112,7 @@ class Tournament < ActiveRecord::Base
 			temp_teams[team_num] << [solo]
 		end
 		#itterate with mixing pot
-		while cand_std > 100 && Time.now.to_i - st < 10 do
+		while cand_std > 100 && Time.now.to_i - st < 20 do
 			Rails.logger.info "temp_teams starting: #{temp_teams.count}"
 			max, min = nil, nil
 			#move max players into mixing pot

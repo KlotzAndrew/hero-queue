@@ -46,22 +46,16 @@ class TournamentTest < ActiveSupport::TestCase
 
 	test "builds teams correctly" do
 		all_players = @tournament.all_solos + @tournament.all_duos.flatten
-		i = 0
+		i = 1000
 		all_players.each do |x|
-			if i <= 5 
-				x.update(elo: 1000)
-			elsif i < 10 
-				x.update(elo: 1500)
-			elsif i < 20 
-				x.update(elo: 2000)
-			elsif i < 30 
-				x.update(elo: 2500)
-			elsif i < 35 
-				x.update(elo: 3000)
-			else 
-				x.update(elo: 3500) 
+			x.update(elo: i)
+			if i < 1500
+				i+=75
+			elsif i < 2000
+				i+=20
+			else
+				i+=40
 			end
-			i+=1
 		end
 		@tournament.build_teams
 		@tournament = @tournament.reload
@@ -84,9 +78,9 @@ class TournamentTest < ActiveSupport::TestCase
 			assert_equal x.teams.first, y.teams.first
 		end
 		#returns correct stats
-		assert_equal 2237, @tournament.team_stats[:team_mean]
+		assert_equal 1754, @tournament.team_stats[:team_mean]
 		#is balanced
 		assert_includes 0..100, @tournament.team_stats[:team_std]
-		#range maximum?
+		#assert range maximum?
 	end
 end
