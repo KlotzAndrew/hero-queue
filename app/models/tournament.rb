@@ -112,13 +112,14 @@ class Tournament < ActiveRecord::Base
 			temp_teams[team_num] << [solo]
 		end
 		#itterate with mixing pot
-		while cand_std > 100 && Time.now.to_i - st < 5 do
+		while cand_std > 100 && Time.now.to_i - st < 10 do
 			Rails.logger.info "temp_teams starting: #{temp_teams.count}"
 			max, min = nil, nil
 			#move max players into mixing pot
 			mixing_pot = []
 			new_teams = [[],[]]
 			team_means = temp_teams.map {|x| x.flatten.map {|y| y.elo}}
+			max_team_mmr, mini_max = team_means.max.sum, team_means.max.sum
 			0.upto(team_means.count-1) do |x| 
 				if team_means[x].sum == team_means.max.sum
 					max = x
@@ -141,50 +142,59 @@ class Tournament < ActiveRecord::Base
 			Rails.logger.info "min_max: #{min}-#{max}"
 			Rails.logger.info "mixing_pot.flatten.count: #{mixing_pot.flatten.count}"
 			Rails.logger.info "temp_teams -2: #{temp_teams.count}"
-			#mix in duos
-			Rails.logger.info "mixing_pot: #{mixing_pot}"
-			mix_duos = []
-			mixing_pot.each do |parse_team| 
-				parse_team.each do |players|
-					if players.count > 1
-						mix_duos << players
+
+			mm_st = Time.now.to_i
+			while mini_max >= max_team_mmr && Time.now.to_i - mm_st < 5
+				new_teams = [[],[]]
+				#mix in duos
+				Rails.logger.info "mixing_pot: #{mixing_pot}"
+				mix_duos = []
+				mixing_pot.each do |parse_team| 
+					parse_team.each do |players|
+						if players.count > 1
+							mix_duos << players
+						end
 					end
 				end
-			end
-			Rails.logger.info "mix_duos: #{mix_duos.count}"
-			mix_duos.each do |duo|
-				team_num = rand(0..new_teams.count-1)
-				while new_teams[team_num].flatten.count >= 4
+				Rails.logger.info "mix_duos: #{mix_duos.count}"
+				mix_duos.each do |duo|
 					team_num = rand(0..new_teams.count-1)
+					while new_teams[team_num].flatten.count >= 4
+						team_num = rand(0..new_teams.count-1)
+					end
+					Rails.logger.info "mix this duo: #{duo}"
+					new_teams[team_num] << duo
 				end
-				Rails.logger.info "mix this duo: #{duo}"
-				new_teams[team_num] << duo
-			end
-			new_teams.each do |xa| 
-				Rails.logger.info "new_teams.count duos: #{xa.flatten.count}"
-			end
-			#mix in singles
-			mix_solos = []
-			mixing_pot.each do |parse_team| 
-				parse_team.each do |players|
-					if players.count == 1
-						mix_solos << players
+				new_teams.each do |xa| 
+					Rails.logger.info "new_teams.count duos: #{xa.flatten.count}"
+				end
+				#mix in solos
+				mix_solos = []
+				mixing_pot.each do |parse_team| 
+					parse_team.each do |players|
+						if players.count == 1
+							mix_solos << players
+						end
 					end
 				end
-			end
-			Rails.logger.info "mix_solos: #{mix_solos.count}"
-			mix_solos.each do |solos|
-				team_num = rand(0..new_teams.count-1)
-				while new_teams[team_num].flatten.count >= 5
+				Rails.logger.info "mix_solos: #{mix_solos.count}"
+				mix_solos.each do |solos|
 					team_num = rand(0..new_teams.count-1)
+					while new_teams[team_num].flatten.count >= 5
+						team_num = rand(0..new_teams.count-1)
+					end
+					Rails.logger.info "mix this solo: #{solos}"
+					new_teams[team_num] << solos
 				end
-				Rails.logger.info "mix this solo: #{solos}"
-				new_teams[team_num] << solos
+				new_teams.each do |xa| 
+					Rails.logger.info "new_teams.count solos: #{xa.flatten.count}"
+				end
+				Rails.logger.info "new_teams aft solos: #{new_teams}"
+				mini_max_demo = new_teams.map {|x| x.flatten.sum {|y| y.elo}}
+				Rails.logger.info "mini_max_demo: #{mini_max_demo}"
+				Rails.logger.info "mini_max: #{mini_max}"
+				Rails.logger.info "mini_max: #{max_team_mmr}"
 			end
-			new_teams.each do |xa| 
-				Rails.logger.info "new_teams.count solos: #{xa.flatten.count}"
-			end
-			Rails.logger.info "new_teams aft solos: #{new_teams}"
 			#add mix back to teams
 			new_teams.each {|add_mix| temp_teams << add_mix}
 			Rails.logger.info "temp_teams.count #{temp_teams.count}"
