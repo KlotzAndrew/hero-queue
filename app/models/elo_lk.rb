@@ -7,7 +7,7 @@ class EloLk
 	private
 
 	def get_elo(tournament)
-		all_sums = tournament.all_solos + tournament.all_duos.flatten
+		all_sums = tournament.all_solos.flatten + tournament.all_duos.flatten
 		without_elo = all_sums.select { |x| x unless x.elo }
 		base_url = 'http://www.lolking.net/summoner/na/'
 		nokogiri_request(without_elo, base_url)
