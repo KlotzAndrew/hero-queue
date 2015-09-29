@@ -45,17 +45,11 @@ class TournamentTest < ActiveSupport::TestCase
 	end
 
 	test "builds teams correctly" do
-		all_players = @tournament.all_solos + @tournament.all_duos.flatten
-		i = 1000
+		all_players = @tournament.all_solos.flatten + @tournament.all_duos.flatten
+		i = [2344, 1865, 1207, 896, 1574, 1944, 2046, 1151, 1649, 1689, 942, 996, 1915, 1328, 1211, 1523, 1113, 927, 1329, 1691, 1550, 1551, 1724, 1789, 1216, 2121, 1246, 1922, 1913, 1600, 1612, 1147, 1275, 1559, 991, 1347, 1215, 1308, 797, 1628]
 		all_players.each do |x|
-			x.update(elo: i)
-			if i < 1500
-				i+=75
-			elsif i < 2000
-				i+=20
-			else
-				i+=40
-			end
+			x.update(elo: i.last)
+			i.pop
 		end
 		@tournament.build_teams
 		@tournament = @tournament.reload
@@ -67,7 +61,7 @@ class TournamentTest < ActiveSupport::TestCase
 			assert_equal 5, x.summoners.count
 		end
 		#each player is on a team (once)
-		@tournament.all_solos.each do |x|
+		@tournament.all_solos.flatten.each do |x|
 			assert_equal 1, x.teams.count
 		end
 		@tournament.all_duos.flatten.each do |x|
@@ -78,7 +72,7 @@ class TournamentTest < ActiveSupport::TestCase
 			assert_equal x.teams.first, y.teams.first
 		end
 		#returns correct stats
-		assert_equal 1754, @tournament.team_stats[:team_mean]
+		assert_equal 1471, @tournament.team_stats[:team_mean]
 		#is balanced
 		assert_includes 0..100, @tournament.team_stats[:team_std]
 		#assert range maximum?
