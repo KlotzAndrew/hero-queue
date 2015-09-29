@@ -90,13 +90,8 @@ class Tournament < ActiveRecord::Base
 		#populate teams
 		p_solos = all_solos
 		p_duos = all_duos
-		all_players = all_solos + all_duos.flatten
-		ids = all_players.map {|x| x.elo}
-		Rails.logger.info "MAIN! #{ids}"
-		Rails.logger.info "TCIKETS! #{tickets.where(status: "Completed").map {|x| [x.summoner_id, x.duo_id]}}"
-		Rails.logger.info "duplicates! #{ids.select{|item| ids.count(item) > 1}.uniq}"
-
 		temp_teams = []
+
 		total_teams.times do |x|
 			temp_teams << []
 		end
@@ -109,15 +104,106 @@ class Tournament < ActiveRecord::Base
 
 			temp_teams[team_num] << duo
 		end
-
 		p_solos.each do |solo|
 			team_num = rand(0..total_teams-1)
 			while temp_teams[team_num].flatten.count >= 5
 				team_num = rand(0..total_teams-1)
 			end
-			temp_teams[team_num] << solo
+			temp_teams[team_num] << [solo]
+		end
+		#itterate with mixing pot
+		while cand_std > 100 && Time.now.to_i - st < 5 do
+			Rails.logger.info "temp_teams starting: #{temp_teams.count}"
+			max, min = nil, nil
+			#move max players into mixing pot
+			mixing_pot = []
+			new_teams = [[],[]]
+			team_means = temp_teams.map {|x| x.flatten.map {|y| y.elo}}
+			0.upto(team_means.count-1) do |x| 
+				if team_means[x].sum == team_means.max.sum
+					max = x
+					break
+				end
+			end
+			mixing_pot << temp_teams[max]
+			temp_teams.delete_at(max)
+			Rails.logger.info "temp_teams -1: #{temp_teams.count}"
+			#move min players into mixing pot
+			team_means = temp_teams.map {|x| x.flatten.map {|y| y.elo}}
+			0.upto(team_means.count-1) do |x| 
+				if team_means[x].sum == team_means.min.sum
+					min = x
+					break
+				end
+			end
+			mixing_pot << temp_teams[min]
+			temp_teams.delete_at(min)
+			Rails.logger.info "min_max: #{min}-#{max}"
+			Rails.logger.info "mixing_pot.flatten.count: #{mixing_pot.flatten.count}"
+			Rails.logger.info "temp_teams -2: #{temp_teams.count}"
+			#mix in duos
+			Rails.logger.info "mixing_pot: #{mixing_pot}"
+			mix_duos = []
+			mixing_pot.each do |parse_team| 
+				parse_team.each do |players|
+					if players.count > 1
+						mix_duos << players
+					end
+				end
+			end
+			Rails.logger.info "mix_duos: #{mix_duos.count}"
+			mix_duos.each do |duo|
+				team_num = rand(0..new_teams.count-1)
+				while new_teams[team_num].flatten.count >= 4
+					team_num = rand(0..new_teams.count-1)
+				end
+				Rails.logger.info "mix this duo: #{duo}"
+				new_teams[team_num] << duo
+			end
+			new_teams.each do |xa| 
+				Rails.logger.info "new_teams.count duos: #{xa.flatten.count}"
+			end
+			#mix in singles
+			mix_solos = []
+			mixing_pot.each do |parse_team| 
+				parse_team.each do |players|
+					if players.count == 1
+						mix_solos << players
+					end
+				end
+			end
+			Rails.logger.info "mix_solos: #{mix_solos.count}"
+			mix_solos.each do |solos|
+				team_num = rand(0..new_teams.count-1)
+				while new_teams[team_num].flatten.count >= 5
+					team_num = rand(0..new_teams.count-1)
+				end
+				Rails.logger.info "mix this solo: #{solos}"
+				new_teams[team_num] << solos
+			end
+			new_teams.each do |xa| 
+				Rails.logger.info "new_teams.count solos: #{xa.flatten.count}"
+			end
+			Rails.logger.info "new_teams aft solos: #{new_teams}"
+			#add mix back to teams
+			new_teams.each {|add_mix| temp_teams << add_mix}
+			Rails.logger.info "temp_teams.count #{temp_teams.count}"
+			#recalculate std
+			team_means = temp_teams.map {|x| x.flatten.map {|y| y.elo}}
+			total_means = team_means.flatten.sum/team_means.count
+			Rails.logger.info "team_mean: #{team_means}"
+			team_sums_sq = []
+			team_means.each do |x|
+				Rails.logger.info "elo_array.each: #{x}"
+				team_sums_sq << (total_means - x.sum)**2
+			end
+			Rails.logger.info "team_sums_sq.sum: #{team_sums_sq.sum}"
+			Rails.logger.info "teams.count: #{temp_teams.count}"
+			cand_std = (team_sums_sq.sum/(temp_teams.count - 1))**0.5
+			Rails.logger.info "cand_std: #{cand_std}"
 		end
 
+		#build finished team objects
 		temp_teams.each do |team_array|
 			Rails.logger.info "TEAM_ARRAY: #{team_array}"
 			team = Team.create
@@ -126,5 +212,6 @@ class Tournament < ActiveRecord::Base
 			end
 			teams << team
 		end
+
 	end
 end
