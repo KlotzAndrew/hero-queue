@@ -24,7 +24,7 @@ module Sortinghat
 		cand_std = 2000
 		#populate teams
 		p_solos, p_duos = all_solos, all_duos
-		temp_teams = []
+		temp_teams = [] 
 		total_teams.times { |x| temp_teams << [] }
 		populate_array(p_duos, temp_teams)
 		populate_array(p_solos, temp_teams)

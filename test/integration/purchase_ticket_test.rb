@@ -7,7 +7,6 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     @tournament_oneseat = tournaments(:tournament_oneseat)
     @summoner = summoners(:boxstripe)
     @duo = summoners(:hukkk)
-
   end
 
   test "solo needs 1 seat" do
@@ -17,6 +16,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
         summonerName: @summoner.summonerName,
         tournament_id: @tournament_sold.id }
     end
+
     ticket = assigns(:ticket)
     assert_equal ticket.errors.first, [:sold_out, ", sorry there are no tickets left!"]
   end
@@ -29,8 +29,9 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
         duoName: @duo.summonerName,
         tournament_id: @tournament_oneseat.id }
     end
-     ticket = assigns(:ticket)
-      assert_equal ticket.errors.first, [:only_one, "seat left! Unable to register a duo"]
+
+    ticket = assigns(:ticket)
+    assert_equal ticket.errors.first, [:only_one, "seat left! Unable to register a duo"]
   end
 
   test "register with existing summoner and duo" do
@@ -41,6 +42,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
   			duoName: @duo.summonerName,
   			tournament_id: @tournament.id }
   	end
+
   	ticket = assigns(:ticket)
   	assert_equal ticket.summoner, @summoner
   	assert_equal ticket.duo, @duo
@@ -62,6 +64,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     			duoName: name_duo,
     			tournament_id: @tournament.id }
     	end
+      
       ticket = assigns(:ticket)
       assert_equal ticket.summoner.summonerName, name_summoner
       assert_equal ticket.duo.summonerName, name_duo
