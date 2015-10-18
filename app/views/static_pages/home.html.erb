@@ -1,15 +1,14 @@
 <% provide(:title, "Home") %>
-<section id="home">
+<section class="wallpaper-1">
 	<div class="container">
 		<div class="col-md-8 col-md-offset-2">
-			<div class="well semi_transparent">
+			<div class="well semi_transparent bold-title text-center">
 				<h1>Live Solo/Duo Queue Tournaments</h1>
 				<h5>Teambalancing + Computers Provided</h5>
 				<h4>First timers welcome! Bronze to Challenger</h4>
-
 			</div>
 			<div class="well">
-				<h2><u>Coming Up</u></h2>
+				<h2 class="bold-title text-center">Coming Up</h2>
 				<div class="row">
 					<div class="col-md-6">
 						<p><%= @tournament.name %></p>
@@ -24,8 +23,8 @@
 					</div>
 				</div>
 
-				<div class="tourney_register">
-					<%= link_to "Join!", tournament_path(@tournament), :class => "btn btn-lg btn-success" %>
+				<div class="text-center">
+					<%= link_to "Join Tournament", tournament_path(@tournament), :class => "btn btn-lg btn-primary", :type => "button" %>
 				</div>
 			</div>
 		</div>

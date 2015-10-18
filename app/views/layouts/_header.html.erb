@@ -1,4 +1,4 @@
-<nav class="navar navbar-inverse navbar-fixed-top">
+<nav class="navar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -7,9 +7,10 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/"><strong>HeroQueue</strong></a>
+			<a class="navbar-brand" href="/"><%= image_tag("brand-logo.png", :alt => "brand logo") %></a>
+			<a class="navbar-brand" id="brand-text" href="/"><strong>HeroQueue</strong></a>
 		</div>
-		<div class="navbar-collapse collapse">
+		<div class="navbar-right navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li><%= link_to "Tournaments", tournaments_path %></li>
 				<li><%= link_to "Format", format_path %></li>
