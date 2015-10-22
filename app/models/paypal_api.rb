@@ -20,6 +20,14 @@ class PaypalApi
 	        transaction_id: params[:txn_id], 
 	        purchased_at: Time.now)
 	      paypal_verify(ticket)
+	     elsif status == "Pending"
+	     	ticket = Ticket.find(params[:invoice])
+	      ticket.update(
+	        notification_params: params, 
+	        status: status, 
+	        transaction_id: params[:txn_id], 
+	        purchased_at: Time.now)
+	      paypal_verify(ticket)
 	    end
 	end
 

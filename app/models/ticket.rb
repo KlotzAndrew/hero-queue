@@ -6,7 +6,7 @@ class Ticket < ActiveRecord::Base
 	validates :summoner_id, presence: true
 	validate :are_remaining_tickets?
 
-	scope :paid, -> {where(status: "Completed")}
+	scope :paid, -> {where(status: ["Completed","Pending"])}
 	scope :unpaid, -> {where("status != ? OR status IS ?", "Completed", nil)}
 
 	scope :solo_tickets, -> {where(duo_id: nil)}
