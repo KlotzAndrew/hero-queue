@@ -29,5 +29,8 @@ class TeamTest < ActiveSupport::TestCase
 		teams = teambalancer.teambalance
 		Team.build_teams(teams, @tournament.id)
 		assert_equal @tournament.reload.teams.count, @tournament.total_teams
+		@tournament.teams.each do |team|
+			assert_equal team.summoners.count, 5
+		end
 	end
 end
