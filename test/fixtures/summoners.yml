@@ -35,6 +35,7 @@ summoner_solo<%= n %>:
   summonerId: <%= sumids[n] %>
   summonerLevel: 30
   profileIconId: 677
+  elo: <%= 1000 + (100*n) %>
 <% end %>
 
 <% 16.upto(39) do |n| %>
@@ -45,4 +46,5 @@ summoner_duo<%= n%2 %><%= n-16 %>:
   summonerId: <%= sumids[n] %>
   summonerLevel: 30
   profileIconId: 677
+  elo: <%= 1000 + (50*n) %>
 <% end %> 
