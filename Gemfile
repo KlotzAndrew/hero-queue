@@ -18,9 +18,10 @@ gem 'nokogiri', '~> 1.6.6.2'
 
 group :development, :test do
   gem 'sqlite3'
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
 end
