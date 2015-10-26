@@ -11,6 +11,15 @@
     </div>
   <% end %>
 
+  <%= f.label :email %>
+  <%= f.text_field :email, :placeholder => "Email" %>
+
+  <%= f.label :password %>
+  <%= f.text_field :password, :placeholder => "Password" %>
+
+  <%= f.label :password_confirmation %>
+  <%= f.text_field :password_confirmation, :placeholder => "Confirmation" %>
+
   <div class="actions">
     <%= f.submit %>
   </div>

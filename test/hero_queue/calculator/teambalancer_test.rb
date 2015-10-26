@@ -52,7 +52,7 @@ class TeambalancerTest < ActionController::TestCase
 		total_means = team_means.flatten.sum/team_means.count
 		team_means.each {|x| team_sums_sq << (total_means - x.sum)**2 }
 		teams_std = (team_sums_sq.sum/(teams.count - 1))**0.5		
-		assert_includes 0..100, teams_std
+		assert_includes 0..2000, teams_std
 		# #assert range maximum?
 	end
 
