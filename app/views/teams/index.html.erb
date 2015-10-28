@@ -6,9 +6,32 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="well semi_transparent">
         <h1 class="bold-title"><u>Listing Teams</u></h1>
-
         <% if @teams.count == 0 %>
           <h3 class="text-center bold-title">Teams have not been built yet</h3>
+        <% else %>
+          <%= render :partial => 'team', :collection => @teams %>
+        <% end %>
+      </div>
+      <div class="well semi_transparent">
+        <h1 class="bold-title"><u>Listing Tickets</u></h1>
+
+        <%= form_for(@tournament) do |f| %>
+          <%= hidden_field_tag(:options, "lolkingelo") %>
+          <div class="actions">
+            <%= f.submit "Update All Elos" %>
+          </div>
+        <% end %>
+
+        <%= form_for(@tournament) do |f| %>
+          <%= hidden_field_tag(:options, "buildteams") %>
+          <div class="actions">
+            <%= f.submit "Build Teams" %>
+          </div>
+        <% end %>  
+
+
+        <% if logged_in? && current_user.admin? %>
+          <%= render :partial => 'ticket', :collection => @tickets %>
         <% end %>
       </div>
     </div>

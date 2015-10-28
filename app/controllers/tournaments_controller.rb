@@ -1,6 +1,8 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:show]
+  before_action :set_tournament, only: [:show, :update]
   before_action :set_ticket, only: [:show]
+  before_action :logged_in_user, only: [:update]
+  before_action :admin_user, only: [:update]
 
   def index
     @upcoming = Tournament.all.where("start_date > ?", Time.now)
@@ -9,6 +11,16 @@ class TournamentsController < ApplicationController
   end
 
   def show
+  end
+
+  def update
+    #maybe case when
+    if params[:options] == "lolkingelo"
+      @tournament.update_summoner_elos
+    elsif params[:options] == "buildteams"
+      @tournament.update_with_teambalancer
+    end
+    redirect_to tournament_teams_path(@tournament)
   end
 
   private
@@ -25,6 +37,10 @@ class TournamentsController < ApplicationController
     end
 
     def tournament_params
-      params[:tournament]
+      params.require(:tournament).permit(:options)
+    end
+
+    def admin_user
+      redirect_to(root_url) unless current_user.admin?
     end
 end

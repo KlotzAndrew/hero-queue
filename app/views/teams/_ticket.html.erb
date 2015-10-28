@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-md-12">
+		<h5> <%= ticket_counter %> | <%= ticket.status %> </h5>
+		<p>
+			Summoner: <%= ticket.summoner.summonerName %> | 
+			Level: <%= ticket.summoner.summonerLevel %> |
+			Elo: <%= ticket.summoner.elo %>
+		</p>
+		<% if ticket.duo %>
+			<p>
+				Summoner: <%= ticket.duo.summonerName %> | 
+				Level: <%= ticket.duo.summonerLevel %> |
+				Elo: <%= ticket.duo.elo %>
+			</p>
+		<% end %>
+	</div>
+</div>

@@ -10,7 +10,13 @@ class LolkingeloTest < ActiveSupport::TestCase
 		VCR.use_cassette("lolking_nokogiri") do
 			fetcher = Fetcher::Lolkingelo.new(@tournament)
 			
-			assert_not_nil @tournament.all_solos.first.first.elo
+			@tournament.all_solos.each do |x|
+				assert_not x.first.elo.nil?
+			end
+			@tournament.all_duos.each do |x, y|
+				assert_not x.elo.nil?
+				assert_not y.elo.nil?
+			end
 		end
 	end
 end

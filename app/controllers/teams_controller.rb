@@ -3,12 +3,15 @@ class TeamsController < ApplicationController
   before_action :set_tournament_teams, only: [:index]
 
   def index
-    # @summoners = Tournament.find(params["tournament_id"]).tickets.where(status: "Completed").map { |ticket| ticket.summoner.summonerName }
   end
 
   private
     def set_tournament_teams
-      @teams = Team.all.where("tournament_id = ?", params["tournament_id"])
+      @tournament = Tournament.find(params["tournament_id"])
+      @teams = @tournament.teams
+      if current_user && current_user.admin?
+        @tickets = @tournament.tickets
+      end
     end
 
     # def set_team

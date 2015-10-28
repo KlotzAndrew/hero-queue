@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-  setup do
+  def setup
     @user = users(:grok)
     @other_user = users(:thrall)
   end

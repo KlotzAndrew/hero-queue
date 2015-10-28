@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PurchaseTicketTest < ActionDispatch::IntegrationTest
-  setup do
+  def setup
     @tournament = tournaments(:tournament_unsold)
     @tournament_sold = tournaments(:tournament_sold)
     @tournament_oneseat = tournaments(:tournament_oneseat)
