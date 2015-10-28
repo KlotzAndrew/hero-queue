@@ -6,7 +6,15 @@ class TournamentTest < ActiveSupport::TestCase
 		@tournament_unsold = tournaments(:tournament_unsold)
 	end
 
-	#instance scopes
+	test "tournament has a limit on number of teams" do
+		@tournament.total_teams.times do |x| 
+			@tournament.teams << @tournament.teams.create
+		end
+		assert_equal @tournament.total_teams, @tournament.teams.count
+		@tournament.teams << @tournament.teams.create
+		assert_equal @tournament.total_teams, @tournament.teams.count
+	end
+	
 	test "player_count returns corrent number" do
 		assert_equal 40, @tournament.player_count
 	end

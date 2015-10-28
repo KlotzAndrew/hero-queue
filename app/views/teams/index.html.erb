@@ -12,29 +12,30 @@
           <%= render :partial => 'team', :collection => @teams %>
         <% end %>
       </div>
-      <div class="well semi_transparent">
-        <h1 class="bold-title"><u>Listing Tickets</u></h1>
 
-        <%= form_for(@tournament) do |f| %>
-          <%= hidden_field_tag(:options, "lolkingelo") %>
-          <div class="actions">
-            <%= f.submit "Update All Elos" %>
-          </div>
-        <% end %>
+      <% if logged_in? && current_user.admin? %>
+        <div class="well semi_transparent">
+          <h1 class="bold-title"><u>Listing Tickets</u></h1>
 
-        <%= form_for(@tournament) do |f| %>
-          <%= hidden_field_tag(:options, "buildteams") %>
-          <div class="actions">
-            <%= f.submit "Build Teams" %>
-          </div>
-        <% end %>  
+          <%= form_for(@tournament) do |f| %>
+            <%= hidden_field_tag(:options, "lolkingelo") %>
+            <div class="actions">
+              <%= f.submit "Update All Elos" %>
+            </div>
+          <% end %>
+
+          <%= form_for(@tournament) do |f| %>
+            <%= hidden_field_tag(:options, "buildteams") %>
+            <div class="actions">
+              <%= f.submit "Build Teams" %>
+            </div>
+          <% end %>  
 
 
-        <% if logged_in? && current_user.admin? %>
-          <%= render :partial => 'ticket', :collection => @tickets %>
-        <% end %>
-      </div>
+            <%= render :partial => 'ticket', :collection => @tickets %>
+        </div>
+      <% end %>
+      
     </div>
   </div>
 </section>
-  

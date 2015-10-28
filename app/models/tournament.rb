@@ -1,8 +1,7 @@
 class Tournament < ActiveRecord::Base
 	has_many :tickets
 	has_many :teams
-	# include Sortinghat
-	
+
 	def player_count
 		tickets.includes(:summoner, :duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 	end
@@ -59,9 +58,13 @@ class Tournament < ActiveRecord::Base
 
 	private
 
+	def under_max_team_limit
+
+	end
+
 	def build_new_teams(teams)
 		teams.each do |team_array|
-			team = self.teams.build
+			team = self.teams.new
 			team_array.flatten.each { |x| team.summoners << Summoner.find(x[:id]) }
 			team.save
 		end		
