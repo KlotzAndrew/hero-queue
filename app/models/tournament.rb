@@ -29,6 +29,27 @@ class Tournament < ActiveRecord::Base
 		build_new_teams(teams)
 	end
 
+	def team_statistics
+		return false if self.teams.empty?
+		team_sums = self.teams.map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
+		{ 
+			team_avg: team_sums.sum/team_sums.count,
+			team_std: calculate_std(team_sums).round(2),
+			team_max: team_sums.max,
+			team_min: team_sums.min,
+			# team_tscore: 1.67
+		}
+	end
+
+	def calculate_std(team_sums)
+		team_sums_sq = []
+		team_mean = team_sums.sum/team_sums.count
+		team_sums.each do |x|
+			team_sums_sq << (team_mean - x)**2
+		end
+		std = (team_sums_sq.sum/(teams.count - 1))**0.5
+	end
+
 	class << self
 		def legacy
 			array = []

@@ -11,6 +11,7 @@ class TeamsController < ApplicationController
       @teams = @tournament.teams
       if current_user && current_user.admin?
         @tickets = @tournament.tickets
+        @team_stats = @tournament.team_statistics
       end
     end
 

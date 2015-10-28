@@ -31,6 +31,14 @@
             </div>
           <% end %>  
 
+            <% if @team_stats %>
+              AVG: <%= @team_stats[:team_avg] %> |
+              STD: <%= @team_stats[:team_std] %> |
+              MAX: <%= @team_stats[:team_max] %> |
+              MIN: <%= @team_stats[:team_min] %>
+
+              <%= render :partial => 'team_stat', :collection => @teams %>
+            <% end %>
 
             <%= render :partial => 'ticket', :collection => @tickets %>
         </div>

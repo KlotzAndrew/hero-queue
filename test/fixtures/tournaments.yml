@@ -40,3 +40,15 @@ tournament_oneseat:
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
   facebook_url: "www.facebook.com"  
+
+tournament_with_teams:
+  name: "Solo/Duo Queue League Tournament"
+  game: "League of Legends"
+  total_players: 15
+  total_teams: 3
+  price: 15.00
+  start_date:  <%= 4.weeks.from_now %>
+  location_name: "Happy Turbo Internet Cafe"
+  location_address: "5171 Yonge St."
+  location_url: "www.happyturbo.com"
+  facebook_url: "www.facebook.com"

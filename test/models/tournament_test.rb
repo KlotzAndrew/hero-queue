@@ -6,6 +6,21 @@ class TournamentTest < ActiveSupport::TestCase
 		@tournament_unsold = tournaments(:tournament_unsold)
 	end
 
+	test "returns correct team statistics" do
+		#build teams on fixtures
+		all_summoners = @tournament.all_solos + @tournament.all_duos.flatten
+		all_summoners.in_groups_of(5) do |summoners|
+			team = Team.create(tournament_id: @tournament.id)
+			summoners.each {|summoner| team.summoners << summoner}
+		end
+		stats = @tournament.team_statistics
+		assert_equal stats[:team_avg], 10625
+		assert_equal stats[:team_std], 2098.64	
+		assert_equal stats[:team_max], 13700
+		assert_equal stats[:team_min], 7600
+		# assert_equal stats[:team_tscore], 2000
+	end
+
 	test "tournament has a limit on number of teams" do
 		@tournament.total_teams.times do |x| 
 			@tournament.teams << @tournament.teams.create
