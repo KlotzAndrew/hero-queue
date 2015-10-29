@@ -8,7 +8,7 @@
 			<div class="tourney_register">
 			<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
 				<%= hidden_field_tag :cmd, "_s-xclick" %>
-				<%= hidden_field_tag :encrypted, PaypalApi.paypal_encrypted(ticket, root_url, root_url) %>
+				<%= hidden_field_tag :encrypted, Builder::PaypalApi.paypal_encrypted(ticket, root_url, root_url) %>
 				<%= submit_tag "Checkout", :class => "btn btn-lg btn-success" %>
 			<% end %>
 

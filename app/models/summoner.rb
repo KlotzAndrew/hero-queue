@@ -10,10 +10,10 @@ class Summoner < ActiveRecord::Base
 		if existing_summoner
 			return existing_summoner
 		else
-			if LolApi.check_throttle(max_throttle)
-				LolApi.create_summoner_record(Summoner.new, summoner_ref, summonerName, is_duo)
+			if Fetcher::LolApi.check_throttle(max_throttle)
+				Fetcher::LolApi.create_summoner_record(Summoner.new, summoner_ref, summonerName, is_duo)
 			else
-				LolApi.throttle_limit_error(Summoner.new)
+				Fetcher::LolApi.throttle_limit_error(Summoner.new)
 			end
 		end
 	end 
