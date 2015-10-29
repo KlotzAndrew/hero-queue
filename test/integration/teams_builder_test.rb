@@ -12,7 +12,7 @@ class TeamsBuilderTest < ActionDispatch::IntegrationTest
 			log_in_as(@user)
 			assert @user.admin?
 			assert_empty @tournament_sold.teams
-			patch tournament_path(@tournament_sold), options: "buildteams"
+			patch tournament_path(@tournament_sold), use_class: "buildteams"
 			assert_equal @tournament_sold.reload.teams.count, 8
 		end
 	end

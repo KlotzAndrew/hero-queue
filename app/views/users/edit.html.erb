@@ -6,7 +6,7 @@
 				<h1>Update your profile</h1>
 
 				    <%= form_for(@user) do |f| %>
-				      <%= render 'form', f: f %>
+				      <%= render 'form_edit', f: f %>
 				      <div class="center-button">
 					      <%= f.submit "Update my Profile", class: "btn btn-primary" %>
 				      </div>

@@ -4,8 +4,9 @@
     <div class="col-md-4 col-md-offset-4">
       <div class="well semi_transparent">
 				<h1>Sign up</h1>
+				<p class="text-center">(currently only for admins!)</p>
 				    <%= form_for(@user) do |f| %>
-				      <%= render 'form', f: f %>
+				      <%= render 'form_new', f: f %>
 				      <div class="center-button">
 					      <%= f.submit "Create my account", class: "btn btn-primary" %>
 				      </div>

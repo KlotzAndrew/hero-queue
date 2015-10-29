@@ -17,7 +17,7 @@ class UpdateElosTest < ActionDispatch::IntegrationTest
 		end
 	end
 
-	test "build teams with admin account" do
+	test "update elos with admin account" do
 		VCR.use_cassette("lolking_nokogiri") do
 			log_in_as(@user)
 			assert @user.admin?
@@ -29,13 +29,13 @@ class UpdateElosTest < ActionDispatch::IntegrationTest
 				assert_nil x.elo
 				assert_nil y.elo
 			end
-			patch tournament_path(@tournament_sold), options: "lolkingelo"
+			patch tournament_path(@tournament_sold), use_class: "lolkingelo"
 			assert_not_nil @tournament_sold.all_solos.first.first.elo
 			assert_redirected_to tournament_teams_path(@tournament_sold)
 		end
 	end
 
-	test "should not build teams if not logged in" do
+	test "should not update elos if not logged in" do
 		VCR.use_cassette("lolking_nokogiri") do
 			reset_summoner_elos(@tournament_sold)
 			@tournament_sold.all_solos.each do |x|
@@ -45,7 +45,7 @@ class UpdateElosTest < ActionDispatch::IntegrationTest
 				assert_nil x.elo
 				assert_nil y.elo
 			end
-			patch tournament_path(@tournament_sold), options: "lolkingelo"
+			patch tournament_path(@tournament_sold), use_class: "lolkingelo"
 			assert_nil @tournament_sold.all_solos.first.first.elo
 			assert_redirected_to login_url
 		end

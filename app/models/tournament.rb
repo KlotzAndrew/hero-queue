@@ -22,10 +22,10 @@ class Tournament < ActiveRecord::Base
 		fetcher = Fetcher::Lolkingelo.new(self)
 	end
 
-	def update_with_teambalancer
+	def update_with_teambalancer(options = {})
 		ticket_hashes = tickets_to_teambalancer_hash
 		teambalancer = Calculator::Teambalancer.new(ticket_hashes[:solos], ticket_hashes[:duos])
-		teams = teambalancer.teambalance
+		teams = teambalancer.teambalance(options)
 		build_new_teams(teams)
 	end
 

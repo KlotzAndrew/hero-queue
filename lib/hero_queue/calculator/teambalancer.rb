@@ -2,13 +2,19 @@ module Calculator
 	class Teambalancer
 		attr_reader :solos
 		attr_reader :duos
-
+		
 		def initialize(solos, duos)
 			@solos = solos
 			@duos = duos
 		end
 
-	def teambalance
+	def teambalance(options = {})
+		time_total = options[:time_total] || 20
+		time_mixer = options[:time_mixer] || 5
+		if Rails.env == "test"
+			time_total = 1
+			time_mixer = 1
+		end
 		cand_std = 2000
 		#populate teams
 		p_solos, p_duos = @solos, @duos
@@ -19,12 +25,12 @@ module Calculator
 		populate_array(p_solos, temp_teams)
 		#itterate with mixing pot
 		st = Time.now.to_i
-		while cand_std > 100 && Time.now.to_i - st < 1 do
+		while cand_std > 100 && Time.now.to_i - st < time_total do
 			mixing_pot = build_mixing_pot(temp_teams)
 			max_team_mmr = mini_max = shuffle_threshhold(temp_teams)
 			#shuffle mixing pot teams
 			mm_st = Time.now.to_i
-			while mini_max >= max_team_mmr && Time.now.to_i - mm_st < 1 do
+			while mini_max >= max_team_mmr && Time.now.to_i - mm_st < time_mixer do
 				new_teams = shuffle_mixpot_teams(mixing_pot)
 				mini_max = new_teams.map {|x| x.flatten.sum {|y| y[:elo]}}.max
 				Rails.logger.info "mini_max after: #{mini_max}"

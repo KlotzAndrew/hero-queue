@@ -14,11 +14,12 @@ class TournamentsController < ApplicationController
   end
 
   def update
-    #maybe case when
-    if params[:options] == "lolkingelo"
+    if params[:use_class] == "lolkingelo"
       @tournament.update_summoner_elos
-    elsif params[:options] == "buildteams"
+      flash[:success] = "Summoner Elos Updated!"
+    elsif params[:use_class] == "buildteams"
       @tournament.update_with_teambalancer
+      flash[:success] = "Teams built!"
     end
     redirect_to tournament_teams_path(@tournament)
   end

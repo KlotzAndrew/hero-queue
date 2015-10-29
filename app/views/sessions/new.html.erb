@@ -4,6 +4,7 @@
     <div class="col-md-4 col-md-offset-4">
       <div class="well semi_transparent">
         <h1>Log in</h1>
+        <p class="text-center">(currently only for admins!)</p>
           <%= form_for(:session, url: login_path) do |f| %>
 
             <%= f.label :email %>
@@ -14,8 +15,9 @@
             <%= f.password_field :password, class: 'form-control' %>
 
             <%= f.label :remember_me, class: "checkbox inline" do %>
-              <%= f.check_box :remember_me %>
-              <span>Remember me on this computer</span>
+            
+              <%= f.check_box :remember_me, style: "margin-left: 0px;" %>
+              <span style="margin-left:20px;">Remember me on this computer</span>
             <% end %>
 
             <div class="center-button">

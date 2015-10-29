@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    if @user.update_attributes(user_params_update)
       flash[:success] = "Profile updated"
       redirect_to @user
     else
@@ -63,6 +63,10 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    def user_params_update
+      params.require(:user).permit(:password, :password_confirmation)
     end
 
     def correct_user

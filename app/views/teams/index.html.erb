@@ -5,7 +5,7 @@
 
     <div class="col-md-8 col-md-offset-2">
       <div class="well semi_transparent">
-        <h1 class="bold-title"><u>Listing Teams</u></h1>
+        <h1 class="bold-title"><u>Teams</u></h1>
         <% if @teams.count == 0 %>
           <h3 class="text-center bold-title">Teams have not been built yet</h3>
         <% else %>
@@ -15,31 +15,40 @@
 
       <% if logged_in? && current_user.admin? %>
         <div class="well semi_transparent">
-          <h1 class="bold-title"><u>Listing Tickets</u></h1>
+          <h1 class="bold-title"><u>Admin Panel</u></h1>
 
-          <%= form_for(@tournament) do |f| %>
-            <%= hidden_field_tag(:options, "lolkingelo") %>
-            <div class="actions">
-              <%= f.submit "Update All Elos" %>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <%= form_for(@tournament) do |f| %>
+                <%= hidden_field_tag(:use_class, "lolkingelo") %>
+                <div class="actions">
+                  <%= f.submit "Update All Elos", class: "btn btn-success" %>
+                </div>
+              <% end %>
             </div>
-          <% end %>
+            <div class="col-md-6 text-center">
+              <%= form_for(@tournament) do |f| %>
+                <%= hidden_field_tag(:use_class, "buildteams") %>
+                <div class="actions">
+                  <%= f.submit "Build Teams", class: "btn btn-success" %>
+                </div>
+              <% end %>  
+            </div>
+          </div>
 
-          <%= form_for(@tournament) do |f| %>
-            <%= hidden_field_tag(:options, "buildteams") %>
-            <div class="actions">
-              <%= f.submit "Build Teams" %>
-            </div>
-          <% end %>  
 
             <% if @team_stats %>
+            <h3>Tournament Stats</h3>
               AVG: <%= @team_stats[:team_avg] %> |
               STD: <%= @team_stats[:team_std] %> |
               MAX: <%= @team_stats[:team_max] %> |
               MIN: <%= @team_stats[:team_min] %>
 
+              <h3>Team Stats</h3>
               <%= render :partial => 'team_stat', :collection => @teams %>
             <% end %>
 
+            <h3>Tickets</h3>
             <%= render :partial => 'ticket', :collection => @tickets %>
         </div>
       <% end %>
