@@ -5,12 +5,12 @@
       <div class="well semi_transparent">
 				<h1>Sign up</h1>
 				<p class="text-center">(currently only for admins!)</p>
-				    <%= form_for(@user) do |f| %>
-				      <%= render 'form_new', f: f %>
-				      <div class="center-button">
-					      <%= f.submit "Create my account", class: "btn btn-primary" %>
-				      </div>
-				    <% end %>
+			    <%= form_for(@user) do |f| %>
+			      <%= render 'form_new', f: f %>
+			      <div class="center-button">
+				      <%= f.submit "Create my account", class: "btn btn-primary" %>
+			      </div>
+			    <% end %>
       </div>
     </div>
   </div>

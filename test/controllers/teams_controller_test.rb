@@ -18,7 +18,7 @@ class TeamsControllerTest < ActionController::TestCase
   	assert assigns(:tickets)
   end
 
-  test "should not display tickets for admin on index" do
+  test "should not display tickets for non-admin on index" do
   	get :index, :tournament_id => @tournament.id
   	assert_not assigns(:tickets)
   	log_in_as(@other_user)

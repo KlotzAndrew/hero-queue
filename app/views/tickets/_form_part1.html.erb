@@ -1,0 +1,18 @@
+<div id="queue_select" class="row">
+	<div class="col-md-6">
+	<%= form_for(ticket, remote: true, html: {class: ""}) do |f|  %>
+		<%= f.hidden_field :tournament_id, :value => ticket.tournament_id %>
+		<%= f.hidden_field :duo_selected, :value => false %>
+		<%= f.submit "Solo Ticket", :class => "btn btn-success"  %>
+	<% end %>
+	<p>(registers 1 summoner)</p>
+	</div>
+	<div class="col-md-6">
+	<%= form_for(ticket, remote: true, html: {class: ""}) do |f|  %>
+		<%= f.hidden_field :tournament_id, :value => ticket.tournament_id %>
+		<%= f.hidden_field :duo_selected, :value => true %>
+		<%= f.submit "Duo Ticket", :class => "btn btn-success"  %>
+	<% end %>
+	<p>(registers 2 summoners)</p>
+	</div>
+</div>

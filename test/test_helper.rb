@@ -15,12 +15,13 @@ class ActiveSupport::TestCase
   end
 
   def log_in_as(user, options = {})
-    password    = options[:password]    || 'password'
+    password = options[:password]    || 'password'
     remember_me = options[:remember_me] || '1'
     if integration_test?
-      post login_path, session: { email:       user.email,
-                                  password:    password,
-                                  remember_me: remember_me }
+      post login_path, session: { 
+        email: user.email,
+        password: password,
+        remember_me: remember_me }
     else
       session[:user_id] = user.id
     end
@@ -32,11 +33,11 @@ class ActiveSupport::TestCase
       defined?(post_via_redirect)
     end  
 	
-	VCR.configure do |config|
-		config.cassette_library_dir = "fixtures/vcr_cassettes"
-		config.hook_into :webmock
-		config.default_cassette_options = {
-	        match_requests_on: [:uri],
-	    	record: :new_episodes }
-	end
+  	VCR.configure do |config|
+  		config.cassette_library_dir = "fixtures/vcr_cassettes"
+  		config.hook_into :webmock
+  		config.default_cassette_options = {
+        match_requests_on: [:uri],
+  	    record: :new_episodes }
+  	end
 end

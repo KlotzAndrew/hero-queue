@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LolApiTest < ActionDispatch::IntegrationTest
+class PaypalApiTest < ActionDispatch::IntegrationTest
 	def setup
 		@ticket = tickets(:openSSL)
 	end

@@ -1,72 +1,14 @@
 <h1>Register</h1>
 <% if @ticket.id %>
-
-<div id="active_ticket" class="row">
-	<div class="col-md-6 col-md-offset-3">
-		<h4 id="summonerName">Summoner: <%= @ticket.summoner.summonerName %></h4>
-		<% if !@ticket.duo.nil? %>
-		<h4 id="duoName">Duo: <%= @ticket.duo.summonerName %></h4>
-		<% end %>
-
-		<div class="tourney_register">
-			<%= form_tag "https://www.paypal.com/cgi-bin/webscr", :html => {:id => "paypal_ticket"} do %>
-				<%= hidden_field_tag :cmd, "_s-xclick" %>
-				<%= hidden_field_tag :encrypted, PaypalApi.paypal_encrypted(@ticket, root_url, root_url) %>
-				<%= submit_tag "Checkout", :class => "btn btn-lg btn-success" %>
-			<% end %>
-			<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
-		</div>
-	</div>
-</div>
-
+	<%= render 'form_part3', ticket: @ticket %>
 <% elsif @ticket.duo_selected %>
-<div id="ticket_form">
-	<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
-		<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
-		<%= f.hidden_field :duo_selected, :value => @ticket.duo_selected %>
-		<h4>Summoner (required)</h4>
-		<div class="form-group">
-			<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
-			<% if @ticket.duo_selected == "true" %>
-				<%= f.text_field :duoName, :placeholder => "Duo Name" %>
-			<% end %>
-		</div>
-
-		<h4>Contact Info (optional)</h4>
-		<div class="form-group">
-			<%= f.text_field :contact_email, :placeholder => "Email" %>
-		</div>
-		<div class="form-group">
-			<%= f.text_field :contact_first_name, :placeholder => "First Name" %>
-		</div>
-		<div class="form-group">
-			<%= f.text_field :contact_last_name, :placeholder => "Last Name" %>
-		</div>
-
-		<%= f.submit "Add Summoner & Contact Info", :class => "btn btn-success"  %>
-	<% end %>
-	<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
-</div>
-
+	<div id="ticket_form">
+		<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
+		<%= render 'form_part2', f: f %>
+			<%= f.submit "Add Summoner & Contact Info", :class => "btn btn-success"  %>
+		<% end %>
+		<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
+	</div>
 <% else %>
-<div id="queue_select" class="row">
-	<div class="col-md-6">
-		<%= form_for(@ticket, remote: true, html: {class: ""}) do |f|  %>
-			<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
-			<%= f.hidden_field :duo_selected, :value => false %>
-			<%= f.submit "Solo Ticket", :class => "btn btn-success"  %>
-		<% end %>
-		<p>(registers 1 summoner)</p>
-	</div>
-	<div class="col-md-6">
-		<%= form_for(@ticket, remote: true, html: {class: ""}) do |f|  %>
-			<%= f.hidden_field :tournament_id, :value => @ticket.tournament_id %>
-			<%= f.hidden_field :duo_selected, :value => true %>
-			<%= f.submit "Duo Ticket", :class => "btn btn-success"  %>
-		<% end %>
-		<p>(registers 2 summoners)</p>
-	</div>
-
-</div>
-
+		<%= render 'tickets/form_part1', ticket: @ticket %>
 <% end %>

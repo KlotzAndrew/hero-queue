@@ -6,11 +6,18 @@ class UsersControllerTest < ActionController::TestCase
     @other_user = users(:thrall)
   end
 
-  # test "should get index" do
-  #   get :index
-  #   assert_response :success
-  #   assert_not_nil assigns(:users)
-  # end
+  test "should get index" do
+    log_in_as(@other_user)
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:users)
+  end
+
+  test "should redirect index when not logged in" do
+    get :index
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
 
   test "should get new" do
     get :new
