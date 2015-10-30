@@ -7,7 +7,7 @@ openSSL:
 ticket_solo<%= n %>:
   tournament: tournament_sold
   summoner_id: <%= n+4 %>
-  status: "Completed"
+  status: "Pending"
 <% end %>
 
 <% i = 8 %>

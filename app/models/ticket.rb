@@ -3,11 +3,14 @@ class Ticket < ActiveRecord::Base
 	belongs_to :summoner
 	belongs_to :duo, :class_name => "Summoner"
 
+	validates :tournament_id, presence: true
 	validates :summoner_id, presence: true
-	validate :are_remaining_tickets?
+	
+	before_create :are_remaining_tickets?
+	before_create :duo_is_not_you?
 
 	scope :paid, -> {where(status: ["Completed","Pending"])}
-	scope :unpaid, -> {where("status != ? OR status IS ?", "Completed", nil)}
+	scope :unpaid, -> {where.not(status: ["Completed","Pending"])}
 
 	scope :solo_tickets, -> {where(duo_id: nil)}
 	scope :duo_tickets, -> {where.not(duo_id: nil)}
@@ -20,7 +23,15 @@ class Ticket < ActiveRecord::Base
 	    return self
 	end
 
+	def solos
+		
+	end
+
 	private
+
+		def duo_is_not_you?
+			return false if self.summoner_id == self.duo_id
+		end
 
 		def add_summoner(summonerName)
 			summoner = Summoner.find_or_create(summonerName)

@@ -3,6 +3,7 @@ class Summoner < ActiveRecord::Base
 	has_many :duo_partners, :class_name => "Ticket", :foreign_key => "duo_id"
 	has_many :summoner_teams
 	has_many :teams, :through => :summoner_teams
+	# has_many :tournaments, :through => :tickets
 	
 	def self.find_or_create(summonerName, is_duo = "summoner name", max_throttle = 9)
 		summoner_ref = summonerName.mb_chars.downcase.gsub(' ', '').to_s

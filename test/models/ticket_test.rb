@@ -1,27 +1,47 @@
 require 'test_helper'
 
 class TicketTest < ActiveSupport::TestCase
-
 	def setup
-		@tournament = tournaments(:tournament_unsold)
+		@tournament_sold = tournaments(:tournament_sold)
+		@summoner = summoners(:boxstripe)
+		@ticket = Ticket.new(
+			tournament_id: @tournament_sold.id,
+			summoner_id: @summoner.id)
+		@ticket_valid = Ticket.new
 	end
 
-	test "ticket builds new summoner" do
-		name_summoner = "theoddone"
-		name_duo = "Annie Bot"
-		VCR.use_cassette("lol_summoners") do
-			assert_difference('Summoner.count', 2) do
-				ticket_params = {
-					tournament_id: @tournament.id, 
-					summonerName: name_summoner, 
-					duoName: name_duo, 
-					contact_email: "", 
-					contact_first_name: "", 
-					contact_last_name: ""}
-				ticket = Ticket.new(ticket_params).new_with_summoner(ticket_params)
-				assert_equal ticket.summoner.summonerName, name_summoner
-				assert_equal ticket.duo.summonerName, name_duo
-			end
-		end
+	test "ticket tournament_id should be present" do
+		@ticket.tournament_id = nil
+		assert_not @ticket.valid?
+	end
+
+	test "ticket summoner_id should be present" do
+		@ticket.summoner_id = nil
+		assert_not @ticket.valid?
+	end
+
+	test "ticket should require 1 seat for solo" do
+		assert_not @ticket.save
+	end
+
+	test "ticket should require 2 seat2 for duo" do
+		@tournament_sold.increment!(:total_players)
+		@ticket.duo_id = 1
+		assert_not @ticket.save
+	end
+
+	test "paid and unpaid should not overlap" do
+		intersection = @tournament_sold.tickets.paid & @tournament_sold.tickets.unpaid
+		assert_empty intersection
+	end
+
+	test "ticket solo and duo cannot be the same person" do
+		@tournament_sold.tickets.delete_all
+		@ticket.duo_id = @ticket.summoner_id
+		assert_not @ticket.save
+	end
+
+	test "summoner can only appear once on tournament[:id]/tickets" do
+
 	end
 end

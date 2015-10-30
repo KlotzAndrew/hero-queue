@@ -7,16 +7,6 @@ class TournamentsControllerTest < ActionController::TestCase
     @other_user = users(:thrall)
   end
 
-  def reset_summoner_elos(tournament)
-    tournament.all_solos.each do |x|
-      x.first.update(elo: nil)
-    end
-    tournament.all_duos.each do |x, y|
-      x.update(elo: nil)
-      y.update(elo: nil)
-    end
-  end  
-
   test "should get index" do
     get :index
     assert_response :success
