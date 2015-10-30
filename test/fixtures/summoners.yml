@@ -27,8 +27,8 @@ imaqtpie:
   summonerLevel: 30
   profileIconId: 677
 
-<% 0.upto(15) do |n| %>
-summoner_solo<%= n %>:
+<% 0.upto(10) do |n| %>
+summoner_with_elo<%= n %>:
   id: <%= n+4 %>
   summonerName: <%= sumName[n] %>
   summoner_ref: <%= sumName_ref[n] %>
@@ -37,14 +37,3 @@ summoner_solo<%= n %>:
   profileIconId: 677
   elo: <%= 1000 + (100*n) %>
 <% end %>
-
-<% 16.upto(39) do |n| %>
-summoner_duo<%= n%2 %><%= n-16 %>:
-  id: <%= n+4 %>
-  summonerName: <%= sumName[n] %>
-  summoner_ref: <%= sumName_ref[n] %>
-  summonerId: <%= sumids[n] %>
-  summonerLevel: 30
-  profileIconId: 677
-  elo: <%= 1000 + (50*n) %>
-<% end %> 

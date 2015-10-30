@@ -3,26 +3,19 @@ openSSL:
   tournament_id: 1
   summoner_id: 1
 
-<% 16.times do |n| %>
+<% 4.times do |n| %>
 ticket_solo<%= n %>:
   tournament: tournament_sold
   summoner_id: <%= n+4 %>
   status: "Completed"
 <% end %>
 
-<% i = 20 %>
-<% 12.times do |n| %>
+<% i = 8 %>
+<% 3.times do |n| %>
 ticket_duo<%= n %>:
   tournament: tournament_sold
   summoner_id: <%= i%>
   duo_id: <%= i+1%>
   status: "Completed"
 <% i += 2 %>
-<% end %>
-
-<% 20.times do |n| %>
-ticket_unpaid<%= n %>:
-  tournament: tournament_sold
-  summoner_id: summoner_solo1
-  duo_id: summoner_solo1
 <% end %>

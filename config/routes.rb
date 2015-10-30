@@ -21,5 +21,7 @@ Rails.application.routes.draw do
   resources :tickets, only: [:create]
   resources :tournaments, only: [:index, :show, :update] do
     resources :teams, only: [:index]
+    # update_summoners_elo
+    # create_balanced_teams
   end
 end

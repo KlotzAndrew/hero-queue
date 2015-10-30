@@ -26,8 +26,8 @@ module Calculator
 		#itterate with mixing pot
 		st = Time.now.to_i
 		while cand_std > 100 && Time.now.to_i - st < time_total do
-			mixing_pot = build_mixing_pot(temp_teams)
 			max_team_mmr = mini_max = shuffle_threshhold(temp_teams)
+			mixing_pot = build_mixing_pot(temp_teams)
 			#shuffle mixing pot teams
 			mm_st = Time.now.to_i
 			while mini_max >= max_team_mmr && Time.now.to_i - mm_st < time_mixer do

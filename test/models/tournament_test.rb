@@ -31,7 +31,7 @@ class TournamentTest < ActiveSupport::TestCase
 	end
 	
 	test "player_count returns corrent number" do
-		assert_equal 40, @tournament.player_count
+		assert_equal 10, @tournament.player_count
 	end
 
 	test "seats_left returns corrent number" do
@@ -39,11 +39,11 @@ class TournamentTest < ActiveSupport::TestCase
 	end
 
 	test "all_solos returns corrent number" do
-		assert_equal 16, @tournament.all_solos.count
+		assert_equal 4, @tournament.all_solos.count
 	end
 
 	test "all_duos returns corrent number" do
-		assert_equal 12, @tournament.all_duos.count
-		assert_equal 24, @tournament.all_duos.flatten.count
+		assert_equal 3, @tournament.all_duos.count
+		assert_equal 6, @tournament.all_duos.flatten.count
 	end
 end

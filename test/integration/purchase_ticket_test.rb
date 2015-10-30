@@ -4,12 +4,11 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
   def setup
     @tournament = tournaments(:tournament_unsold)
     @tournament_sold = tournaments(:tournament_sold)
-    @tournament_oneseat = tournaments(:tournament_oneseat)
     @summoner = summoners(:boxstripe)
     @duo = summoners(:hukkk)
   end
 
-  test "solo needs 1 seat" do
+  test "should return error when no seats for solo" do
     get tournament_path(@tournament_sold)
     assert_difference '@summoner.tickets.count', 0 do
       xhr :post, tickets_path, ticket: { 
@@ -21,13 +20,14 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     assert_equal ticket.errors.first, [:sold_out, ", sorry there are no tickets left!"]
   end
 
-  test "duo needs 2 seats" do
-    get tournament_path(@tournament_oneseat)
+  test "should return error when no seats for duo" do
+    @tournament_sold.increment!(:total_players)
+    get tournament_path(@tournament_sold)
     assert_difference '@summoner.tickets.count', 0 do
       xhr :post, tickets_path, ticket: { 
         summonerName: @summoner.summonerName,
         duoName: @duo.summonerName,
-        tournament_id: @tournament_oneseat.id }
+        tournament_id: @tournament_sold.id }
     end
 
     ticket = assigns(:ticket)
