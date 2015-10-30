@@ -18,11 +18,11 @@ class Tournament < ActiveRecord::Base
 		tickets.includes(:summoner, :duo).paid.duo_tickets.map {|x| [x.summoner, x.duo]}
 	end
 
-	def update_summoner_elos
+	def update_summoners_elo
 		fetcher = Fetcher::Lolkingelo.new(self)
 	end
 
-	def update_with_teambalancer(options = {})
+	def create_tournament_teams(options = {})
 		ticket_hashes = tickets_to_teambalancer_hash
 		teambalancer = Calculator::Teambalancer.new(ticket_hashes[:solos], ticket_hashes[:duos])
 		teams = teambalancer.teambalance(options)

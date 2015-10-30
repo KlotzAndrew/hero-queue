@@ -4,6 +4,7 @@ require_relative '../../../lib/hero_queue/fetcher/lolkingelo'
 class LolkingeloTest < ActiveSupport::TestCase
 	def setup
 		@tournament = tournaments(:tournament_sold)
+		Summoner.all.each {|x| x.update(elo: nil)}
 	end
 
 	test "correctly fetches summoner elo" do

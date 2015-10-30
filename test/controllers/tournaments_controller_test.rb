@@ -29,16 +29,47 @@ class TournamentsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:ticket)
   end
 
-  test "only admin can update summoners elo" do
-    # patch :update_summoners_elo 
+  test "should let admin update summoners elo" do
+    @tournament_sold.all_solos.first.first.update(elo: nil)
+    log_in_as(@user)
+    assert @user.admin?
+    VCR.use_cassette("lolking_nokogiri") do
+      patch :update_summoners_elo, id: @tournament_sold
+    end
+    assert_not_nil @tournament_sold.all_solos.first.first.reload.elo
+    assert_redirected_to tournament_teams_path(@tournament_sold)
   end
 
-  # test "should only allow admin to edit tournament" do
-  #   patch :update, id: @tournament, tournament: {}
-  #   assert_redirected_to login_url
-  #   log_in_as(@other_user)
-  #   assert_not @other_user.admin?
-  #   patch :update, id: @tournament, tournament: {}
-  #   assert_redirected_to root_url
-  # end
+  test "should be logged in to update summoners elo" do
+    patch :update_summoners_elo, id: @tournament_sold
+    assert_redirected_to login_url
+  end
+
+  test "should be admin to update summoners elo" do
+    log_in_as(@other_user)
+    assert_not @other_user.admin?
+    patch :update_summoners_elo, id: @tournament_sold
+    assert_redirected_to root_url
+  end
+
+  test "should let admin build teams" do
+    log_in_as(@user)
+    assert @user.admin?
+    patch :create_tournament_teams, id: @tournament_sold
+    assert_equal @tournament_sold.reload.teams.count, @tournament_sold.total_teams
+    assert_redirected_to tournament_teams_path(@tournament_sold)
+  end
+
+  test "should be admin to build teams" do
+    log_in_as(@other_user)
+    assert_not @other_user.admin?
+    patch :create_tournament_teams, id: @tournament_sold
+    assert_redirected_to root_url
+  end
+
+  test "should be logged in to build teams" do
+    patch :create_tournament_teams, id: @tournament_sold
+    assert_redirected_to login_url
+  end
+
 end

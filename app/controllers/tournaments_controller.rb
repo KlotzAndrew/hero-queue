@@ -1,8 +1,8 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:show, :update]
+  before_action :set_tournament, only: [:show, :update, :update_summoners_elo, :create_tournament_teams]
   before_action :set_ticket, only: [:show]
-  before_action :logged_in_user, only: [:update]
-  before_action :admin_user, only: [:update]
+  before_action :logged_in_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
+  before_action :admin_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
 
   def index
     @upcoming = Tournament.all.where("start_date > ?", Time.now)
@@ -13,14 +13,13 @@ class TournamentsController < ApplicationController
   def show
   end
 
-  def update
-    if params[:use_class] == "lolkingelo"
-      @tournament.update_summoner_elos
-      flash[:success] = "Summoner Elos Updated!"
-    elsif params[:use_class] == "buildteams"
-      @tournament.update_with_teambalancer
-      flash[:success] = "Teams built!"
-    end
+  def update_summoners_elo
+    @tournament.update_summoners_elo
+    redirect_to tournament_teams_path(@tournament)
+  end
+
+  def create_tournament_teams
+    @tournament.create_tournament_teams
     redirect_to tournament_teams_path(@tournament)
   end
 

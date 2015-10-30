@@ -19,9 +19,11 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :tickets, only: [:create]
-  resources :tournaments, only: [:index, :show, :update] do
+  resources :tournaments, only: [:index, :show] do
+    member do
+      patch 'update_summoners_elo'
+      patch 'create_tournament_teams'
+    end
     resources :teams, only: [:index]
-    # update_summoners_elo
-    # create_balanced_teams
   end
 end
