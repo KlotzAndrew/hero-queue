@@ -38,7 +38,7 @@ class Tournament < ActiveRecord::Base
 
 	def team_statistics
 		return false if self.teams.empty?
-		team_sums = self.teams.map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
+		team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
 		{ 
 			team_avg: team_sums.sum/team_sums.count,
 			team_std: calculate_std(team_sums).round(2),
