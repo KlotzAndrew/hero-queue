@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026210659) do
+ActiveRecord::Schema.define(version: 20151031033612) do
 
   create_table "summoner_teams", force: :cascade do |t|
     t.integer  "team_id"
@@ -66,8 +66,9 @@ ActiveRecord::Schema.define(version: 20151026210659) do
     t.string   "location_url"
     t.string   "location_address"
     t.string   "facebook_url"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.boolean  "teams_approved",   default: false
   end
 
   create_table "users", force: :cascade do |t|

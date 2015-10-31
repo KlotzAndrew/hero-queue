@@ -8,14 +8,6 @@ class TournamentTest < ActiveSupport::TestCase
 		@other_summoner = summoners(:hukkk)
 	end
 
-	def build_demo_teams(tournament)
-		all_summoners = tournament.all_solos + tournament.all_duos.flatten
-		all_summoners.in_groups_of(5) do |summoners|
-			team = Team.create(tournament_id: tournament.id)
-			summoners.each {|summoner| team.summoners << summoner}
-		end
-	end
-
 	test "should return summoners that have paid" do
 		assert_not @tournament_unsold.summoners.include?(@summoner)
 		ticket = @tournament_unsold.tickets.new(

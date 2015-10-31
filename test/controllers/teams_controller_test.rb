@@ -2,7 +2,7 @@ require 'test_helper'
 
 class TeamsControllerTest < ActionController::TestCase
   def setup
-    @tournament = tournaments(:tournament_unsold)
+    @tournament = tournaments(:tournament_sold)
     @user = users(:grok)
     @other_user = users(:thrall)
   end
@@ -25,5 +25,26 @@ class TeamsControllerTest < ActionController::TestCase
   	assert_not @other_user.admin?
   	get :index, :tournament_id => @tournament.id
   	assert_not assigns(:tickets)
+  end
+
+  test "should not display teams unless approved" do
+    build_demo_teams(@tournament)
+    get :index, :tournament_id => @tournament.id
+    assert_empty assigns(:teams)
+  end
+
+  test "should display unapproved teams to admin" do
+    build_demo_teams(@tournament)
+    log_in_as(@user)
+    assert @user.admin?
+    get :index, :tournament_id => @tournament.id
+    assert_operator assigns(:teams).count, :>, 0
+  end
+
+  test "should display teams when approved" do
+    build_demo_teams(@tournament)
+    @tournament.update(teams_approved: true)
+    get :index, :tournament_id => @tournament.id
+    assert_operator assigns(:teams).count, :>, 0
   end
 end

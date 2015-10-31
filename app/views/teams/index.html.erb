@@ -36,12 +36,11 @@
 
 
             <% if @team_stats %>
-            <h3>Tournament Stats</h3>
+            <h3>Tournament Stats | Approved(<%= @tournament.teams_approved %>)</h3>
               AVG: <%= @team_stats[:team_avg] %> |
               STD: <%= @team_stats[:team_std] %> |
               MAX: <%= @team_stats[:team_max] %> |
               MIN: <%= @team_stats[:team_min] %>
-
               <h3>Team Stats</h3>
               <%= render :partial => 'team_stat', :collection => @teams %>
             <% end %>

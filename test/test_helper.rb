@@ -19,6 +19,14 @@ class ActiveSupport::TestCase
   fixtures :all
   include ApplicationHelper
 
+  def build_demo_teams(tournament)
+    all_summoners = tournament.all_solos + tournament.all_duos.flatten
+    all_summoners.in_groups_of(5) do |summoners|
+      team = Team.create(tournament_id: tournament.id)
+      summoners.each {|summoner| team.summoners << summoner}
+    end
+  end
+
 	def is_logged_in?
     !session[:user_id].nil?
   end
