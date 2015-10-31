@@ -18,3 +18,4 @@
 
 # Ignore vcr recordings
 /fixtures/vcr_cassettes/*
+/coverage/*

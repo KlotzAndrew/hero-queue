@@ -32,6 +32,7 @@ group :test do
 	gem 'mini_backtrace',     '0.1.3'
   gem 'webmock', '1.21.0'
   gem 'vcr', '~> 2.9.3'
+  gem 'simplecov', :require => false
 end
 
 group :production do
