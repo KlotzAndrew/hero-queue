@@ -7,26 +7,7 @@ class TeambalancerTest < ActionController::TestCase
 	end
 
 	test "correctly returns balanced teams" do
-		solos = @tournament.all_solos.map do |x|
-		 [{
-		  	id: x.first.id,
-		  	elo: x.first.elo
-		  }]
-		end
-		duos = @tournament.all_duos.map do |x,y|
-		 [{
-		  	id: x.id,
-		  	elo: x.elo,
-		  	duo: y.id
-		  },
-		  {
-		  	id: y.id,
-		  	elo: y.elo,
-		  	duo: x.id
-		  }]
-		end
-
-		teambalancer = Calculator::Teambalancer.new(solos, duos)
+		teambalancer = Calculator::Teambalancer.new(@tournament.all_solos, @tournament.all_duos)
 		teams = teambalancer.teambalance
 		#corrent number of teams
 		assert_equal teams.count, @tournament.total_teams
@@ -52,7 +33,7 @@ class TeambalancerTest < ActionController::TestCase
 		total_means = team_means.flatten.sum/team_means.count
 		team_means.each {|x| team_sums_sq << (total_means - x.sum)**2 }
 		teams_std = (team_sums_sq.sum/(teams.count - 1))**0.5		
-		assert_includes 0..2000, teams_std
+		assert_includes 0..50, teams_std
 		# #assert range maximum?
 	end
 

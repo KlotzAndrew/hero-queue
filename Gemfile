@@ -14,6 +14,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'nokogiri', '~> 1.6.6.2'
 
 gem 'bcrypt', '~> 3.1.7'
+gem 'descriptive_statistics'
 # gem 'unicorn'
 
 group :development, :test do

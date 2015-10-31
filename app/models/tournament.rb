@@ -30,8 +30,7 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def create_tournament_teams(options = {})
-		ticket_hashes = tickets_to_teambalancer_hash
-		teambalancer = Calculator::Teambalancer.new(ticket_hashes[:solos], ticket_hashes[:duos])
+		teambalancer = Calculator::Teambalancer.new(self.all_solos, self.all_duos)
 		teams = teambalancer.teambalance(options)
 		build_new_teams(teams)
 	end
@@ -41,7 +40,7 @@ class Tournament < ActiveRecord::Base
 		team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
 		{ 
 			team_avg: team_sums.sum/team_sums.count,
-			team_std: calculate_std(team_sums).round(2),
+			team_std: team_sums.standard_deviation.round(2),
 			team_max: team_sums.max,
 			team_min: team_sums.min,
 			# team_tscore: 1.67
@@ -96,29 +95,6 @@ class Tournament < ActiveRecord::Base
 			team_array.flatten.each { |x| team.summoners << Summoner.find(x[:id]) }
 			team.save
 		end		
-	end
-
-	def tickets_to_teambalancer_hash
-		ticket_hashes = {}
-		ticket_hashes[:solos] = self.all_solos.map do |x|
-		 [{
-		  	id: x.first.id,
-		  	elo: x.first.elo
-		  }]
-		end
-		ticket_hashes[:duos] = self.all_duos.map do |x,y|
-		 [{
-		  	id: x.id,
-		  	elo: x.elo,
-		  	duo: y.id
-		  },
-		  {
-		  	id: y.id,
-		  	elo: y.elo,
-		  	duo: x.id
-		  }]
-		end
-		return ticket_hashes
 	end
 
 end

@@ -2,15 +2,17 @@ module Calculator
 	class Teambalancer
 		attr_reader :solos
 		attr_reader :duos
+		attr_reader :total_teams
 		
 		def initialize(solos, duos)
-			@solos = solos
-			@duos = duos
+			@solos = parse_solos(solos)
+			@duos = parse_duos(duos)
+			@total_teams = tally_players(solos, duos)
 		end
 
 	def teambalance(options = {})
 		time_total = options[:time_total] || 20
-		time_mixer = options[:time_mixer] || 5
+		time_mixer = options[:time_mixer] || 1
 		if Rails.env == "test"
 			time_total = 1
 			time_mixer = 1
@@ -18,16 +20,16 @@ module Calculator
 		cand_std = 2000
 		#populate teams
 		p_solos, p_duos = @solos, @duos
-		temp_teams = [] 
+		teams = [] 
 		number_of_teams = (@solos.count + @duos.flatten.count)/5
-		number_of_teams.times { |x| temp_teams << [] }
-		populate_array(p_duos, temp_teams)
-		populate_array(p_solos, temp_teams)
+		number_of_teams.times { |x| teams << [] }
+		populate_array(p_duos, teams)
+		populate_array(p_solos, teams)
 		#itterate with mixing pot
 		st = Time.now.to_i
-		while cand_std > 100 && Time.now.to_i - st < time_total do
-			max_team_mmr = mini_max = shuffle_threshhold(temp_teams)
-			mixing_pot = build_mixing_pot(temp_teams)
+		while cand_std > 25 && Time.now.to_i - st < time_total do
+			max_team_mmr = mini_max = shuffle_threshhold(teams)
+			mixing_pot = build_mixing_pot(teams)
 			#shuffle mixing pot teams
 			mm_st = Time.now.to_i
 			while mini_max >= max_team_mmr && Time.now.to_i - mm_st < time_mixer do
@@ -36,21 +38,27 @@ module Calculator
 				Rails.logger.info "mini_max after: #{mini_max}"
 			end
 			#add mix back to teams
-			new_teams.each {|mixed_team| temp_teams << mixed_team}
-			cand_std = calculate_std(temp_teams)
+			new_teams.each {|mixed_team| teams << mixed_team}
+			cand_std = calculate_std(teams)
 			Rails.logger.info "cand_std: #{cand_std}"
 		end
-		build_finished_teams(temp_teams)
+		build_finished_teams(teams)
 	end
 
-	def shuffle_threshhold(temp_teams)
-		temp_teams.map {|x| x.flatten.map {|y| y[:elo]}}.max.sum
+	def tally_players(solos, duos)
+		solos.count + duos.flatten.count
 	end
 
-	def build_mixing_pot(temp_teams)
+	# => below is old
+
+	def shuffle_threshhold(teams)
+		teams.map {|x| x.flatten.map {|y| y[:elo]}}.max.sum
+	end
+
+	def build_mixing_pot(teams)
 		mixing_pot = []
-		move_extreme_team(temp_teams, mixing_pot, "max")
-		move_extreme_team(temp_teams, mixing_pot, "min")
+		move_extreme_team(teams, mixing_pot, "max")
+		move_extreme_team(teams, mixing_pot, "min")
 		return mixing_pot
 	end
 
@@ -71,21 +79,21 @@ module Calculator
 		base.delete_at(index_value)
 	end
 
-	def build_finished_teams(temp_teams)
-		# temp_teams.each do |team_array|
+	def build_finished_teams(teams)
+		# teams.each do |team_array|
 		# 	team = Team.create
 		# 	team_array.flatten.each { |x| team.summoners << x }
 		# 	teams << team
 		# end
-		return temp_teams
+		return teams
 	end
 
-	def calculate_std(temp_teams)
+	def calculate_std(teams)
 		team_sums_sq = []
-		team_means = temp_teams.map {|x| x.flatten.map {|y| y[:elo]}}
+		team_means = teams.map {|x| x.flatten.map {|y| y[:elo]}}
 		total_means = team_means.flatten.sum/team_means.count
 		team_means.each {|x| team_sums_sq << (total_means - x.sum)**2 }
-		return (team_sums_sq.sum/(temp_teams.count - 1))**0.5
+		return (team_sums_sq.sum/(teams.count - 1))**0.5
 	end
 
 	def extreme_team_index(base, value)
@@ -112,5 +120,29 @@ module Calculator
 			target[team_num] << players
 		end
 	end
+
+		def parse_solos(solos)
+			solos_hashed = solos.map do |x|
+			 [{
+			  	id: x.first.id,
+			  	elo: x.first.elo
+			  }]
+			end
+		end
+		def parse_duos(duos)
+			duos_hashed = duos.map do |x,y|
+			 [{
+			  	id: x.id,
+			  	elo: x.elo,
+			  	duo: y.id
+			  },
+			  {
+			  	id: y.id,
+			  	elo: y.elo,
+			  	duo: x.id
+			  }]
+			end
+		end
+
 	end
 end
