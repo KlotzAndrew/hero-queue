@@ -2,6 +2,13 @@ class Tournament < ActiveRecord::Base
 	has_many :tickets
 	has_many :teams
 
+	def summoners
+		sumoner_objs = []
+		all_solos.flatten.each {|x| sumoner_objs << x}
+		all_duos.flatten.each {|x| sumoner_objs << x}
+		return sumoner_objs
+	end
+
 	def player_count
 		tickets.includes(:summoner, :duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 	end

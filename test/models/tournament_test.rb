@@ -4,21 +4,43 @@ class TournamentTest < ActiveSupport::TestCase
 	def setup
 		@tournament = tournaments(:tournament_sold)
 		@tournament_unsold = tournaments(:tournament_unsold)
+		@summoner = summoners(:boxstripe)
+		@other_summoner = summoners(:hukkk)
+	end
+
+	def build_demo_teams(tournament)
+		all_summoners = tournament.all_solos + tournament.all_duos.flatten
+		all_summoners.in_groups_of(5) do |summoners|
+			team = Team.create(tournament_id: tournament.id)
+			summoners.each {|summoner| team.summoners << summoner}
+		end
+	end
+
+	test "should return summoners that have paid" do
+		assert_not @tournament_unsold.summoners.include?(@summoner)
+		ticket = @tournament_unsold.tickets.new(
+			summoner_id: @summoner.id,
+			status: "Completed")
+		assert ticket.save
+		assert @tournament_unsold.summoners.include?(@summoner)
+	end
+
+	test "should not return summoners that have not paid" do
+		assert_not @tournament_unsold.summoners.include?(@summoner)
+		ticket = @tournament_unsold.tickets.new(
+			summoner_id: @summoner.id,
+			status: "")
+		assert ticket.save
+		assert_not @tournament_unsold.summoners.include?(@summoner)
 	end
 
 	test "returns correct team statistics" do
-		#build teams on fixtures
-		all_summoners = @tournament.all_solos + @tournament.all_duos.flatten
-		all_summoners.in_groups_of(5) do |summoners|
-			team = Team.create(tournament_id: @tournament.id)
-			summoners.each {|summoner| team.summoners << summoner}
-		end
+		build_demo_teams(@tournament)
 		stats = @tournament.team_statistics
-		assert_equal stats[:team_avg], 10625
-		assert_equal stats[:team_std], 2098.64	
-		assert_equal stats[:team_max], 13700
-		assert_equal stats[:team_min], 7600
-		# assert_equal stats[:team_tscore], 2000
+		assert_equal stats[:team_avg], 7250
+		assert_equal stats[:team_std], 1484.92	
+		assert_equal stats[:team_max], 8300
+		assert_equal stats[:team_min], 6200
 	end
 
 	test "tournament has a limit on number of teams" do

@@ -1,10 +1,27 @@
 require 'test_helper'
 
 class SummonerTest < ActiveSupport::TestCase
-
 	def setup
     stub_request(:get, 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/timeout?api_key=' + Rails.application.secrets.league_api_key).to_timeout
+    @summoner = summoners(:boxstripe)
+    @other_summoner = summoners(:hukkk)
  	end
+
+  test "should not return unpaid ticket associations" do
+    ticket = @summoner.tickets.new(
+      tournament_id: 1,
+      status: "")
+    assert ticket.save
+    assert_not @summoner.tickets.include?(ticket)
+  end
+
+  test "should return paid ticket associations" do
+    ticket = @summoner.tickets.new(
+      tournament_id: 1,
+      status: "Completed")
+    assert ticket.save
+    assert @summoner.tickets.include?(ticket)
+  end
 
   test "api call responds to throttle limit" do
     name_summoner = "theoddone"

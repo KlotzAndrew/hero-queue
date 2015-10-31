@@ -10,7 +10,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
 
   test "should return error when no seats for solo" do
     get tournament_path(@tournament_sold)
-    assert_difference '@summoner.tickets.count', 0 do
+    assert_difference 'Ticket.count', 0 do
       xhr :post, tickets_path, ticket: { 
         summonerName: @summoner.summonerName,
         tournament_id: @tournament_sold.id }
@@ -23,7 +23,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
   test "should return error when no seats for duo" do
     @tournament_sold.increment!(:total_players)
     get tournament_path(@tournament_sold)
-    assert_difference '@summoner.tickets.count', 0 do
+    assert_difference 'Ticket.count', 0 do
       xhr :post, tickets_path, ticket: { 
         summonerName: @summoner.summonerName,
         duoName: @duo.summonerName,
@@ -36,7 +36,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
 
   test "register with existing summoner and duo" do
   	get tournament_path(@tournament)
-  	assert_difference '@summoner.tickets.count', 1 do
+  	assert_difference 'Ticket.count', 1 do
   		xhr :post, tickets_path, ticket: { 
   			summonerName: @summoner.summonerName,
   			duoName: @duo.summonerName,
@@ -87,7 +87,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
       ticket = assigns(:ticket)
       assert_equal ticket.errors.first, [:summoner_id, "can't be blank"]
 
-      assert_difference '@summoner.tickets.count', 1 do
+      assert_difference 'Ticket.count', 1 do
         xhr :post, tickets_path, ticket: { 
           summonerName: @summoner.summonerName,
           duoName: @duo.summonerName,

@@ -23,10 +23,6 @@ class Ticket < ActiveRecord::Base
 	    return self
 	end
 
-	def solos
-		
-	end
-
 	private
 
 		def duo_is_not_you?
