@@ -10,7 +10,7 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def player_count
-		tickets.includes(:summoner, :duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		tickets.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 	end
 
 	def seats_left

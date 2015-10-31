@@ -13,7 +13,7 @@ class TeamsController < ApplicationController
 
     def set_admin_values
       if current_user && current_user.admin?
-        @tickets = @tournament.tickets.where.not(status: nil)
+        @tickets = @tournament.tickets.includes(:summoner, :duo).where.not(status: nil)
         @team_stats = @tournament.team_statistics
       end
     end
