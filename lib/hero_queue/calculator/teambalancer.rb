@@ -23,9 +23,13 @@ module Calculator
 		def optimize_teams(teams_hash)
 			st = Time.now.to_i
 			candidate_std = teams_hash[:elo_sums].standard_deviation
+			i = 0
 			while (candidate_std >= TARGET_STD) && (Time.now.to_i - st) < TIME_TOTAL
+				i +=1
 				teams_hash = shuffle_teams(teams_hash)
 				candidate_std = teams_hash[:elo_sums].standard_deviation
+				Rails.logger.info "ELOS: #{teams_hash[:elo_sums]}"
+				Rails.logger.info "candidate_std: #{candidate_std} | #{i}"
 			end
 			return teams_hash
 		end
@@ -33,20 +37,30 @@ module Calculator
 		def shuffle_teams(teams_hash)
 			random_teams_index = pick_random_teams
 			teams_new = calc_new_teams(teams_hash, random_teams_index)
-			teams_hash = remove_teams_old(teams_hash, random_teams_index)
-			teams_hash = merge_teams_to_main(teams_hash, teams_new, random_teams_index)
+			if teams_new
+				Rails.logger.info "accepted teams"
+				teams_hash = remove_teams_old(teams_hash, random_teams_index)
+				teams_hash = merge_teams_to_main(teams_hash, teams_new, random_teams_index)
+			end
+			return teams_hash
 		end
 
 		def calc_new_teams(teams_hash, random_teams_index)
 			# mix = random_teams_index.each_with_object(Array.new) {|i, a| a += teams_hash[:teams][i]}
 			mix = Array.new
 			random_teams_index.each {|x| mix = mix + teams_hash[:teams][x]}
-			candidate_diff = baseline_diff = (teams_hash[:elo_sums].max - teams_hash[:elo_sums].min)
+			temp_elo_vals = []
+			temp_elo_vals << teams_hash[:elo_sums][random_teams_index[0]]
+			temp_elo_vals << teams_hash[:elo_sums][random_teams_index[1]]
+			candidate_diff = baseline_diff = (temp_elo_vals.max - temp_elo_vals.min)
 			st2 = Time.now.to_i
+			teams_new = {}
 			while candidate_diff >= baseline_diff && (Time.now.to_i - st2) < TIME_MIXER
 				teams_new = itterate_teams(mix)
 				candidate_diff = (teams_new[:elo_sums].max - teams_new[:elo_sums].min)
 			end
+			Rails.logger.info "diff: #{candidate_diff} | #{baseline_diff}"
+			return nil if candidate_diff >= baseline_diff
 			return teams_new
 		end
 
@@ -87,8 +101,6 @@ module Calculator
 			new_teams_hash = {
 				teams: Array.new(total_teams) {[]},
 				elo_sums: Array.new(total_teams) {0},
-				# teams_mix: Array.new(2){[]},
-				# elo_sums_mix: Array.new(2){0}
 			}
 			duos.each do |player|
 				random_team = random_team_with_space(new_teams_hash[:teams], player.count)
@@ -100,6 +112,7 @@ module Calculator
 				new_teams_hash[:teams][random_team] << player
 				new_teams_hash[:teams][random_team][0].each {|h| new_teams_hash[:elo_sums][random_team] += h[:elo]}
 			end
+			binding.pry
 			return new_teams_hash
 		end
 
