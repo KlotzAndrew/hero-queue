@@ -1,5 +1,5 @@
 class Team < ActiveRecord::Base
-	belongs_to :tournament
+	belongs_to :tournament, touch: true
 	has_many :summoner_teams
 	has_many :summoners, :through => :summoner_teams
 

@@ -1,29 +1,18 @@
 class TeamsController < ApplicationController
   before_action :set_tournament_teams, only: [:index]
-  before_action :set_admin_values, only: [:index]
-  before_action :set_teams_if_approved, only: [:index]
+  before_action :set_admin_stats, only: [:index]
 
   def index
   end
 
   private
     def set_tournament_teams
-      @tournament = Tournament.find(params["tournament_id"])
-      @teams ||= []
+      @tournament = Tournament.includes(teams: :summoners, tickets: [:summoner, :duo]).find(params["tournament_id"])
     end
 
-    def set_admin_values
+    def set_admin_stats
       if current_user && current_user.admin?
-        @tickets = @tournament.tickets.includes(:summoner, :duo).where.not(status: nil)
         @team_stats = @tournament.team_statistics
-      end
-    end
-
-    def set_teams_if_approved
-      if @tournament.teams_approved == true
-        @teams = @tournament.teams
-      elsif current_user && current_user.admin?
-        @teams = @tournament.teams
       end
     end
 end

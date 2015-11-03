@@ -6,10 +6,12 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="well semi_transparent">
         <h1 class="bold-title"><u>Teams</u></h1>
-        <% if @teams.count == 0 %>
-          <h3 class="text-center bold-title">Teams have not been built yet</h3>
+        <% if @tournament.teams && @tournament.teams_approved == true %>
+          <% cache("#{@tournament.cache_key}/show/teams") do %>
+            <%= render :partial => 'team', :collection => @tournament.teams %>
+          <% end %>
         <% else %>
-          <%= render :partial => 'team', :collection => @teams %>
+          <h3 class="text-center bold-title">Teams have not been built yet</h3>
         <% end %>
       </div>
 
@@ -42,11 +44,15 @@
               MAX: <%= @team_stats[:team_max] %> |
               MIN: <%= @team_stats[:team_min] %>
               <h3>Team Stats</h3>
-              <%= render :partial => 'team_stat', :collection => @teams %>
+              <% cache("#{@tournament.cache_key}/show/team_stats") do %>
+                <%= render :partial => 'team_stat', :collection => @tournament.teams %>
+              <% end %>
             <% end %>
 
             <h3>Tickets</h3>
-            <%= render :partial => 'ticket', :collection => @tickets %>
+            <% cache("#{@tournament.cache_key}/show/tickets") do %>
+              <%= render :partial => 'ticket', :collection => @tournament.tickets %>
+            <% end %>
         </div>
       <% end %>
       

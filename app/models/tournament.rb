@@ -1,5 +1,5 @@
 class Tournament < ActiveRecord::Base
-	has_many :tickets
+	has_many :tickets, -> {paid}
 	has_many :teams
 
 	def summoners
@@ -10,7 +10,9 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def player_count
-		tickets.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		Rails.cache.fetch("#{cache_key}/player_count") do
+			tickets.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		end
 	end
 
 	def seats_left
@@ -36,15 +38,16 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def team_statistics
-		return false if self.teams.empty?
-		team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
-		{ 
-			team_avg: team_sums.sum/team_sums.count,
-			team_std: team_sums.standard_deviation.round(2),
-			team_max: team_sums.max,
-			team_min: team_sums.min,
-			# team_tscore: 1.67
-		}
+		Rails.cache.fetch("#{cache_key}.team_statistics") do
+			return false if self.teams.empty?
+			team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
+			{ 
+				team_avg: team_sums.sum/team_sums.count,
+				team_std: team_sums.standard_deviation.round(2),
+				team_max: team_sums.max,
+				team_min: team_sums.min,
+			}
+		end
 	end
 
 	def calculate_std(team_sums)

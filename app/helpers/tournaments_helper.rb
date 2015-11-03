@@ -10,12 +10,4 @@ module TournamentsHelper
 			link_to 'Sold Out!', tournament, :class => "btn btn-danger"
 		end
 	end
-
-	def tournament_teams(tournament)
-		if tournament.teams.count > 0
-			link_to 'View Teams', tournament_teams_path(tournament), :class => "btn btn-primary"
-		else
-			link_to 'View Teams', tournament_teams_path(tournament), :class => "btn btn-default"
-		end
-	end
 end

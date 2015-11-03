@@ -6,6 +6,7 @@
 		<div class="col-md-8 col-md-offset-2">
 			<div class="well semi_transparent">
 
+		<% cache @tournament do %>
 				<h2><%= @tournament.name %></h2>
 					<h4>Registered: <%= @tournament.player_count %>/<%= @tournament.total_players %></h4>
 				<div class="row">
@@ -20,15 +21,16 @@
 						<p><a href="<%= @tournament.location_url %>"><%= @tournament.location_url %></a></p>
 					</div>
 				</div>
-
+		<% end %>
 
 			</div>
 			<div id="register" class="well">
 				<%= render 'tickets/register' %>
 			</div>
 			<div class="text-center" style="margin-bottom:25px;">
-				<%= tournament_teams(@tournament)  %>
+				<%= link_to 'View Teams', tournament_teams_path(@tournament), :class => "btn btn-primary" %>
 			</div>
 		</div>
+
 	</div>
 </section>

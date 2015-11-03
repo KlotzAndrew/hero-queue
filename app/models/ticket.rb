@@ -1,5 +1,5 @@
 class Ticket < ActiveRecord::Base
-	belongs_to :tournament
+	belongs_to :tournament, touch: true
 	belongs_to :summoner
 	belongs_to :duo, :class_name => "Summoner"
 
