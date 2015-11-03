@@ -1,14 +1,13 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="col-md-2">
-			<strong>Team #<%= team_stat_counter %></strong><br/>
-			<%= team_stat.summoners.inject(0) {|sum, n| sum + n.elo} %>
-		</div>
-		<% team_stat.summoners.each do |summoner| %>
-		<div class="col-md-2">
+<tr>
+	<td>
+		<strong>Team #<%= team_stat_counter %></strong><br/>
+		<%= team_stat.summoners.inject(0) {|sum, n| sum + n.elo} %>
+	</td>
+	<% team_stat.summoners.each do |summoner| %>
+		<td>
 			<%= summoner.summonerName %><br/>
 			<i><%= summoner.elo %></i>
-		</div>
-		<% end %>
-	</div>
-</div>
+		</td>
+	<% end %>
+</tr>
+			
