@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151031033612) do
+ActiveRecord::Schema.define(version: 20151104035125) do
 
   create_table "summoner_teams", force: :cascade do |t|
     t.integer  "team_id"
@@ -34,11 +34,17 @@ ActiveRecord::Schema.define(version: 20151031033612) do
     t.datetime "updated_at",    null: false
   end
 
+  add_index "summoners", ["elo"], name: "index_summoners_on_elo"
+  add_index "summoners", ["summonerId"], name: "index_summoners_on_summonerId"
+  add_index "summoners", ["summoner_ref"], name: "index_summoners_on_summoner_ref"
+
   create_table "teams", force: :cascade do |t|
     t.integer  "tournament_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id"
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "summoner_id"
@@ -54,6 +60,11 @@ ActiveRecord::Schema.define(version: 20151031033612) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
+
+  add_index "tickets", ["duo_id"], name: "index_tickets_on_duo_id"
+  add_index "tickets", ["status"], name: "index_tickets_on_status"
+  add_index "tickets", ["summoner_id"], name: "index_tickets_on_summoner_id"
+  add_index "tickets", ["tournament_id"], name: "index_tickets_on_tournament_id"
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
