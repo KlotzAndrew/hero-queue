@@ -6,7 +6,8 @@ class Tournament < ActiveRecord::Base
 		sumoner_objs = []
 		all_solos.flatten.each {|x| sumoner_objs << x}
 		all_duos.flatten.each {|x| sumoner_objs << x}
-		return sumoner_objs
+		
+		sumoner_objs
 	end
 
 	def player_count
