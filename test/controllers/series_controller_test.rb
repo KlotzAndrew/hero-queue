@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SeriesControllerTest < ActionController::TestCase
 	def setup
-		@series = series(:basic)
+		@series = series(:winter)
 	end
 
   test "should show series" do
