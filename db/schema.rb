@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104035125) do
+ActiveRecord::Schema.define(version: 20151104064809) do
+
+  create_table "series", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "summoner_teams", force: :cascade do |t|
     t.integer  "team_id"
@@ -80,6 +86,7 @@ ActiveRecord::Schema.define(version: 20151104035125) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.boolean  "teams_approved",   default: false
+    t.integer  "series_id"
   end
 
   create_table "users", force: :cascade do |t|

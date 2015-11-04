@@ -4,10 +4,14 @@
 		<p id="notice"><%= notice %></p>
 
 		<div class="col-md-8 col-md-offset-2">
-			<div class="well semi_transparent">
+			
 
 		<% cache @tournament do %>
+			<div class="well semi_transparent">
 				<h2><%= @tournament.name %></h2>
+					<% if @tournament.series %>
+						<h4 class="text-center">part of the <a href="<%= series_path(@tournament.series) %>"><%= @tournament.series.name %></a> with <a href="/prizing#series">series prizing</a></h4>
+					<% end %>
 					<h4>Registered: <%= @tournament.player_count %>/<%= @tournament.total_players %></h4>
 				<div class="row">
 					<div class="col-md-6">
@@ -21,9 +25,10 @@
 						<p><a href="<%= @tournament.location_url %>"><%= @tournament.location_url %></a></p>
 					</div>
 				</div>
+			</div>			
 		<% end %>
 
-			</div>
+			
 			<div id="register" class="well">
 				<%= render 'tickets/register' %>
 			</div>

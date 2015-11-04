@@ -1,6 +1,7 @@
 class Tournament < ActiveRecord::Base
 	has_many :tickets, -> {paid}
 	has_many :teams
+	belongs_to :series
 
 	def summoners
 		sumoner_objs = []

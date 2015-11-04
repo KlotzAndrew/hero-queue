@@ -1,0 +1,21 @@
+<div class="well">
+	<h2 class="bold-title text-center"><%= tournament.name %></h2>
+	<% if tournament.series %>
+		<h4 class="text-center">part of the <a href="<%= series_path(tournament.series) %>"><%= tournament.series.name %></a> with <i><a href="/prizing#series">series prizing</a></i></h4>
+	<% end %>
+	<h4 class="text-center">Registered: <%= tournament.player_count %>/<%= tournament.total_players %></h4>
+	<div class="row">
+		<div class="col-md-6">
+			<p><%= tournament.location_name %>, <%= tournament.location_address %></p>
+			<p><a href="<%= tournament.location_url %>"><%= tournament.location_url %></a></p>
+		</div>
+		<div class="col-md-6">
+			<p><%= tournament_duration(tournament.start_date) %></p>
+			<p><a href="<%= tournament.facebook_url %>">Check out the facebook event</a></p>
+		</div>
+	</div>
+
+	<div class="text-center">
+		<%= link_to "Join Tournament", tournament_path(tournament), :class => "btn btn-lg btn-primary", :type => "button" %>
+	</div>
+</div>
