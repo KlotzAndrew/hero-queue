@@ -9,7 +9,7 @@ class SeriesController < ApplicationController
       @series = Series.find(params[:id])
     end
 
-    def series_params
-      params[:series]
-    end
+    # def series_params
+    #   params[:series]
+    # end
 end

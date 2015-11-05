@@ -3,6 +3,7 @@ require 'test_helper'
 class TicketsControllerTest < ActionController::TestCase
   setup do
     @tournament = tournaments(:tournament_unsold)
+    @ticket = tickets(:unpaid)
   end
 
   test "should create ticket" do
@@ -26,6 +27,26 @@ class TicketsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select_jquery :html, '#register' do
       assert_select 'div#active_ticket'
+    end
+  end
+
+  test "hook should correctly updates completed ticket" do
+    VCR.use_cassette("paypal_api") do
+      post :hook, {
+        payment_status: "Completed",
+        invoice: @ticket.id
+      }
+      assert_equal "Completed", @ticket.reload.status
+    end
+  end
+
+  test "hook should correctly updates pending ticket" do
+    VCR.use_cassette("paypal_api") do
+      post :hook, {
+        payment_status: "Pending",
+        invoice: @ticket.id
+      }
+      assert_equal "Pending", @ticket.reload.status
     end
   end
 

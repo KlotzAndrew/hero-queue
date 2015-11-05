@@ -3,6 +3,10 @@ openSSL:
   tournament_id: 1
   summoner_id: 1
 
+unpaid:
+  tournament_id: 1
+  summoner_id: 1
+
 <% 4.times do |n| %>
 ticket_solo<%= n %>:
   tournament: tournament_sold
