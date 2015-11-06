@@ -10,7 +10,7 @@
         <div class="table-responsive">
           <table class="table">
             <thead class="row">
-              <th class="col-md-3">Date</th>
+              <th class="col-md-2">Date</th>
               <th class="col-md-4 text-left">Name</th>
               <th class="col-md-3 text-center">Registered</th>
               <th class="col-md-1 text-right"></th>
@@ -19,7 +19,7 @@
             <tbody class="row">
               <% @upcoming.each do |tournament| %>
               <tr>
-                <td class="col-md-3"><%= tournament_start(tournament.start_date) %> </td>
+                <td class="col-md-2"><%= tournament_start(tournament.start_date) %> </td>
                 <td class="col-md-4 text-left"><%= tournament.name %> </td>
                 <td class="col-md-3 text-center"><%= tournament.player_count %>/<%= tournament.total_players %></td>
                 <td class="col-md-1 text-right"><%= tournaments_link(tournament) %></td>
