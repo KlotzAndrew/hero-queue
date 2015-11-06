@@ -5,28 +5,29 @@
 
     <div class="col-md-8 col-md-offset-2">
       <div class="well semi_transparent">
-        <h1 class="bold-title">Upcoming Tournaments</h1>
-        <table class="table">
-          <thead>
-            <tr>
+        
+        <h1 class="bold-title">Upcoming Tournaments</h1>      
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="row">
               <th class="col-md-3">Date</th>
               <th class="col-md-4 text-left">Name</th>
               <th class="col-md-3 text-center">Registered</th>
               <th class="col-md-1 text-right"></th>
-            </tr>
-          </thead>
+            </thead>
 
-          <tbody>
-            <% @upcoming.each do |tournament| %>
+            <tbody class="row">
+              <% @upcoming.each do |tournament| %>
               <tr>
-                <td> <%= tournament_start(tournament.start_date) %> </td>
-                <td class="text-left"> <%= tournament.name %> </td>
-                <td class="text-center"><%= tournament.player_count %>/<%= tournament.total_players %></td>
-                <td class="text-right"><%= tournaments_link(tournament) %></td>
+                <td class="col-md-3"><%= tournament_start(tournament.start_date) %> </td>
+                <td class="col-md-4 text-left"><%= tournament.name %> </td>
+                <td class="col-md-3 text-center"><%= tournament.player_count %>/<%= tournament.total_players %></td>
+                <td class="col-md-1 text-right"><%= tournaments_link(tournament) %></td>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
 
         <h1 class="bold-title">Past Tournaments</h1>
         <table class="table">
@@ -59,7 +60,7 @@
             <% end %>
           </tbody>
       </table>
-        
+
       </div>
     </div>
 

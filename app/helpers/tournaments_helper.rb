@@ -1,6 +1,6 @@
 module TournamentsHelper
 	def tournament_start(time)
-		time.strftime("%Y; %B %-d, %l%P")
+		time.strftime("%b. %-d, %l%P")
 	end
 
 	def tournaments_link(tournament)
