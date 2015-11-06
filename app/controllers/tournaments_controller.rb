@@ -5,8 +5,8 @@ class TournamentsController < ApplicationController
   before_action :admin_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
 
   def index
-    @upcoming = Tournament.all.where("start_date > ?", Time.now)
-    @past = Tournament.all.where("start_date < ?", Time.now)
+    @upcoming = Tournament.all.where("start_date > ?", Time.now).order(start_date: :asc)
+    @past = Tournament.all.where("start_date < ?", Time.now).order(start_date: :asc)
     @legacy_tours = Tournament.legacy
   end
 
