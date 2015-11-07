@@ -42,14 +42,7 @@
 
           <tbody>
             <% @past.each do |tournament| %>
-            <% if tournament %>
-              <tr>
-                <td> <%= tournament_start(tournament.start_date) %> </td>
-                <td class="text-left"> <%= tournament.name %> </td>
-                <td class="text-center"> <%= tickets_sold(tournament) %> </td>
-                <td class="text-right"></td>
-              </tr>
-            <% end %>
+
             <% end %>
 
             <% @legacy_tours.each do |tournament| %>

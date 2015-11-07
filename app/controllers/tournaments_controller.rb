@@ -6,7 +6,7 @@ class TournamentsController < ApplicationController
 
   def index
     @upcoming = Tournament.all.order(start_date: :asc) #where("start_date > ?", Time.now)
-    # @past = Tournament.all.where("start_date < ?", Time.now).order(start_date: :asc)
+    @past = [] #Tournament.all.where("start_date < ?", Time.now).order(start_date: :asc)
     @legacy_tours = Tournament.legacy
   end
 
