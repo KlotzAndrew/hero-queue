@@ -26,6 +26,7 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem "bullet"
+  gem 'capybara'
 end
 
 group :test do
