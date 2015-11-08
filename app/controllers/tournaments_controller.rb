@@ -5,8 +5,8 @@ class TournamentsController < ApplicationController
   before_action :admin_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
 
   def index
-    @upcoming = Tournament.all.order(start_date: :asc) #where("start_date > ?", Time.now)
-    @past = [] #Tournament.all.where("start_date < ?", Time.now).order(start_date: :asc)
+    @upcoming = Tournament.where("start_date > ?", Time.now).order(start_date: :asc)
+    @past = Tournament.where("start_date < ?", Time.now).order(start_date: :asc)
     @legacy_tours = Tournament.legacy
   end
 
@@ -26,14 +26,13 @@ class TournamentsController < ApplicationController
   private
     def set_tournament
       @tournament = Tournament.find(params[:id])
+      session[:tournament_id] = @tournament.id
     end
 
     def set_ticket
-      if params[:active_ticket]
-        @ticket = Ticket.where("id = ?", params[:active_ticket]).first
-      else
-        @ticket = Ticket.new(tournament_id: @tournament.id)
-      end
+      Rails.logger.info "SESSIONS1: #{session[:ticket_id]}"
+      Rails.logger.info "SESSIONS2 #{@tournament.tickets.where(id: (session[:ticket_id])).first}"
+      @ticket = @tournament.tickets.where(id: (session[:ticket_id])).first || @tournament.tickets.build
     end
 
     def tournament_params

@@ -3,19 +3,26 @@ class TicketsController < ApplicationController
 
   def create
     @ticket = Ticket.new(ticket_params)
-    if params[:commit] == "Solo Ticket" or params[:commit] == "Duo Ticket"
-      respond_to do |format|
-        format.html { redirect_to tournament_path(@ticket.tournament.id)}
-        format.js
-      end
-    else
+
+    if @ticket.summonerName
       @ticket.new_with_summoner(ticket_params)
       @ticket.save
+      session[:ticket_id] = @ticket.id
       respond_to do |format|
         format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
         format.js
       end
+    elsif @ticket.duo_selected
+      respond_to do |format|
+        format.html { redirect_to tournament_path(@ticket.tournament.id)}
+        format.js
+      end
     end
+  end
+
+  def reset_ticket_session
+    session[:ticket_id] = nil
+    redirect_to controller: 'tournaments', action: 'show', id: session[:tournament_id]
   end
 
   def hook

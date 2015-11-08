@@ -1,13 +1,13 @@
 <h1>Register</h1>
 <% if @ticket.id %>
-	<%= render 'form_part3', ticket: @ticket %>
+	<%= render 'tickets/form_part3', ticket: @ticket %>
 <% elsif @ticket.duo_selected %>
 	<div id="ticket_form">
 		<%= form_for(@ticket, remote: true, html: {class: "text-center"}) do |f|  %>
-		<%= render 'form_part2', f: f %>
+		<%= render 'tickets/form_part2', f: f %>
 			<%= f.submit "Add Summoner & Contact Info", :class => "btn btn-success"  %>
 		<% end %>
-		<%= link_to "reset", tournament_path(@ticket.tournament), :class => "btn btn-sm btn-warning" %>
+		<%= link_to "reset", ticket_reset_path, :class => "btn btn-sm btn-warning" %>
 	</div>
 <% else %>
 		<%= render 'tickets/form_part1', ticket: @ticket %>

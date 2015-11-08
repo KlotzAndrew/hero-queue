@@ -47,7 +47,7 @@ module Builder
 		    values.merge!({
 		      "amount_1" => calculate_price(ticket),
 		      "currency_code" => "CAD",
-		      "item_name_1" => summoner_name_string(ticket),
+		      "item_name_1" => "#{ticket_name(ticket)}: #{summoner_name_string(ticket)}",
 		      "item_number_1" => 1,
 		      "quantity_1" => 1,
 		    })
@@ -62,10 +62,14 @@ module Builder
 			end
 		end
 
+		def self.ticket_name(ticket)
+			"HQ-#{ticket.tournament.start_date.strftime("%b. %d")}"
+		end
+
 		def self.summoner_name_string(ticket)
 			if ticket.duo then duo = ", duo: #{ticket.duo.summonerName}" end
 			duo ||= "" 
-			return "HQ-ticket (#{ticket.summoner.summonerName + duo})"
+			return "(#{ticket.summoner.summonerName + duo})"
 		end
 
 		def self.encrypt_for_paypal(values)

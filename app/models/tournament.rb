@@ -1,5 +1,5 @@
 class Tournament < ActiveRecord::Base
-	has_many :tickets, -> {paid}
+	has_many :tickets
 	has_many :teams
 	belongs_to :series
 
@@ -13,7 +13,7 @@ class Tournament < ActiveRecord::Base
 
 	def player_count
 		Rails.cache.fetch("#{cache_key}/player_count") do
-			tickets.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+			tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 		end
 	end
 
@@ -22,11 +22,11 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def all_solos
-		tickets.includes(:summoner).paid.solo_tickets.map {|x| [x.summoner]}
+		tickets.paid.includes(:summoner).paid.solo_tickets.map {|x| [x.summoner]}
 	end
 
 	def all_duos
-		tickets.includes(:summoner, :duo).paid.duo_tickets.map {|x| [x.summoner, x.duo]}
+		tickets.paid.includes(:summoner, :duo).paid.duo_tickets.map {|x| [x.summoner, x.duo]}
 	end
 
 	def update_summoners_elo
