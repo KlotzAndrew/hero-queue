@@ -19,7 +19,7 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
   include ApplicationHelper
-  include Capybara::DSL
+  # include Capybara::DSL
 
   def build_demo_teams(tournament)
     all_summoners = tournament.all_solos + tournament.all_duos.flatten
@@ -59,4 +59,8 @@ class ActiveSupport::TestCase
         match_requests_on: [:uri],
   	    record: :new_episodes }
   	end
+end
+
+class ActionDispatch::IntegrationTest
+  include Capybara::DSL
 end
