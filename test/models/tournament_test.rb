@@ -60,4 +60,12 @@ class TournamentTest < ActiveSupport::TestCase
 		assert_equal 3, @tournament.all_duos.count
 		assert_equal 6, @tournament.all_duos.flatten.count
 	end
+
+	test "upcoming correctly returns upcoming tournaments" do
+		assert_equal Tournament.where("start_date > ?", Time.now).order(start_date: :asc).map(&:id), Tournament.upcoming.map(&:id)
+	end
+
+	test "past correctly returns past tournaments" do
+		assert_equal Tournament.where("start_date < ?", Time.now).order(start_date: :asc).map(&:id), Tournament.past.map(&:id)
+	end
 end

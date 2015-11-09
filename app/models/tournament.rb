@@ -3,6 +3,9 @@ class Tournament < ActiveRecord::Base
 	has_many :teams
 	belongs_to :series
 
+	scope :upcoming, -> {where("start_date > ?", Time.now).order(start_date: :asc)}
+	scope :past, -> {where("start_date < ?", Time.now).order(start_date: :asc)}
+
 	def summoners
 		sumoner_objs = []
 		all_solos.flatten.each {|x| sumoner_objs << x}
@@ -80,10 +83,6 @@ class Tournament < ActiveRecord::Base
 	end
 
 	private
-
-	def under_max_team_limit
-
-	end
 
 	def build_new_teams(teams)
 		teams.each do |team_array|
