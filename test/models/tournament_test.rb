@@ -30,9 +30,9 @@ class TournamentTest < ActiveSupport::TestCase
 		build_demo_teams(@tournament)
 		stats = @tournament.team_statistics
 		assert_equal stats[:team_avg], 7250
-		assert_equal stats[:team_std], 1050.0	
-		assert_equal stats[:team_max], 8300
-		assert_equal stats[:team_min], 6200
+		assert_equal stats[:team_std], 1250.0	
+		assert_equal stats[:team_max], 8500
+		assert_equal stats[:team_min], 6000
 	end
 
 	test "tournament has a limit on number of teams" do

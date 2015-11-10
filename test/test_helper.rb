@@ -13,6 +13,9 @@ require 'rails/test_help'
 require "minitest/reporters"
 require 'webmock/minitest'
 require 'capybara/rails'
+require 'selenium-webdriver'
+# require 'capybara/poltergeist'
+
 Minitest::Reporters.use!
 
 class ActiveSupport::TestCase
@@ -58,6 +61,7 @@ class ActiveSupport::TestCase
   		config.default_cassette_options = {
         match_requests_on: [:uri],
   	    record: :new_episodes }
+        config.ignore_localhost = true
   	end
 end
 

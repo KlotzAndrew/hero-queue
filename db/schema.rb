@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151104064809) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "series", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
@@ -26,8 +29,8 @@ ActiveRecord::Schema.define(version: 20151104064809) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "summoner_teams", ["summoner_id"], name: "index_summoner_teams_on_summoner_id"
-  add_index "summoner_teams", ["team_id"], name: "index_summoner_teams_on_team_id"
+  add_index "summoner_teams", ["summoner_id"], name: "index_summoner_teams_on_summoner_id", using: :btree
+  add_index "summoner_teams", ["team_id"], name: "index_summoner_teams_on_team_id", using: :btree
 
   create_table "summoners", force: :cascade do |t|
     t.string   "summonerName"
@@ -40,9 +43,9 @@ ActiveRecord::Schema.define(version: 20151104064809) do
     t.datetime "updated_at",    null: false
   end
 
-  add_index "summoners", ["elo"], name: "index_summoners_on_elo"
-  add_index "summoners", ["summonerId"], name: "index_summoners_on_summonerId"
-  add_index "summoners", ["summoner_ref"], name: "index_summoners_on_summoner_ref"
+  add_index "summoners", ["elo"], name: "index_summoners_on_elo", using: :btree
+  add_index "summoners", ["summonerId"], name: "index_summoners_on_summonerId", using: :btree
+  add_index "summoners", ["summoner_ref"], name: "index_summoners_on_summoner_ref", using: :btree
 
   create_table "teams", force: :cascade do |t|
     t.integer  "tournament_id"
@@ -50,7 +53,7 @@ ActiveRecord::Schema.define(version: 20151104064809) do
     t.datetime "updated_at",    null: false
   end
 
-  add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id"
+  add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id", using: :btree
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "summoner_id"
@@ -67,10 +70,10 @@ ActiveRecord::Schema.define(version: 20151104064809) do
     t.datetime "updated_at",          null: false
   end
 
-  add_index "tickets", ["duo_id"], name: "index_tickets_on_duo_id"
-  add_index "tickets", ["status"], name: "index_tickets_on_status"
-  add_index "tickets", ["summoner_id"], name: "index_tickets_on_summoner_id"
-  add_index "tickets", ["tournament_id"], name: "index_tickets_on_tournament_id"
+  add_index "tickets", ["duo_id"], name: "index_tickets_on_duo_id", using: :btree
+  add_index "tickets", ["status"], name: "index_tickets_on_status", using: :btree
+  add_index "tickets", ["summoner_id"], name: "index_tickets_on_summoner_id", using: :btree
+  add_index "tickets", ["tournament_id"], name: "index_tickets_on_tournament_id", using: :btree
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"

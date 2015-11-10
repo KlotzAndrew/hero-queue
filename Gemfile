@@ -12,13 +12,12 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'nokogiri', '~> 1.6.6.2'
-
 gem 'bcrypt', '~> 3.1.7'
 gem 'descriptive_statistics'
+gem 'pg'
 # gem 'unicorn'
 
 group :development, :test do
-  gem 'sqlite3'
   gem 'byebug'
   gem 'pry'
   gem 'pry-rails'
@@ -27,6 +26,8 @@ group :development, :test do
   gem 'spring'
   gem "bullet"
   gem 'capybara'
+  gem 'selenium-webdriver'
+  # gem 'poltergeist'
 end
 
 group :test do
@@ -41,7 +42,6 @@ group :test do
 end
 
 group :production do
-	gem 'pg'
 	gem 'rails_12factor'
   gem 'memcachier'
   gem 'dalli'
