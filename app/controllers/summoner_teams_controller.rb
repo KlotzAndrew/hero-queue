@@ -1,5 +1,7 @@
 class SummonerTeamsController < ApplicationController
 	before_action :set_summoner_team, only: [:update]
+	before_action :logged_in_user, only: [:index, :create, :update]
+	before_action :admin_user, only: [:index, :update, :create]
 
 	def index
 		@summoner_teams = SummonerTeam.includes(:summoner).where(team_id: params["team_id"])
@@ -14,6 +16,8 @@ class SummonerTeamsController < ApplicationController
 	def create
 		summoner = Summoner.find_or_create(params[:summoner_team][:summonerName])
 		if summoner.id 
+			fetcher = Fetcher::Lolkingelo.new([summoner])
+			fetcher.update_summoners_elo
 			SummonerTeam.transaction do
 				SummonerTeam.create!(
 					team_id: params[:team_id],
@@ -34,5 +38,9 @@ class SummonerTeamsController < ApplicationController
 
 		def summoner_team_params
       params.require(:summoner_team).permit(:absent)
+    end
+
+    def admin_user
+      redirect_to(root_url) unless current_user.admin?
     end
 end
