@@ -42,6 +42,12 @@ class Tournament < ActiveRecord::Base
 		build_new_teams(teams)
 	end
 
+	def approve_tournament_teams
+		team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
+		return false unless team_sums.standard_deviation < 75
+		self.update!(teams_approved: true)
+	end
+
 	def team_statistics
 		Rails.cache.fetch("#{cache_key}.team_statistics") do
 			return false if self.teams.empty?

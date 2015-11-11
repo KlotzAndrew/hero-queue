@@ -23,3 +23,10 @@ ticket_duo<%= n %>:
   status: "Completed"
 <% i += 2 %>
 <% end %>
+
+<% 15.times do |n| %>
+tournament_with_teams<%= n %>:
+  tournament: tournament_with_teams
+  summoner: dummy_summoner<%= n %>
+  status: "Completed"
+<% end %>

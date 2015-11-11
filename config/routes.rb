@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     member do
       patch 'update_summoners_elo'
       patch 'create_tournament_teams'
+      patch 'approve_tournament_teams'
     end
     resources :teams,             only: [:index]
   end

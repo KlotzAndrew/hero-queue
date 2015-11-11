@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		
-			<% @series.tournaments.each do |tournament| %>
+			<% @series.tournaments.order(start_date: :asc).each do |tournament| %>
 				<%= render 'tournaments/tournament', tournament: tournament %>
 			<% end %>
 

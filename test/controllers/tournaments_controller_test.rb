@@ -3,6 +3,7 @@ require 'test_helper'
 class TournamentsControllerTest < ActionController::TestCase
   def setup
     @tournament_sold = tournaments(:tournament_sold)
+    @tournament_with_teams = tournaments(:tournament_with_teams)
     @user = users(:grok)
     @other_user = users(:thrall)
   end
@@ -59,6 +60,27 @@ class TournamentsControllerTest < ActionController::TestCase
 
   test "should be logged in to build teams" do
     patch :create_tournament_teams, id: @tournament_sold
+    assert_redirected_to login_url
+  end
+
+  test "should let admin approve teams" do
+    log_in_as(@user)
+    assert @user.admin?
+    patch :create_tournament_teams, id: @tournament_with_teams
+    patch :approve_tournament_teams, id: @tournament_with_teams
+    assert_equal true, @tournament_with_teams.reload.teams_approved
+    assert_redirected_to tournament_teams_path(@tournament_with_teams)
+  end
+
+  test "should be admin to approve teams" do
+    log_in_as(@other_user)
+    assert_not @other_user.admin?
+    patch :approve_tournament_teams, id: @tournament_with_teams
+    assert_redirected_to root_url
+  end
+
+  test "should be logged in to approve teams" do
+    patch :approve_tournament_teams, id: @tournament_with_teams
     assert_redirected_to login_url
   end
 

@@ -1,8 +1,8 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:show, :update, :update_summoners_elo, :create_tournament_teams]
+  before_action :set_tournament, only: [:show, :update, :update_summoners_elo, :create_tournament_teams, :approve_tournament_teams]
   before_action :set_ticket, only: [:show]
-  before_action :logged_in_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
-  before_action :admin_user, only: [:update, :update_summoners_elo, :create_tournament_teams]
+  before_action :logged_in_user, only: [:update, :update_summoners_elo, :create_tournament_teams, :approve_tournament_teams]
+  before_action :admin_user, only: [:update, :update_summoners_elo, :create_tournament_teams, :approve_tournament_teams]
 
   def index
     @upcoming = Tournament.upcoming
@@ -20,6 +20,11 @@ class TournamentsController < ApplicationController
 
   def create_tournament_teams
     @tournament.create_tournament_teams
+    redirect_to tournament_teams_path(@tournament)
+  end
+
+  def approve_tournament_teams
+    @tournament.approve_tournament_teams
     redirect_to tournament_teams_path(@tournament)
   end
 
