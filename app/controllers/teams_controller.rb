@@ -7,7 +7,7 @@ class TeamsController < ApplicationController
 
   private
     def set_tournament_teams
-      @tournament = Tournament.includes(teams: :summoners, tickets: [:summoner, :duo]).find(params["tournament_id"])
+      @tournament = Tournament.includes(teams: [:summoners,:absent_summoners], tickets: [:summoner, :duo]).find(params["tournament_id"])
     end
 
     def set_admin_stats

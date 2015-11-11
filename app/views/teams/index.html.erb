@@ -60,7 +60,15 @@
                   <%= render :partial => 'team_stat', :collection => @tournament.teams %>
                 </table>
               <% end %>
-            <% end %>
+              <h3>Absent Sumoners:</h3>
+                <% @tournament.teams.each do |x| %>
+                  <% unless x.absent_summoners.empty? %>
+                    <% x.absent_summoners.each do |y| %>
+                      <%= y.summonerName %>, <%= y.elo %> |
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
 
             <h3>Tickets</h3>
             <% cache("#{@tournament.cache_key}/show/tickets") do %>

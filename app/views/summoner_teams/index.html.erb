@@ -1,0 +1,20 @@
+<% provide(:title, "Team Assignments") %>
+<section id="teams_index">
+  <div class="container">
+  	<p id="notice"><%= notice %></p>
+	  	<div class="col-md-8 col-md-offset-2">
+	      
+	      <div class="well semi_transparent">
+	      	<h5>Add in a ringer:</h5>
+	      	<%= form_for([@summoner_teams.first.team.tournament, @summoner_teams.first.team, @ringer]) do |f| %>
+		      	<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
+		      	<%= f.submit "Add Ringer", :class => "btn btn-success"  %>
+	      	<% end %>
+
+	      	<h5>Current Summoners:</h5>
+	      	<%= render :partial => 'team_assignment', :collection => @summoner_teams %>
+	      </div>
+
+	    </div>
+  </div>
+</section>

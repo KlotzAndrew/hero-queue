@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104064809) do
+ActiveRecord::Schema.define(version: 20151111011922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,8 +25,9 @@ ActiveRecord::Schema.define(version: 20151104064809) do
   create_table "summoner_teams", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "summoner_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "absent",      default: false
   end
 
   add_index "summoner_teams", ["summoner_id"], name: "index_summoner_teams_on_summoner_id", using: :btree

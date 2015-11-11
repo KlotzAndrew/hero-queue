@@ -1,0 +1,2 @@
+module SummonerTeamsHelper
+end

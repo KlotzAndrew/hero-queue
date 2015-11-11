@@ -1,0 +1,11 @@
+team_1:
+  id: 1
+  tournament: tournament_with_teams
+
+team_2:
+  id: 2
+  tournament: tournament_with_teams
+
+team_3:
+  id: 3
+  tournament: tournament_with_teams

@@ -1,7 +1,8 @@
 <tr>
 	<td>
 		<strong>Team #<%= team_stat_counter %></strong><br/>
-		<%= team_stat.summoners.inject(0) {|sum, n| sum + n.elo} %>
+		<%= team_stat.summoners.inject(0) {|sum, n| sum + n.elo if n.elo} %>
+		<%= link_to "Edit", tournament_team_summoner_teams_path(team_stat.tournament_id, team_stat.id) %>
 	</td>
 	<% team_stat.summoners.each do |summoner| %>
 		<td>

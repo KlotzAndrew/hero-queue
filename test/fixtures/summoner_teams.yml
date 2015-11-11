@@ -1,11 +1,17 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+<% 5.times do |x| %>
+summoner_team_<%= x %>:
+  team_id: 1
+  summoner: dummy_summoner<%= x %>
+<% end %>
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+<% 5.times do |x| %>
+summoner_team_<%= x + 5 %>:
+  team_id: 2
+  summoner: dummy_summoner<%= x + 5 %>
+<% end %>
+
+<% 5.times do |x| %>
+summoner_team_<%= x + 10 %>:
+  team_id: 3
+  summoner: dummy_summoner<%= x + 10 %>
+<% end %>

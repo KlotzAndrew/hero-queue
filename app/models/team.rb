@@ -1,7 +1,17 @@
 class Team < ActiveRecord::Base
 	belongs_to :tournament, touch: true
-	has_many :summoner_teams
-	has_many :summoners, :through => :summoner_teams
+	
+	# has_many :summoner_teams
+	# has_many :assigned_summoners, :through => :summoner_teams
+
+	has_many :summoner_assignments, :class_name => 'SummonerTeam'
+	has_many :assigned_summoners, :source => :summoner, :through => :summoner_assignments
+
+	has_many :absent_assignments, -> {absent}, :class_name => 'SummonerTeam'
+	has_many :absent_summoners, :source => :summoner, :through => :absent_assignments
+
+	has_many :present_assignments, -> {present}, :class_name => 'SummonerTeam'
+	has_many :summoners, :source => :summoner, :through => :present_assignments
 
 	before_save :under_max_team_limit
 
