@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'confirmations/update'
+
   root 'static_pages#home'
   get 'rules' => 'static_pages#rules'
   get 'format' => 'static_pages#format'
