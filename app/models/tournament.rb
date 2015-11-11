@@ -33,7 +33,9 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def update_summoners_elo
-		fetcher = Fetcher::Lolkingelo.new(self)
+		summoners_array = self.all_solos.flatten + self.all_duos.flatten
+		fetcher = Fetcher::Lolkingelo.new(summoners_array)
+		fetcher.update_summoners_elo
 	end
 
 	def create_tournament_teams(options = {})

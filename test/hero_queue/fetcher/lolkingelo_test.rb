@@ -9,8 +9,10 @@ class LolkingeloTest < ActiveSupport::TestCase
 
 	test "correctly fetches summoner elo" do
 		VCR.use_cassette("lolking_nokogiri") do
-			fetcher = Fetcher::Lolkingelo.new(@tournament)
-			
+			summoners_array = @tournament.all_solos.flatten + @tournament.all_duos.flatten
+			fetcher = Fetcher::Lolkingelo.new(summoners_array)
+			fetcher.update_summoners_elo
+
 			@tournament.all_solos.each do |x|
 				assert_not x.first.elo.nil?
 			end

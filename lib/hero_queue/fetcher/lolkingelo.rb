@@ -1,16 +1,19 @@
 module Fetcher
 	class Lolkingelo
-		def initialize(tournament)
-			#only needs array containing summonerNames
-			return false if tournament.id.nil?
-			get_elo(tournament)
+		attr_reader :summoners_array
+
+		def initialize(summoners_array)
+			@summoners_array = summoners_array
+		end
+
+		def update_summoners_elo
+			get_elo
 		end
 
 		private
 
-		def get_elo(tournament)
-			all_sums = tournament.all_solos.flatten + tournament.all_duos.flatten
-			without_elo = all_sums.select { |x| x unless x.elo }
+		def get_elo
+			without_elo = @summoners_array.select { |x| x unless x.elo }
 			base_url = 'http://www.lolking.net/summoner/na/'
 			nokogiri_request(without_elo, base_url)
 		end

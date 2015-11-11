@@ -18,10 +18,10 @@ class SummonerTeamsController < ApplicationController
 				SummonerTeam.create!(
 					team_id: params[:team_id],
 					summoner_id: summoner.id)
-			Ticket.create(
-				summoner_id: params[:summoner_id],
-				tournament_id: params[:tournament_id],
-				status: "Ringer")
+				Ticket.create(
+					summoner_id: params[:summoner_id],
+					tournament_id: params[:tournament_id],
+					status: "Ringer")
 			end
 		end
 		redirect_to tournament_team_summoner_teams_path(params[:tournament_id], params[:team_id])
