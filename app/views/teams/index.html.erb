@@ -8,9 +8,11 @@
         <h1 class="bold-title"><u>Teams</u></h1>
         <% if @tournament.teams && @tournament.teams_approved == true %>
           <% cache("#{@tournament.cache_key}/show/teams") do %>
-            <table class="table table-hover">
-              <%= render :partial => 'team', :collection => @tournament.teams %>
-            </table>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <%= render :partial => 'team', :collection => @tournament.teams %>
+              </table>
+            </div>
           <% end %>
         <% else %>
           <h3 class="text-center bold-title">Teams have not been built yet</h3>
@@ -56,9 +58,11 @@
               MIN: <%= @team_stats[:team_min] %>
               <h3>Team Stats</h3>
               <% cache("#{@tournament.cache_key}/show/team_stats") do %>
-                <table class="table table-hover">
-                  <%= render :partial => 'team_stat', :collection => @tournament.teams %>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <%= render :partial => 'team_stat', :collection => @tournament.teams %>
+                  </table>
+                </div>
               <% end %>
               <h3>Ringers:</h3>
               <% @tournament.ringers.each do |ringer| %>
