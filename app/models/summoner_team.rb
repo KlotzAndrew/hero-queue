@@ -1,6 +1,6 @@
 class SummonerTeam < ActiveRecord::Base
 	belongs_to :summoner
-	belongs_to :team
+	belongs_to :team, touch: true
 
 	scope :present, -> {where.not(absent: true)}
 	scope :absent, -> {where(absent: true)}

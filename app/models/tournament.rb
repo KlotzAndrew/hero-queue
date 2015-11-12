@@ -18,13 +18,13 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def player_count
-		# Rails.cache.fetch("#{cache_key}/player_count") do
-		if teams_approved
-			teams.inject(0) {|sum, t| sum + t.summoners.count}
-		else
-			tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		Rails.cache.fetch("#{cache_key}/player_count") do
+			if teams_approved
+				teams.inject(0) {|sum, t| sum + t.summoners.count}
+			else
+				tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+			end
 		end
-		# end
 	end
 
 	def seats_left
