@@ -6,6 +6,9 @@ class Tournament < ActiveRecord::Base
 	scope :upcoming, -> {where("start_date > ?", Time.now).order(start_date: :asc)}
 	scope :past, -> {where("start_date < ?", Time.now).order(start_date: :asc)}
 
+	has_many :ringer_tickets, -> {ringers}, :class_name => 'Ticket'
+	has_many :ringers, :source => :summoner, :through => :ringer_tickets
+
 	def summoners
 		sumoner_objs = []
 		all_solos.flatten.each {|x| sumoner_objs << x}
@@ -57,7 +60,7 @@ class Tournament < ActiveRecord::Base
 	def team_statistics
 		Rails.cache.fetch("#{cache_key}.team_statistics") do
 			return false if self.teams.empty?
-			team_sums = self.teams.includes(:summoners).map {|x| x.summoners.inject(0) {|sum, n| sum + n.elo}}
+			team_sums = self.teams.includes(:summoners).map {|x| x.summoners.map(&:elo).sum }
 			{ 
 				team_avg: team_sums.sum/team_sums.count,
 				team_std: team_sums.standard_deviation.round(2),

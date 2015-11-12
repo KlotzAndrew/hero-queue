@@ -1,12 +1,12 @@
 <h4><%= team_assignment.summoner.summonerName %><%= " - ABSENT" if team_assignment.absent == true %></h4>
 <%= team_assignment.summoner.inspect %>
 
-<%= form_for(team_assignment) do |f| %>
+<%= form_for([tournament, team, team_assignment]) do |f| %>
 	<% if team_assignment.absent %>
-		<%= f.hidden_field :absent, :value => false %>
+		<%= f.hidden_field :absent, :value => "false" %>
 		<%= f.submit "Mark Present", :class => "btn btn-success"  %>
 	<% else %>
-		<%= f.hidden_field :absent, :value => true %>
+		<%= f.hidden_field :absent, :value => "true" %>
 		<%= f.submit "Mark Absent", :class => "btn btn-danger"  %>
 	<% end %>
 <% end %>

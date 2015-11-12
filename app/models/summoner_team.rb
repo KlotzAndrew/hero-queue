@@ -16,8 +16,7 @@ class SummonerTeam < ActiveRecord::Base
 				summoner.tickets.create!(
 					tournament_id: tournament_id,
 					status: "Ringer")
-				summoner.summoner_teams.create!(
-					team_id: team_id )
+				Team.find(team_id).summoners << summoner
 			end
 		end
 	end

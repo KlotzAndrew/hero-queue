@@ -60,7 +60,12 @@
                   <%= render :partial => 'team_stat', :collection => @tournament.teams %>
                 </table>
               <% end %>
-              <h3>Absent Sumoners:</h3>
+              <h3>Ringers:</h3>
+              <% @tournament.ringers.each do |ringer| %>
+                <%= ringer.summonerName %>, <%= ringer.elo %> |
+              <% end %>
+
+              <h3>Absent/Unassigned Sumoners:</h3>
                 <% @tournament.teams.each do |x| %>
                   <% unless x.absent_summoners.empty? %>
                     <% x.absent_summoners.each do |y| %>

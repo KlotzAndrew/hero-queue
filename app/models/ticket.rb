@@ -9,8 +9,9 @@ class Ticket < ActiveRecord::Base
 	before_create :are_remaining_tickets?
 	before_create :duo_is_not_you?
 
-	scope :paid, -> {where(status: ["Completed","Pending", "Ringer"])}
-	scope :unpaid, -> {where.not(status: ["Completed","Pending", "Ringer"])}
+	scope :paid, -> {where(status: ["Completed","Pending","Ringer"])}
+	scope :unpaid, -> {where.not(status: ["Completed","Pending","Ringer"])}
+	scope :ringers, -> {where(status: ["Ringer"])}
 
 	scope :solo_tickets, -> {where(duo_id: nil)}
 	scope :duo_tickets, -> {where.not(duo_id: nil)}

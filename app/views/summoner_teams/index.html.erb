@@ -12,7 +12,7 @@
 	      	<% end %>
 
 	      	<h5>Current Summoners:</h5>
-	      	<%= render :partial => 'team_assignment', :collection => @summoner_teams %>
+	      	<%= render :partial => 'team_assignment', :collection => @summoner_teams, locals: { tournament: @summoner_teams.first.team.tournament, team: @summoner_teams.first.team } %>
 	      </div>
 
 	    </div>

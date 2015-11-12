@@ -6,7 +6,7 @@ class ReplaceSummonerWithRingerTest < ActionDispatch::IntegrationTest
 		@admin = users(:grok)
 	end
 
-	test "mark absent and replace with ringer" do
+	test "mark absent and replace with ringer the remove" do
 		team = @tournament_with_teams.teams.first
 		summoner = team.summoners.first
 		log_in_as(@admin)
@@ -14,7 +14,7 @@ class ReplaceSummonerWithRingerTest < ActionDispatch::IntegrationTest
 		get tournament_team_summoner_teams_path(@tournament_with_teams, team)
 		assert_template 'summoner_teams/index'
 		assert_difference 'team.summoners.count', -1 do
-      patch summoner_team_path(summoner.summoner_teams.first), 
+      patch tournament_team_summoner_team_path(@tournament_with_teams, team, summoner.summoner_teams.first), 
       	summoner_team: 
 	      	{ 
 		        absent: true
@@ -34,6 +34,15 @@ class ReplaceSummonerWithRingerTest < ActionDispatch::IntegrationTest
     assert_template 'summoner_teams/index'
 	end
 
+	# test "remove ringer from tournament" do
+ #    summoner_team = team.summoner_teams.last
+ #    assert_difference 'team.summoners.count', -1 do
+ #      delete tournament_team_summoner_team_path(@tournament_with_teams, team, summoner_team) 
+ #    end
+ #    follow_redirect!
+ #    assert_template 'summoner_teams/index'
+	# end
+
 	test "toggle player absent/present" do
 		team = @tournament_with_teams.teams.first
 		summoner = team.summoners.first
@@ -42,7 +51,7 @@ class ReplaceSummonerWithRingerTest < ActionDispatch::IntegrationTest
 		get tournament_team_summoner_teams_path(@tournament_with_teams, team)
 		assert_template 'summoner_teams/index'
 		assert_difference 'team.summoners.count', -1 do
-      patch summoner_team_path(summoner.summoner_teams.first), 
+      patch tournament_team_summoner_team_path(@tournament_with_teams, team, summoner.summoner_teams.first), 
       	summoner_team: 
 	      	{ 
 		        absent: true
@@ -52,7 +61,7 @@ class ReplaceSummonerWithRingerTest < ActionDispatch::IntegrationTest
     assert_template 'summoner_teams/index'
     #mark summoner as present
     assert_difference 'team.summoners.count', 1 do
-      patch summoner_team_path(summoner.summoner_teams.first), 
+      patch tournament_team_summoner_team_path(@tournament_with_teams, team, summoner.summoner_teams.first), 
       	summoner_team: 
 	      	{ 
 		        absent: false

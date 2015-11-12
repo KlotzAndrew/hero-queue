@@ -1,8 +1,8 @@
 class Team < ActiveRecord::Base
 	belongs_to :tournament, touch: true
 	
-	# has_many :summoner_teams
-	# has_many :assigned_summoners, :through => :summoner_teams
+	has_many :summoner_teams
+	has_many :assigned_summoners, :through => :summoner_teams
 
 	has_many :summoner_assignments, :class_name => 'SummonerTeam'
 	has_many :assigned_summoners, :source => :summoner, :through => :summoner_assignments
