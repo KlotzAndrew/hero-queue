@@ -8,6 +8,7 @@ class Ticket < ActiveRecord::Base
 	
 	before_create :are_remaining_tickets?
 	before_create :duo_is_not_you?
+	before_create :teams_already_built?
 
 	scope :paid, -> {where(status: ["Completed","Pending","Ringer"])}
 	scope :unpaid, -> {where.not(status: ["Completed","Pending","Ringer"])}
@@ -24,7 +25,15 @@ class Ticket < ActiveRecord::Base
 	    return self
 	end
 
+	def teams_already_built?
+		if self.tournament.teams_approved && self.status != "Ringer"
+			self.errors.add(:too_late, ", sorry teams have already been built!") 
+			return false
+		end
+	end
+
 	private
+
 
 		def duo_is_not_you?
 			return false if self.summoner_id == self.duo_id

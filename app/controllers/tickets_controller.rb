@@ -6,6 +6,7 @@ class TicketsController < ApplicationController
 
     if @ticket.summonerName
       @ticket.new_with_summoner(ticket_params)
+      @ticket.teams_already_built?
       @ticket.save
       session[:ticket_id] = @ticket.id
       respond_to do |format|

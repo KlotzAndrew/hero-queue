@@ -8,6 +8,20 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
     @duo = summoners(:hukkk)
   end
 
+  test "should not create ticket if teams approved" do
+    @tournament_sold.increment!(:total_players)
+    @tournament_sold.update(teams_approved: true)
+    get tournament_path(@tournament_sold)
+    assert_difference 'Ticket.count', 0 do
+      xhr :post, tickets_path, ticket: { 
+        summonerName: @summoner.summonerName,
+        tournament_id: @tournament_sold.id }
+    end
+
+    ticket = assigns(:ticket)
+    assert_equal ticket.errors.first, [:too_late, ", sorry teams have already been built!"]
+  end
+
   test "should return error when no seats for solo" do
     get tournament_path(@tournament_sold)
     assert_difference 'Ticket.count', 0 do

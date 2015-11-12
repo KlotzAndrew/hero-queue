@@ -7,7 +7,6 @@ class TicketTest < ActiveSupport::TestCase
 		@ticket = Ticket.new(
 			tournament_id: @tournament_sold.id,
 			summoner_id: @summoner.id)
-		@ticket_valid = Ticket.new
 	end
 
 	test "ticket tournament_id should be present" do
@@ -41,7 +40,12 @@ class TicketTest < ActiveSupport::TestCase
 		assert_not @ticket.save
 	end
 
-	test "summoner can only appear once on tournament[:id]/tickets" do
+	test "tickets cannot be purchased after teams approved" do
+		@tournament_sold.increment!(:total_players)
+		@tournament_sold.update(teams_approved: true)
+		assert_not @ticket.save
+	end
 
+	test "summoner can only appear once on tournament[:id]/tickets" do
 	end
 end
