@@ -40,3 +40,4 @@ tournament_with_teams:
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
   facebook_url: "www.facebook.com"
+  teams_approved: true

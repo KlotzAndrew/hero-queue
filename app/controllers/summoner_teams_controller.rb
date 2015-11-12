@@ -14,20 +14,9 @@ class SummonerTeamsController < ApplicationController
 	end
 
 	def create
-		summoner = Summoner.find_or_create(params[:summoner_team][:summonerName])
-		if summoner.id 
-			fetcher = Fetcher::Lolkingelo.new([summoner])
-			fetcher.update_summoners_elo
-			SummonerTeam.transaction do
-				SummonerTeam.create!(
-					team_id: params[:team_id],
-					summoner_id: summoner.id)
-				Ticket.create(
-					summoner_id: params[:summoner_id],
-					tournament_id: params[:tournament_id],
-					status: "Ringer")
-			end
-		end
+		summoner_team = SummonerTeam.new
+		summoner_team.add_to_team_as_ringer(params[:summoner_team][:summonerName], params[:tournament_id], params[:team_id])
+		
 		redirect_to tournament_team_summoner_teams_path(params[:tournament_id], params[:team_id])
 	end
 
