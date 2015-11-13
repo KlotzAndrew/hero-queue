@@ -34,7 +34,6 @@ class Ticket < ActiveRecord::Base
 
 	private
 
-
 		def duo_is_not_you?
 			return false if self.summoner_id == self.duo_id
 		end

@@ -10,7 +10,16 @@
           <% cache("#{@tournament.cache_key}/show/teams") do %>
             <div class="table-responsive">
               <table class="table table-hover">
-                <%= render :partial => 'team', :collection => @tournament.teams %>
+                <thead>
+                  <tr>
+                    <th>Pos</th>
+                    <th>Team</th>
+                    <th>Summoners</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%= render :partial => 'team', :collection => @tournament.teams.order_ranked %>
+                </tbody>
               </table>
             </div>
           <% end %>
@@ -60,7 +69,16 @@
               <% cache("#{@tournament.cache_key}/show/team_stats") do %>
                 <div class="table-responsive">
                   <table class="table table-hover">
-                    <%= render :partial => 'team_stat', :collection => @tournament.teams %>
+                    <thead>
+                      <tr>
+                        <th>Pos</th>
+                        <th>Team</th>
+                        <th>Summoners</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%= render :partial => 'team_stat', :collection => @tournament.teams.order_ranked, locals: { tournament: @tournament } %>
+                    </tbody>
                   </table>
                 </div>
               <% end %>

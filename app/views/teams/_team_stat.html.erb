@@ -1,5 +1,12 @@
 <tr>
 	<td>
+		<%= form_for([tournament, team_stat])  do |f| %>
+			<%= f.select :position, (1..tournament.total_teams) %>
+		<%= f.submit "Update" %>
+		<% end %>
+	</td>
+
+	<td>
 		<strong>Team #<%= team_stat_counter %></strong><br/>
 		<%= team_stat.summoners.inject(0) {|sum, n| sum + n.elo if n.elo} %>
 		<%= link_to "Edit", tournament_team_summoner_teams_path(team_stat.tournament_id, team_stat.id) %>

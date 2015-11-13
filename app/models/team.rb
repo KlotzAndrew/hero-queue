@@ -13,7 +13,9 @@ class Team < ActiveRecord::Base
 	has_many :present_assignments, -> {present}, :class_name => 'SummonerTeam'
 	has_many :summoners, :source => :summoner, :through => :present_assignments
 
-	before_save :under_max_team_limit
+	before_create :under_max_team_limit
+
+	scope :order_ranked, -> {order(position: :asc)}
 
 	def self.build_teams(teams, tournament_id)
 		teams.each do |team_array|

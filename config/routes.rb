@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       patch 'create_tournament_teams'
       patch 'approve_tournament_teams'
     end
-    resources :teams,             only: [:index] do
+    resources :teams,             only: [:index, :update] do
       resources :summoner_teams,  only: [:update, :create, :index, :destroy]
     end
   end

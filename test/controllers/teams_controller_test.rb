@@ -3,6 +3,8 @@ require 'test_helper'
 class TeamsControllerTest < ActionController::TestCase
   def setup
     @tournament = tournaments(:tournament_sold)
+    @tournament_with_teams = tournaments(:tournament_with_teams)
+    @team = @tournament_with_teams.teams.first
     @user = users(:grok)
     @other_user = users(:thrall)
   end
@@ -60,5 +62,29 @@ class TeamsControllerTest < ActionController::TestCase
     log_in_as(@other_user)
     get :index, :tournament_id => @tournament.id
     assert_nil assigns(:team_stats)
+  end
+
+  test "should update team position for admin" do
+    log_in_as(@user)
+    patch :update, 
+      tournament_id: @tournament_with_teams.id,
+      id: @team.id,
+      team: {
+        position: 1
+      }
+    assert_equal 1, @team.reload.position
+    assert_redirected_to tournament_teams_path(@tournament_with_teams)
+  end
+
+  test "should redirect update if not admin" do
+    log_in_as(@other_user)
+    patch :update, 
+      tournament_id: @tournament_with_teams.id,
+      id: @team.id,
+      team: {
+        position: 1
+      }
+    assert_equal nil, @team.reload.position
+    assert_redirected_to root_url
   end
 end

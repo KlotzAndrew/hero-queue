@@ -19,7 +19,19 @@ Tournament.create!(
 	total_players: 40,
 	total_teams: 8,
 	price: 15.00,
-	start_date: 4.weeks.from_now,
+	start_date: 4.weeks.ago,
+	location_name: "Happy Turbo Internet Cafe",
+	location_address: "5171 Yonge St.",
+	location_url: "http://www.happyturbo.com",
+	facebook_url: "https://www.facebook.com")
+
+Tournament.create!(
+	name: "Solo/Duo Queue League Tournament",
+	game: "League of Legends",
+	total_players: 40,
+	total_teams: 8,
+	price: 15.00,
+	start_date: Time.now + 4.weeks,
 	location_name: "Happy Turbo Internet Cafe",
 	location_address: "5171 Yonge St.",
 	location_url: "http://www.happyturbo.com",
@@ -37,7 +49,7 @@ end
 SUMMONERS_TO_DUOS = 20
 DUO_SIZE = 2
 summoners = Summoner.all.each_slice(SUMMONERS_TO_DUOS).to_a
-tournament = Tournament.last
+tournament = Tournament.order(start_date: :desc).first
 
 summoners.first.each_slice(DUO_SIZE).to_a.each do |x,y|
 	tournament.tickets.create!(
