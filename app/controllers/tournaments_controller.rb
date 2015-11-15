@@ -39,7 +39,6 @@ class TournamentsController < ApplicationController
     end
 
     def tournament_params
-      params.require(:tournament).permit(:options)
     end
 
     def admin_user

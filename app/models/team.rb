@@ -28,10 +28,6 @@ class Team < ActiveRecord::Base
 
 	private
 
-	def self.test
-		::Builder::TeamName.new.random_name
-	end
-
 	def under_max_team_limit
 		if self.tournament.teams.count >= self.tournament.total_teams
 			return false
