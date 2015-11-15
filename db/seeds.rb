@@ -13,6 +13,9 @@ User.create!(
 	activated: true,
 	)
 
+series = Series.create!(
+	name: "Winter Series")
+
 Tournament.create!(
 	name: "Solo/Duo Queue League Tournament",
 	game: "League of Legends",
@@ -25,17 +28,20 @@ Tournament.create!(
 	location_url: "http://www.happyturbo.com",
 	facebook_url: "https://www.facebook.com")
 
-Tournament.create!(
-	name: "Solo/Duo Queue League Tournament",
-	game: "League of Legends",
-	total_players: 40,
-	total_teams: 8,
-	price: 15.00,
-	start_date: Time.now + 4.weeks,
-	location_name: "Happy Turbo Internet Cafe",
-	location_address: "5171 Yonge St.",
-	location_url: "http://www.happyturbo.com",
-	facebook_url: "https://www.facebook.com")
+
+1.upto(4) do |x|
+	series.tournaments.create!(
+		name: "Solo/Duo Queue League Tournament (#{x})",
+		game: "League of Legends",
+		total_players: 40,
+		total_teams: 8,
+		price: 15.00,
+		start_date: Time.now + x.weeks,
+		location_name: "Happy Turbo Internet Cafe",
+		location_address: "5171 Yonge St.",
+		location_url: "http://www.happyturbo.com",
+		facebook_url: "https://www.facebook.com")
+end
 
 0.upto(sumName.count-1) do |x|
 	summoner = Summoner.create!(
@@ -49,7 +55,7 @@ end
 SUMMONERS_TO_DUOS = 20
 DUO_SIZE = 2
 summoners = Summoner.all.each_slice(SUMMONERS_TO_DUOS).to_a
-tournament = Tournament.order(start_date: :desc).first
+tournament = Tournament.upcoming.first
 
 summoners.first.each_slice(DUO_SIZE).to_a.each do |x,y|
 	tournament.tickets.create!(
