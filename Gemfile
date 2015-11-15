@@ -15,6 +15,7 @@ gem 'nokogiri', '~> 1.6.6.2'
 gem 'bcrypt', '~> 3.1.7'
 gem 'descriptive_statistics'
 gem 'pg'
+# gem 'faker', '~> 1.5'
 # gem 'unicorn'
 
 group :development, :test do

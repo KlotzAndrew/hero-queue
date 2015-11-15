@@ -19,12 +19,18 @@ class Team < ActiveRecord::Base
 
 	def self.build_teams(teams, tournament_id)
 		teams.each do |team_array|
-			team = Team.create(tournament_id: tournament_id)
+			team = Team.create(
+				tournament_id: tournament_id,
+				name: ::Builder::TeamName.new.random_name)
 			team_array.flatten.each { |player| team.summoners << Summoner.find(player[:id]) }
 		end
 	end
 
 	private
+
+	def self.test
+		::Builder::TeamName.new.random_name
+	end
 
 	def under_max_team_limit
 		if self.tournament.teams.count >= self.tournament.total_teams

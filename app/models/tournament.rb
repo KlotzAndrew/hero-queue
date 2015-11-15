@@ -48,7 +48,7 @@ class Tournament < ActiveRecord::Base
 	def create_tournament_teams(options = {})
 		teambalancer = Calculator::Teambalancer.new(self.all_solos, self.all_duos)
 		teams = teambalancer.teambalance(options)
-		build_new_teams(teams)
+		Team.build_teams(teams, self.id)
 	end
 
 	def approve_tournament_teams
@@ -98,13 +98,5 @@ class Tournament < ActiveRecord::Base
 	end
 
 	private
-
-	def build_new_teams(teams)
-		teams.each do |team_array|
-			team = self.teams.new
-			team_array.flatten.each { |x| team.summoners << Summoner.find(x[:id]) }
-			team.save
-		end		
-	end
 
 end

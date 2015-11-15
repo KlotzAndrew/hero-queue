@@ -10,9 +10,15 @@ class TeamTest < ActiveSupport::TestCase
 		teambalancer = Calculator::Teambalancer.new(@tournament.all_solos, @tournament.all_duos)
 		teams = teambalancer.teambalance
 		Team.build_teams(teams, @tournament.id)
+		#correct number of teams
 		assert_equal @tournament.reload.teams.count, @tournament.total_teams
+		#teams are correct size
 		@tournament.teams.each do |team|
 			assert_equal team.summoners.count, 5
+		end		
+		#teams have names
+		@tournament.teams.each do |team|
+			assert team.name, msg = "team is missing a name"
 		end
 	end
 
