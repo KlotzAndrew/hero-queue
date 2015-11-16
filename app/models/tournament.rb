@@ -15,13 +15,13 @@ class Tournament < ActiveRecord::Base
 	has_many :solo_players, -> {present.solos}, :class_name => "TournamentParticipation"
 	has_many :all_solos, :source => :summoner, :through => :solo_players
 
+	has_many :unassigned_participations, -> {unassigned}, :class_name => "TournamentParticipation"
+	# has_many :unassigned_summoners, :source => :summoner, :through => :summoner_without_team
+
 	def player_count
 		Rails.cache.fetch("#{cache_key}/player_count") do
 			self.tournament_participations.present.count
 		end
-		# 	if teams_approved
-		# 		teams.inject(0) {|sum, t| sum + t.summoners.count}
-		# 	end
 	end
 
 	def seats_left

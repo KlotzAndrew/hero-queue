@@ -2,7 +2,7 @@
 	<td>
 		<%= form_for([tournament, team_stat])  do |f| %>
 			<%= f.select :position, (1..tournament.total_teams) %>
-		<%= f.submit "Update" %>
+			<%= f.submit "Update" %>
 		<% end %>
 	</td>
 

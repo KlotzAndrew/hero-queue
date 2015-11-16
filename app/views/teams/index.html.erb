@@ -82,12 +82,23 @@
                   </table>
                 </div>
               <% end %>
+              <h3>Unassigned:</h3>
+                <% @tournament.unassigned_participations.each do |participation| %>
+                  <%= participation.summoner.summonerName %>, <%= participation.summoner.elo  %> |
+                    
+                  <%= form_for([@tournament, @tournament.teams.first, participation]) do |f| %>
+                    <%= f.select :team_id, (1..@tournament.total_teams) %>
+                    <%= f.submit "Update" %>
+                  <% end %>
+
+                <% end %>
+
               <h3>Ringers:</h3>
               <% @tournament.ringers.each do |ringer| %>
                 <%= ringer.summonerName %>, <%= ringer.elo %> |
               <% end %>
 
-              <h3>Absent/Unassigned Sumoners:</h3>
+              <h3>Absent Sumoners:</h3>
                 <% @tournament.teams.each do |x| %>
                   <% unless x.absent_summoners.empty? %>
                     <% x.absent_summoners.each do |y| %>

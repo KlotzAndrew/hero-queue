@@ -5,6 +5,7 @@ class TournamentParticipation < ActiveRecord::Base
 
 	scope :present, -> {where.not(absent: true)}
 	scope :absent, -> {where(absent: true)}
+	scope :unassigned, -> {where(team_id: nil)}
 
 	scope :solos, -> {where(duo_approved: false)}
 

@@ -11,7 +11,9 @@ class TournamentParticipationsController < ApplicationController
 	end
 
 	def update
-		if @ringer_ticket && tournament_participation_params[:absent] == "true"
+		if @tournament_participation.team_id.nil?
+			@tournament_participation.update(tournament_participation_teamid_params)
+		elsif @ringer_ticket && tournament_participation_params[:absent] == "true"
 			@ringer_ticket.destroy
 			@tournament_participation.destroy
 		else
@@ -22,7 +24,6 @@ class TournamentParticipationsController < ApplicationController
 
 	def create
 		TournamentParticipation.add_to_team_as_ringer(params[:tournament_participation][:summonerName], params[:tournament_id], params[:team_id])
-
 		redirect_to tournament_team_tournament_participations_path(params[:tournament_id], params[:team_id])
 	end
 
@@ -36,7 +37,7 @@ class TournamentParticipationsController < ApplicationController
 
 	private
 		def set_ringer_ticket
-			@ringer_ticket = @tournament_participation.team.tournament.tickets.where(status: "Ringer").where(summoner_id: @tournament_participation.summoner_id).first
+			@ringer_ticket = @tournament_participation.team.tournament.tickets.where(status: "Ringer").where(summoner_id: @tournament_participation.summoner_id).first if @tournament_participation.team
 		end
 
 		def set_tournament_participation
@@ -45,6 +46,10 @@ class TournamentParticipationsController < ApplicationController
 
 		def tournament_participation_params
       params.require(:tournament_participation).permit(:absent)
+    end
+
+    def tournament_participation_teamid_params
+    	params.require(:tournament_participation).permit(:team_id)
     end
 
     def admin_user
