@@ -16,13 +16,11 @@ class Tournament < ActiveRecord::Base
 	has_many :all_solos, :source => :summoner, :through => :solo_players
 
 	def player_count
-		# Rails.cache.fetch("#{cache_key}/player_count") do
+		Rails.cache.fetch("#{cache_key}/player_count") do
 			self.tournament_participations.count
-		# end
+		end
 		# 	if teams_approved
 		# 		teams.inject(0) {|sum, t| sum + t.summoners.count}
-		# 	else
-		# 		tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
 		# 	end
 	end
 

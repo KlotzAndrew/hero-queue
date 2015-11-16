@@ -8,22 +8,17 @@ class TournamentTest < ActiveSupport::TestCase
 		@other_summoner = summoners(:hukkk)
 	end
 
-	test "should return summoners that have paid" do
-		assert_not @tournament_unsold.summoners.include?(@summoner)
-		ticket = @tournament_unsold.tickets.new(
-			summoner_id: @summoner.id,
-			status: "Completed")
-		assert ticket.save
-		assert @tournament_unsold.summoners.include?(@summoner)
+	test "should correcly return all_solos players" do
+		solos = @tournament.all_solos
+		assert_equal 4, solos.count
 	end
 
-	test "should not return summoners that have not paid" do
-		assert_not @tournament_unsold.summoners.include?(@summoner)
-		ticket = @tournament_unsold.tickets.new(
-			summoner_id: @summoner.id,
-			status: "")
-		assert ticket.save
-		assert_not @tournament_unsold.summoners.include?(@summoner)
+	test "should correcly return all_duos players" do
+		duos = @tournament.all_duos
+		assert_equal 3, duos.count
+		duos.each do |x|
+			assert_equal 2, x.count
+		end
 	end
 
 	test "returns correct team statistics" do

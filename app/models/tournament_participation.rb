@@ -1,12 +1,12 @@
 class TournamentParticipation < ActiveRecord::Base
 	belongs_to :summoner
-	belongs_to :tournament
+	belongs_to :tournament, touch: true
 
 	scope :solos, -> {where(duo_approved: false)}
 	# scope :duos, -> {where(duo_approved: true)}
 
 	def self.duos
-		duo_hash = where(duo_approved: true).each_with_object({}) do |t,h|
+		duo_hash = where(duo_approved: true).includes(:summoner).each_with_object({}) do |t,h|
 			if h.has_key?(t.duo_id)
 				h[t.duo_id] << t
 			else
