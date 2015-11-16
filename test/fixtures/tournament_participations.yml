@@ -1,0 +1,21 @@
+<% 4.times do |n| %>
+tournament_participation<%= n %>:
+  tournament: tournament_sold
+  summoner_id: <%= n+4 %>
+<% end %>
+
+<% i = 8 %>
+<% 3.times do |n| %>
+tournament_participation<%= i %>:
+  tournament: tournament_sold
+  summoner_id: <%= i%>
+  duo_id: <%= i+1 %>
+  duo_approved: true
+
+tournament_participation<%= i+1 %>:
+  tournament: tournament_sold
+  summoner_id: <%= i+1 %>
+  duo_id: <%= i %>
+  duo_approved: true  
+<% i += 2 %>
+<% end %>

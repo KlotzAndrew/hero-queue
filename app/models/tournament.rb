@@ -9,38 +9,41 @@ class Tournament < ActiveRecord::Base
 	has_many :ringer_tickets, -> {ringers}, :class_name => 'Ticket'
 	has_many :ringers, :source => :summoner, :through => :ringer_tickets
 
-	def summoners
-		sumoner_objs = []
-		all_solos.flatten.each {|x| sumoner_objs << x}
-		all_duos.flatten.each {|x| sumoner_objs << x}
-		
-		sumoner_objs
-	end
+	has_many :tournament_participations
+	has_many :summoners, :through => :tournament_participations
+
+	has_many :solo_players, -> {solos}, :class_name => "TournamentParticipation"
+	has_many :all_solos, :source => :summoner, :through => :solo_players
 
 	def player_count
-		Rails.cache.fetch("#{cache_key}/player_count") do
-			if teams_approved
-				teams.inject(0) {|sum, t| sum + t.summoners.count}
-			else
-				tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
-			end
-		end
+		# Rails.cache.fetch("#{cache_key}/player_count") do
+			self.tournament_participations.count
+		# end
+		# 	if teams_approved
+		# 		teams.inject(0) {|sum, t| sum + t.summoners.count}
+		# 	else
+		# 		tickets.paid.includes(:duo).paid.inject(0) {|sum, n| n.duo ? sum += 2 : sum += 1}
+		# 	end
 	end
 
 	def seats_left
 		self.total_players - player_count
 	end
 
-	def all_solos
+	def all_duos
+		self.tournament_participations.duos
+	end
+
+	def all_solo_tickets
 		tickets.paid.includes(:summoner).paid.solo_tickets.map {|x| [x.summoner]}
 	end
 
-	def all_duos
+	def all_duo_tickets
 		tickets.paid.includes(:summoner, :duo).paid.duo_tickets.map {|x| [x.summoner, x.duo]}
 	end
 
 	def update_summoners_elo
-		summoners_array = self.all_solos.flatten + self.all_duos.flatten
+		summoners_array = self.summoners
 		fetcher = Fetcher::Lolkingelo.new(summoners_array)
 		fetcher.update_summoners_elo
 	end

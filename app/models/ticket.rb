@@ -32,7 +32,43 @@ class Ticket < ActiveRecord::Base
 		end
 	end
 
+	def self.check_paypal_ipn(params)
+		status = params[:payment_status]
+	    if status == "Completed"
+	    	# check reciever email is my paypal email
+	    	# elsif response.body == VERIFIED or INVALID
+	      ticket = Ticket.find(params[:invoice])
+	      ticket.update(
+	        notification_params: params, 
+	        status: status, 
+	        transaction_id: params[:txn_id], 
+	        purchased_at: Time.now)
+	      self.paypal_verify(ticket)
+	      ticket.add_players_to_tournament
+	     elsif status == "Pending"
+	     	ticket = Ticket.find(params[:invoice])
+	      ticket.update(
+	        notification_params: params, 
+	        status: status, 
+	        transaction_id: params[:txn_id], 
+	        purchased_at: Time.now)
+	      self.paypal_verify(ticket)
+	      ticket.add_players_to_tournament
+	    end
+	end	
+
+	def add_players_to_tournament
+		TournamentParticipation.add_summoners_to_tournament(self.tournament_id, self.summoner_id, self.duo_id)
+	end	
+
 	private
+
+		def self.paypal_verify(ticket)
+			raw_body = JSON.parse(ticket.notification_params.gsub('\\','').gsub('=>',':'))
+			uri = URI.parse('https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
+			request = Net::HTTP.post_form(uri, raw_body)
+		end	
+
 
 		def duo_is_not_you?
 			return false if self.summoner_id == self.duo_id

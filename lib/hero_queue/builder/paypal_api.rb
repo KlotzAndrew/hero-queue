@@ -9,29 +9,6 @@ module Builder
 			encrypt_for_paypal(values)
 		end
 
-		def self.check_paypal_ipn(params)
-			status = params[:payment_status]
-		    if status == "Completed"
-		    	# check reciever email is my paypal email
-		    	# elsif response.body == VERIFIED or INVALID
-		      ticket = Ticket.find(params[:invoice])
-		      ticket.update(
-		        notification_params: params, 
-		        status: status, 
-		        transaction_id: params[:txn_id], 
-		        purchased_at: Time.now)
-		      paypal_verify(ticket)
-		     elsif status == "Pending"
-		     	ticket = Ticket.find(params[:invoice])
-		      ticket.update(
-		        notification_params: params, 
-		        status: status, 
-		        transaction_id: params[:txn_id], 
-		        purchased_at: Time.now)
-		      paypal_verify(ticket)
-		    end
-		end
-
 		private
 
 		def self.build_values(ticket, return_url, notify_url)
@@ -75,12 +52,6 @@ module Builder
 		def self.encrypt_for_paypal(values)
 			signed = OpenSSL::PKCS7::sign(OpenSSL::X509::Certificate.new(APP_CERT_PEM), OpenSSL::PKey::RSA.new(APP_KEY_PEM, ''), values.map { |k, v| "#{k}=#{v}" }.join("\n"), [], OpenSSL::PKCS7::BINARY)
 			OpenSSL::PKCS7::encrypt([OpenSSL::X509::Certificate.new(PAYPAL_CERT_PEM)], signed.to_der, OpenSSL::Cipher::Cipher::new("DES3"), OpenSSL::PKCS7::BINARY).to_s.gsub("\n", "")
-		end
-
-		def self.paypal_verify(ticket)
-			raw_body = JSON.parse(ticket.notification_params.gsub('\\','').gsub('=>',':'))
-			uri = URI.parse('https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
-			request = Net::HTTP.post_form(uri, raw_body)
 		end
 	end
 end

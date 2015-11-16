@@ -117,8 +117,8 @@ module Calculator
 		def parse_solos(solos)
 			solos_hashed = solos.map do |x|
 			 [{
-			  	id: x.first.id,
-			  	elo: x.first.elo
+			  	id: x.id,
+			  	elo: x.elo
 			  }]
 			end
 		end

@@ -64,6 +64,7 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
       assert_select 'div#active_ticket'
       assert_select 'form[action=?]', "https://www.paypal.com/cgi-bin/webscr"
     end
+    assert @tournament.summoners.include?(@summoner), msg = "summoner is not marked on tournament"
   end
 
   test "register with new summoner and duo" do

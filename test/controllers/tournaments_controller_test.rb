@@ -21,13 +21,13 @@ class TournamentsControllerTest < ActionController::TestCase
   end
 
   test "should let admin update summoners elo" do
-    @tournament_sold.all_solos.first.first.update(elo: nil)
+    @tournament_sold.all_solos.first.update(elo: nil)
     log_in_as(@user)
     assert @user.admin?
     VCR.use_cassette("lolking_nokogiri") do
       patch :update_summoners_elo, id: @tournament_sold
     end
-    assert_not_nil @tournament_sold.all_solos.first.first.reload.elo
+    assert_not_nil @tournament_sold.all_solos.first.reload.elo
     assert_redirected_to tournament_teams_path(@tournament_sold)
   end
 
@@ -66,7 +66,6 @@ class TournamentsControllerTest < ActionController::TestCase
   test "should let admin approve teams" do
     log_in_as(@user)
     assert @user.admin?
-    patch :create_tournament_teams, id: @tournament_with_teams
     patch :approve_tournament_teams, id: @tournament_with_teams
     assert_equal true, @tournament_with_teams.reload.teams_approved
     assert_redirected_to tournament_teams_path(@tournament_with_teams)

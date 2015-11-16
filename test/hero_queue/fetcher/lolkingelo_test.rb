@@ -14,7 +14,7 @@ class LolkingeloTest < ActiveSupport::TestCase
 			fetcher.update_summoners_elo
 
 			@tournament.all_solos.each do |x|
-				assert_not x.first.elo.nil?
+				assert_not x.elo.nil?
 			end
 			@tournament.all_duos.each do |x, y|
 				assert_not x.elo.nil?
