@@ -58,7 +58,7 @@ class Ticket < ActiveRecord::Base
 	end	
 
 	def add_players_to_tournament
-		TournamentParticipation.add_summoners_to_tournament(self.tournament_id, self.summoner_id, self.duo_id)
+		SummonerTeam.add_summoners_to_tournament(self.tournament_id, self.summoner_id, self.duo_id)
 	end	
 
 	private

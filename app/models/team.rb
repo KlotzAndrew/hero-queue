@@ -22,7 +22,10 @@ class Team < ActiveRecord::Base
 			team = Team.create(
 				tournament_id: tournament_id,
 				name: ::Builder::TeamName.new.random_name)
-			team_array.flatten.each { |player| team.summoners << Summoner.find(player[:id]) }
+			team_array.flatten.each do |player| 
+				summoner_team = SummonerTeam.where(tournament_id: tournament_id).where(summoner_id: player[:id]).first
+				summoner_team.update(team_id: team.id)
+			end
 		end
 	end
 

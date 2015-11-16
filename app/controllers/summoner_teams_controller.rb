@@ -21,8 +21,7 @@ class SummonerTeamsController < ApplicationController
 	end
 
 	def create
-		summoner_team = SummonerTeam.new
-		summoner_team.add_to_team_as_ringer(params[:summoner_team][:summonerName], params[:tournament_id], params[:team_id])
+		SummonerTeam.add_to_team_as_ringer(params[:summoner_team][:summonerName], params[:tournament_id], params[:team_id])
 
 		redirect_to tournament_team_summoner_teams_path(params[:tournament_id], params[:team_id])
 	end
