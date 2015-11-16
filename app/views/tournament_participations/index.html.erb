@@ -6,13 +6,13 @@
 	      
 	      <div class="well semi_transparent">
 	      	<h5>Add in a ringer:</h5>
-	      	<%= form_for([@summoner_teams.first.team.tournament, @summoner_teams.first.team, @ringer]) do |f| %>
+	      	<%= form_for([@tournament_participations.first.team.tournament, @tournament_participations.first.team, @ringer]) do |f| %>
 		      	<%= f.text_field :summonerName, :placeholder => "Summoner Name" %>
 		      	<%= f.submit "Add Ringer", :class => "btn btn-success"  %>
 	      	<% end %>
 
 	      	<h5>Current Summoners:</h5>
-	      	<%= render :partial => 'team_assignment', :collection => @summoner_teams, locals: { tournament: @summoner_teams.first.team.tournament, team: @summoner_teams.first.team } %>
+	      	<%= render :partial => 'team_assignment', :collection => @tournament_participations, locals: { tournament: @tournament_participations.first.team.tournament, team: @tournament_participations.first.team } %>
 	      </div>
 
 	    </div>

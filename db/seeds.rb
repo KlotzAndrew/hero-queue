@@ -62,10 +62,23 @@ duo_and_solo_summoner_array.first.each_slice(DUO_SIZE).to_a.each do |x,y|
 		summoner_id: x.id,
 		duo_id: y.id,
 		status: "Completed")
+	TournamentParticipation.create!(
+		tournament_id: tournament.id,
+		summoner_id: x.id,
+		duo_id: y.id,
+		duo_approved: true)
+	TournamentParticipation.create!(
+		tournament_id: tournament.id,
+		summoner_id: y.id,
+		duo_id: x.id,
+		duo_approved: true)
 end
 
 duo_and_solo_summoner_array.last.each do |x|
 	tournament.tickets.create!(
 		summoner_id: x.id,
 		status: "Completed")
+	TournamentParticipation.create!(
+		tournament_id: tournament.id,
+		summoner_id: x.id)
 end

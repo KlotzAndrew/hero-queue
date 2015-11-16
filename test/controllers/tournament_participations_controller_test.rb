@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SummonerTeamsControllerTest < ActionController::TestCase
+class TournamentParticipationsControllerTest < ActionController::TestCase
 	def setup
 		@admin = users(:grok)
 		@other_user = users(:thrall)
@@ -13,7 +13,7 @@ class SummonerTeamsControllerTest < ActionController::TestCase
 		get :index, :tournament_id => @tournament_with_teams.id, :team_id => @team
 		
 		assert_response :success
-		assert_equal @team.summoners.count, assigns(:summoner_teams).count
+		assert_equal @team.summoners.count, assigns(:tournament_participations).count
 		assert_template partial: '_team_assignment', count: @team.summoners.count
 		assert assigns(:ringer)
 	end
@@ -36,8 +36,8 @@ class SummonerTeamsControllerTest < ActionController::TestCase
       patch :update, 
 	      tournament_id: @tournament_with_teams,
       	team_id: @team,
-      	id: summoner.summoner_teams.first,
-      	summoner_team: 
+      	id: summoner.tournament_participations.first,
+      	tournament_participation: 
 	      	{ 
 		        absent: true
 	        }
@@ -46,8 +46,8 @@ class SummonerTeamsControllerTest < ActionController::TestCase
       patch :update, 
       tournament_id: @tournament_with_teams,
     	team_id: @team,
-      id: summoner.summoner_teams.first,
-      	summoner_team: 
+      id: summoner.tournament_participations.first,
+      	tournament_participation: 
 	      	{ 
 		        absent: false
 	        }
@@ -56,22 +56,22 @@ class SummonerTeamsControllerTest < ActionController::TestCase
 
 	test "update should delete assignment/ticket if ringer" do
 		summoner = @team.summoners.first
-		summoner_team = @team.summoner_teams.last
-		ticket = summoner_team.team.tournament.tickets.where(summoner_id: summoner_team.summoner_id).first
+		tournament_participation = @team.tournament_participations.last
+		ticket = tournament_participation.team.tournament.tickets.where(summoner_id: tournament_participation.summoner_id).first
 		ticket.update(status: "Ringer")
 		log_in_as(@admin)
 		assert_difference '@team.summoners.count', -1 do
 	  	patch :update, 
 	      tournament_id: @tournament_with_teams,
       	team_id: @team,
-      	id: summoner_team,
-      	summoner_team: 
+      	id: tournament_participation,
+      	tournament_participation: 
 	      	{ 
 		        absent: "true"
 	        }
   	end
   	assert_equal 0, Ticket.where(id: ticket.id).count
-  	assert_redirected_to tournament_team_summoner_teams_path(@tournament_with_teams, @team)
+  	assert_redirected_to tournament_team_tournament_participations_path(@tournament_with_teams, @team)
 	end
 
 	test "update should redirect unless logged in" do
@@ -80,8 +80,8 @@ class SummonerTeamsControllerTest < ActionController::TestCase
       patch :update, 
       	tournament_id: @tournament_with_teams,
       	team_id: @team,
-      	id: summoner.summoner_teams.first,
-      	summoner_team: 
+      	id: summoner.tournament_participations.first,
+      	tournament_participation: 
 	      	{ 
 		        absent: true
 	        }
@@ -96,8 +96,8 @@ class SummonerTeamsControllerTest < ActionController::TestCase
       patch :update, 
       	tournament_id: @tournament_with_teams,
       	team_id: @team,
-	      id: summoner.summoner_teams.first,
-      	summoner_team: 
+	      id: summoner.tournament_participations.first,
+      	tournament_participation: 
 	      	{ 
 		        absent: true
 	        }
@@ -106,27 +106,27 @@ class SummonerTeamsControllerTest < ActionController::TestCase
   end
 
   test "create should add in a ringer" do
-  	@team.summoners.last.summoner_teams.first.update(absent: true)
+  	@team.summoners.last.tournament_participations.first.update(absent: true)
   	log_in_as(@admin)
   	assert_difference '@team.summoners.count', 1 do
 	  	post :create, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-	      	summoner_team: 
+	      	tournament_participation: 
 		      	{ 
 			        summonerName: "boxstripe"
 		        }
   	end
-  	assert_redirected_to tournament_team_summoner_teams_path(@tournament_with_teams, @team)
+  	assert_redirected_to tournament_team_tournament_participations_path(@tournament_with_teams, @team)
   end
 
   test "should redirect create unless logged in" do
-  	@team.summoners.last.summoner_teams.first.update(absent: true)
+  	@team.summoners.last.tournament_participations.first.update(absent: true)
   	assert_difference '@team.summoners.count', 0 do
 	  	post :create, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-	      	summoner_team: 
+	      	tournament_participation: 
 		      	{ 
 			        summonerName: "boxstripe"
 		        }
@@ -135,13 +135,13 @@ class SummonerTeamsControllerTest < ActionController::TestCase
 	end
 
 	test "should redirect create unless user" do
-		@team.summoners.last.summoner_teams.first.update(absent: true)
+		@team.summoners.last.tournament_participations.first.update(absent: true)
 		log_in_as(@other_user)
   	assert_difference '@team.summoners.count', 0 do
 	  	post :create, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-	      	summoner_team: 
+	      	tournament_participation: 
 		      	{ 
 			        summonerName: "boxstripe"
 		        }
@@ -150,54 +150,54 @@ class SummonerTeamsControllerTest < ActionController::TestCase
 	end
 
 	test "should delete ringer from tournament" do
-		summoner_team = @team.summoner_teams.last
-		ticket = summoner_team.team.tournament.tickets.where(summoner_id: summoner_team.summoner_id).first
+		tournament_participation = @team.tournament_participations.last
+		ticket = tournament_participation.team.tournament.tickets.where(summoner_id: tournament_participation.summoner_id).first
 		log_in_as(@admin)
 		#paid ticket cannot be deleted
 		assert_difference '@team.summoners.count', 0 do
 	  	delete :destroy, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-      	id: summoner_team
+      	id: tournament_participation
   	end
   	assert_equal 1, Ticket.where(id: ticket.id).count
-  	assert_redirected_to tournament_team_summoner_teams_path(@tournament_with_teams, @team)
+  	assert_redirected_to tournament_team_tournament_participations_path(@tournament_with_teams, @team)
   	#only ringer ticket can be deleted
 		ticket.update(status: "Ringer")
   	assert_difference '@team.summoners.count', -1 do
 	  	delete :destroy, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-      	id: summoner_team
+      	id: tournament_participation
   	end
   	assert_equal 0, Ticket.where(id: ticket.id).count
-  	assert_redirected_to tournament_team_summoner_teams_path(@tournament_with_teams, @team)
+  	assert_redirected_to tournament_team_tournament_participations_path(@tournament_with_teams, @team)
 	end
 
 	test "should redirect delete if not admin in" do
-		summoner_team = @team.summoner_teams.last
-		ticket = summoner_team.team.tournament.tickets.where(summoner_id: summoner_team.summoner_id).first
+		tournament_participation = @team.tournament_participations.last
+		ticket = tournament_participation.team.tournament.tickets.where(summoner_id: tournament_participation.summoner_id).first
 		log_in_as(@other_user)
 		#paid ticket cannot be deleted
 		assert_difference '@team.summoners.count', 0 do
 	  	delete :destroy, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-      	id: summoner_team
+      	id: tournament_participation
   	end
   	assert_equal 1, Ticket.where(id: ticket.id).count
   	assert_redirected_to root_url
 	end
 
 	test "should redirect delete if not logged in" do
-		summoner_team = @team.summoner_teams.last
-		ticket = summoner_team.team.tournament.tickets.where(summoner_id: summoner_team.summoner_id).first
+		tournament_participation = @team.tournament_participations.last
+		ticket = tournament_participation.team.tournament.tickets.where(summoner_id: tournament_participation.summoner_id).first
 		#paid ticket cannot be deleted
 		assert_difference '@team.summoners.count', 0 do
 	  	delete :destroy, 
 	  		tournament_id: @tournament_with_teams.id, 
 	  		team_id: @team.id, 
-      	id: summoner_team
+      	id: tournament_participation
   	end
   	assert_equal 1, Ticket.where(id: ticket.id).count
   	assert_redirected_to login_url

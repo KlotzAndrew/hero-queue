@@ -1,16 +1,16 @@
 class Team < ActiveRecord::Base
 	belongs_to :tournament, touch: true
 	
-	has_many :summoner_teams
-	has_many :assigned_summoners, :through => :summoner_teams
+	has_many :tournament_participations
+	has_many :assigned_summoners, :through => :tournament_participations
 
-	has_many :summoner_assignments, :class_name => 'SummonerTeam'
+	has_many :summoner_assignments, :class_name => 'TournamentParticipation'
 	has_many :assigned_summoners, :source => :summoner, :through => :summoner_assignments
 
-	has_many :absent_assignments, -> {absent}, :class_name => 'SummonerTeam'
+	has_many :absent_assignments, -> {absent}, :class_name => 'TournamentParticipation'
 	has_many :absent_summoners, :source => :summoner, :through => :absent_assignments
 
-	has_many :present_assignments, -> {present}, :class_name => 'SummonerTeam'
+	has_many :present_assignments, -> {present}, :class_name => 'TournamentParticipation'
 	has_many :summoners, :source => :summoner, :through => :present_assignments
 
 	before_create :under_max_team_limit
@@ -23,7 +23,7 @@ class Team < ActiveRecord::Base
 				tournament_id: tournament_id,
 				name: ::Builder::TeamName.new.random_name)
 			team_array.flatten.each do |player| 
-				summoner_team = SummonerTeam.where(tournament_id: tournament_id).where(summoner_id: player[:id]).first
+				summoner_team = TournamentParticipation.where(tournament_id: tournament_id).where(summoner_id: player[:id]).first
 				summoner_team.update(team_id: team.id)
 			end
 		end

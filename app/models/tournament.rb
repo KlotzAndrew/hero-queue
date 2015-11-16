@@ -9,15 +9,15 @@ class Tournament < ActiveRecord::Base
 	has_many :ringer_tickets, -> {ringers}, :class_name => 'Ticket'
 	has_many :ringers, :source => :summoner, :through => :ringer_tickets
 
-	has_many :summoner_teams
-	has_many :summoners, :through => :summoner_teams
+	has_many :tournament_participations
+	has_many :summoners, :through => :tournament_participations
 
-	has_many :solo_players, -> {present.solos}, :class_name => "SummonerTeam"
+	has_many :solo_players, -> {present.solos}, :class_name => "TournamentParticipation"
 	has_many :all_solos, :source => :summoner, :through => :solo_players
 
 	def player_count
 		Rails.cache.fetch("#{cache_key}/player_count") do
-			self.summoner_teams.present.count
+			self.tournament_participations.present.count
 		end
 		# 	if teams_approved
 		# 		teams.inject(0) {|sum, t| sum + t.summoners.count}
@@ -29,7 +29,7 @@ class Tournament < ActiveRecord::Base
 	end
 
 	def all_duos
-		self.summoner_teams.present.duos
+		self.tournament_participations.present.duos
 	end
 
 	def all_solo_tickets

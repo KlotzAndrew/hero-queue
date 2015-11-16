@@ -1,10 +1,10 @@
 class Summoner < ActiveRecord::Base
 	has_many :tickets, -> {paid}
-	has_many :summoner_teams
-	has_many :teams, :through => :summoner_teams
+	has_many :tournament_participations
+	has_many :teams, :through => :tournament_participations
 
-	has_many :summoner_teams
-	has_many :tournaments, :through => :summoner_teams
+	has_many :tournament_participations
+	has_many :tournaments, :through => :tournament_participations
 	
 	def self.find_or_create(summonerName, is_duo = "summoner name", max_throttle = 9)
 		summoner_ref = summonerName.mb_chars.downcase.gsub(' ', '').to_s

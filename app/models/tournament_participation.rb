@@ -1,4 +1,4 @@
-class SummonerTeam < ActiveRecord::Base
+class TournamentParticipation < ActiveRecord::Base
 	belongs_to :summoner
 	belongs_to :team, touch: true
 	belongs_to :tournament
@@ -26,7 +26,7 @@ class SummonerTeam < ActiveRecord::Base
 		if summoner.id 
 			fetcher = Fetcher::Lolkingelo.new([summoner])
 			fetcher.update_summoners_elo
-			SummonerTeam.transaction do
+			TournamentParticipation.transaction do
 				summoner.tickets.create!(
 					tournament_id: tournament_id,
 					status: "Ringer")
@@ -46,19 +46,19 @@ class SummonerTeam < ActiveRecord::Base
 	private
 
 		def self.participation_solo(tournament_id, summoner_id, team_id = nil)
-			SummonerTeam.create(
+			TournamentParticipation.create(
 				tournament_id: tournament_id,
 				summoner_id: summoner_id,
 				team_id: team_id)
 		end
 
 		def self.participation_with_duo(tournament_id, summoner_id, duo_id)
-			SummonerTeam.create(
+			TournamentParticipation.create(
 				tournament_id: tournament_id,
 				summoner_id: summoner_id,
 				duo_id: duo_id,
 				duo_approved: true)
-			SummonerTeam.create(
+			TournamentParticipation.create(
 				tournament_id: tournament_id,
 				summoner_id: duo_id,
 				duo_id: summoner_id,
