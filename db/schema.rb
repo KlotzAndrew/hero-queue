@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20151115203318) do
     t.integer  "tournament_id"
     t.integer  "duo_id"
     t.boolean  "duo_approved",  default: false
+    t.string   "status"
   end
 
   add_index "tournament_participations", ["summoner_id"], name: "index_tournament_participations_on_summoner_id", using: :btree

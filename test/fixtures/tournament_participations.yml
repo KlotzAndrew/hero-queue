@@ -4,6 +4,7 @@ summoner_team_<%= x %>:
   summoner: dummy_summoner<%= x %>
   tournament: tournament_with_teams
   ticket_id: 1
+  status: "Player"
 <% end %>
 
 <% 5.times do |x| %>
@@ -12,6 +13,7 @@ summoner_team_<%= x + 5 %>:
   summoner: dummy_summoner<%= x + 5 %>
   tournament: tournament_with_teams
   ticket_id: 1  
+  status: "Player"
 <% end %>
 
 <% 5.times do |x| %>
@@ -20,6 +22,7 @@ summoner_team_<%= x + 10 %>:
   summoner: dummy_summoner<%= x + 10 %>
   tournament: tournament_with_teams
   ticket_id: 1  
+  status: "Player"
 <% end %>
 
 <% 4.times do |n| %>
@@ -29,6 +32,7 @@ summoner_team_solo_<%= n %>:
   tournament: tournament_sold
   summoner_id: <%= n+4 %>
   ticket_id: 1
+  status: "Player"
 <% end %>
 
 <% i = 8 %>
@@ -39,11 +43,13 @@ summoner_team_duo1_<%= n %>:
   duo_id: <%= i+1%>
   duo_approved: true  
   ticket_id: 1
+  status: "Player"
 summoner_team_duo2_<%= n+1 %>:
   tournament: tournament_sold
   summoner_id: <%= i+1 %>
   duo_id: <%= i %>
   duo_approved: true
   ticket_id: 1
+  status: "Player"
 <% i += 2 %>
 <% end %>

@@ -4,6 +4,7 @@ class TournamentTest < ActiveSupport::TestCase
 	def setup
 		@tournament = tournaments(:tournament_sold)
 		@tournament_unsold = tournaments(:tournament_unsold)
+		@tournament_with_teams = tournaments(:tournament_with_teams)
 		@summoner = summoners(:boxstripe)
 		@other_summoner = summoners(:hukkk)
 	end
@@ -22,12 +23,11 @@ class TournamentTest < ActiveSupport::TestCase
 	end
 
 	test "returns correct team statistics" do
-		build_demo_teams(@tournament)
-		stats = @tournament.team_statistics
-		assert_equal stats[:team_avg], 7250
-		assert_equal stats[:team_std], 1250.0	
-		assert_equal stats[:team_max], 8500
-		assert_equal stats[:team_min], 6000
+		stats = @tournament_with_teams.team_statistics
+		assert_equal stats[:team_avg], 5.0
+		assert_equal stats[:team_std], 0.0	
+		assert_equal stats[:team_max], 5.0
+		assert_equal stats[:team_min], 5.0
 	end
 
 	test "tournament has a limit on number of teams" do

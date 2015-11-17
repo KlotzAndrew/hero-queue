@@ -2,8 +2,6 @@ class TournamentParticipationsController < ApplicationController
 	before_action :set_tournament_participation, only: [:update, :destroy]
 	before_action :logged_in_user, only: [:index, :create, :update, :destroy]
 	before_action :admin_user, only: [:index, :update, :create, :destroy]
-	before_action :set_ringer_ticket, only: [:destroy, :update]
-
 
 	def index
 		@tournament_participations = TournamentParticipation.includes(:summoner).where(team_id: params["team_id"])
@@ -11,14 +9,7 @@ class TournamentParticipationsController < ApplicationController
 	end
 
 	def update
-		if @tournament_participation.team_id.nil?
-			@tournament_participation.update(tournament_participation_teamid_params)
-		elsif @ringer_ticket && tournament_participation_params[:absent] == "true"
-			@ringer_ticket.destroy
-			@tournament_participation.destroy
-		else
-			@tournament_participation.update(tournament_participation_params)
-		end
+		update_team_or_absent
 		redirect_to tournament_team_tournament_participations_path(@tournament_participation.team.tournament, @tournament_participation.team)
 	end
 
@@ -28,16 +19,21 @@ class TournamentParticipationsController < ApplicationController
 	end
 
 	def destroy
-		if @ringer_ticket
-			@ringer_ticket.destroy
+		if @tournament_participation.status == "Ringer"
+			@tournament_participation.ticket.destroy
 			@tournament_participation.destroy
 		end
 		redirect_to tournament_team_tournament_participations_path(params[:tournament_id], params[:team_id])
 	end
 
 	private
-		def set_ringer_ticket
-			@ringer_ticket = @tournament_participation.team.tournament.tickets.where(status: "Ringer").where(summoner_id: @tournament_participation.summoner_id).first if @tournament_participation.team
+
+		def update_team_or_absent
+			if @tournament_participation.team_id.nil?
+				@tournament_participation.update(team_id_params)
+			else
+				@tournament_participation.update(tournament_participation_params)
+			end
 		end
 
 		def set_tournament_participation
@@ -48,7 +44,7 @@ class TournamentParticipationsController < ApplicationController
       params.require(:tournament_participation).permit(:absent)
     end
 
-    def tournament_participation_teamid_params
+    def team_id_params
     	params.require(:tournament_participation).permit(:team_id)
     end
 

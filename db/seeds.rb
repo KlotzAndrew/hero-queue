@@ -58,16 +58,18 @@ duo_and_solo_summoner_array = Summoner.all.each_slice(SUMMONERS_TO_DUOS).to_a
 tournament = Tournament.upcoming.first
 
 duo_and_solo_summoner_array.first.each_slice(DUO_SIZE).to_a.each do |x,y|
-	tournament.tickets.create!(
+	ticket = tournament.tickets.create!(
 		summoner_id: x.id,
 		duo_id: y.id,
 		status: "Completed")
 	TournamentParticipation.create!(
+		ticket_id: ticket.id,
 		tournament_id: tournament.id,
 		summoner_id: x.id,
 		duo_id: y.id,
 		duo_approved: true)
 	TournamentParticipation.create!(
+		ticket_id: ticket.id,
 		tournament_id: tournament.id,
 		summoner_id: y.id,
 		duo_id: x.id,
@@ -75,10 +77,11 @@ duo_and_solo_summoner_array.first.each_slice(DUO_SIZE).to_a.each do |x,y|
 end
 
 duo_and_solo_summoner_array.last.each do |x|
-	tournament.tickets.create!(
+	ticket = tournament.tickets.create!(
 		summoner_id: x.id,
 		status: "Completed")
 	TournamentParticipation.create!(
+		ticket_id: ticket.id,
 		tournament_id: tournament.id,
 		summoner_id: x.id)
 end

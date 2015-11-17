@@ -30,24 +30,23 @@ class TeamsControllerTest < ActionController::TestCase
   end
 
   test "should not display teams unless approved" do
-    build_demo_teams(@tournament)
-    get :index, :tournament_id => @tournament.id
+    @tournament_with_teams.update(teams_approved: false)
+    get :index, :tournament_id => @tournament_with_teams.id
     assert_template partial: '_team', count: 0
   end
 
   test "should not display unapproved teams to admin" do
-    build_demo_teams(@tournament)
+    @tournament_with_teams.update(teams_approved: false)
     log_in_as(@user)
     assert @user.admin?
-    get :index, :tournament_id => @tournament.id
+    get :index, :tournament_id => @tournament_with_teams.id
     assert_template partial: '_team', count: 0
   end
 
   test "should display teams when approved" do
-    build_demo_teams(@tournament)
     @tournament.update(teams_approved: true)
-    get :index, :tournament_id => @tournament.id
-    assert_template partial: '_team', count: 2
+    get :index, :tournament_id => @tournament_with_teams.id
+    assert_template partial: '_team', count: 3
   end
 
   test "should display team stats to admin" do

@@ -24,18 +24,6 @@ class ActiveSupport::TestCase
   include ApplicationHelper
   # include Capybara::DSL
 
-  def build_demo_teams(tournament)
-    all_summoners = tournament.all_solos + tournament.all_duos.flatten
-    all_summoners.in_groups_of(5) do |summoners|
-      team = Team.create(tournament_id: tournament.id)
-      summoners.each do |summoner| 
-        tournament.tournament_participations.create!(
-          summoner_id: summoner.id,
-          team_id: team.id)
-      end
-    end
-  end
-
 	def is_logged_in?
     !session[:user_id].nil?
   end

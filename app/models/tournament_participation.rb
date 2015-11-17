@@ -34,27 +34,28 @@ class TournamentParticipation < ActiveRecord::Base
 				ticket = summoner.tickets.create!(
 					tournament_id: tournament_id,
 					status: "Ringer")
-				add_summoners_to_tournament(ticket.id, tournament_id, summoner.id, nil, team_id)
+				add_summoners_to_tournament(ticket.id, tournament_id, summoner.id, nil, team_id, "Ringer")
 			end
 		end
 	end
 
-	def self.add_summoners_to_tournament(ticket_id, tournament_id, summoner_id, duo_id, team_id = nil)
+	def self.add_summoners_to_tournament(ticket_id, tournament_id, summoner_id, duo_id, team_id = nil, status = nil)
 		if duo_id
 				create_participation_with_duo(ticket_id, tournament_id, summoner_id, duo_id)
 		else
-			create_participation_solo(ticket_id, tournament_id, summoner_id, team_id)
+			create_participation_solo(ticket_id, tournament_id, summoner_id, team_id, status)
 		end
 	end
 	
 	private
 
-		def self.create_participation_solo(ticket_id, tournament_id, summoner_id, team_id = nil)
+		def self.create_participation_solo(ticket_id, tournament_id, summoner_id, team_id = nil, status = nil)
 			TournamentParticipation.create(
 				ticket_id: ticket_id,
 				tournament_id: tournament_id,
 				summoner_id: summoner_id,
-				team_id: team_id)
+				team_id: team_id,
+				status: status)
 		end
 
 		def self.create_participation_with_duo(ticket_id, tournament_id, summoner_id, duo_id)
