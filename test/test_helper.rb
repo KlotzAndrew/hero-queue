@@ -28,7 +28,11 @@ class ActiveSupport::TestCase
     all_summoners = tournament.all_solos + tournament.all_duos.flatten
     all_summoners.in_groups_of(5) do |summoners|
       team = Team.create(tournament_id: tournament.id)
-      summoners.each {|summoner| team.summoners << summoner}
+      summoners.each do |summoner| 
+        tournament.tournament_participations.create!(
+          summoner_id: summoner.id,
+          team_id: team.id)
+      end
     end
   end
 

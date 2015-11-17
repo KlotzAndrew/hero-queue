@@ -2,8 +2,25 @@ require 'test_helper'
 
 class TeamTest < ActiveSupport::TestCase
   def setup
+  	@team = Team.new(
+    	tournament_id: 1)
+
 		@tournament = tournaments(:tournament_sold)
 		@tournament_with_teams = tournaments(:tournament_with_teams)
+	end
+
+	test "should be valid" do
+		assert @team.valid?
+	end
+
+	test "tournament_id should be present" do
+		@team.tournament_id = nil
+		assert_not @team.valid?
+	end
+
+	test "teams should not exceed max team limit" do
+		team = @tournament_with_teams.teams.new
+		assert_not team.save
 	end
 
 	test "correctly builds teams" do

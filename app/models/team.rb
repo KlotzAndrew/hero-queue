@@ -15,6 +15,8 @@ class Team < ActiveRecord::Base
 
 	before_create :under_max_team_limit
 
+	validates :tournament_id, presence: true
+
 	scope :order_ranked, -> {order(position: :asc)}
 
 	def self.build_teams(teams, tournament_id)

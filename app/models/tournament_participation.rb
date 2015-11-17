@@ -9,6 +9,9 @@ class TournamentParticipation < ActiveRecord::Base
 
 	scope :solos, -> {where(duo_approved: false)}
 
+	validates :summoner_id, presence: true
+	validates :tournament_id, presence: true
+
 	attr_accessor :summonerName
 
 	def self.duos
@@ -38,31 +41,33 @@ class TournamentParticipation < ActiveRecord::Base
 
 	def self.add_summoners_to_tournament(tournament_id, summoner_id, duo_id, team_id = nil)
 		if duo_id
-				participation_with_duo(tournament_id, summoner_id, duo_id)
+				create_participation_with_duo(tournament_id, summoner_id, duo_id)
 		else
-			participation_solo(tournament_id, summoner_id, team_id)
+			create_participation_solo(tournament_id, summoner_id, team_id)
 		end
 	end
 	
 	private
 
-		def self.participation_solo(tournament_id, summoner_id, team_id = nil)
+		def self.create_participation_solo(tournament_id, summoner_id, team_id = nil)
 			TournamentParticipation.create(
 				tournament_id: tournament_id,
 				summoner_id: summoner_id,
 				team_id: team_id)
 		end
 
-		def self.participation_with_duo(tournament_id, summoner_id, duo_id)
-			TournamentParticipation.create(
-				tournament_id: tournament_id,
-				summoner_id: summoner_id,
-				duo_id: duo_id,
-				duo_approved: true)
-			TournamentParticipation.create(
-				tournament_id: tournament_id,
-				summoner_id: duo_id,
-				duo_id: summoner_id,
-				duo_approved: true)
+		def self.create_participation_with_duo(tournament_id, summoner_id, duo_id)
+			TournamentParticipation.transaction do
+				TournamentParticipation.create(
+					tournament_id: tournament_id,
+					summoner_id: summoner_id,
+					duo_id: duo_id,
+					duo_approved: true)
+				TournamentParticipation.create(
+					tournament_id: tournament_id,
+					summoner_id: duo_id,
+					duo_id: summoner_id,
+					duo_approved: true)
+			end
 		end
 end
