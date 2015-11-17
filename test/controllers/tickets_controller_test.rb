@@ -6,47 +6,51 @@ class TicketsControllerTest < ActionController::TestCase
     @ticket = tickets(:unpaid)
   end
 
-  test "should create ticket" do
+  test "should create ticket without tournament participation" do
     assert_difference 'Ticket.count', 1 do
       post :create, ticket: { 
         tournament_id: @tournament.id, 
         summonerName: "Boxstripe" }
     end
 
+    assert_empty @ticket.tournament_participations
     ticket = assigns(:ticket)
     assert_redirected_to tournament_path(@tournament, :active_ticket => ticket)
   end
 
-  test "should create ticket via ajax" do
+  test "should create ticket via ajax without tournament participation" do
     assert_difference('Ticket.count', 1) do
       xhr :post, :create, ticket: { 
         tournament_id: @tournament.id, 
         summonerName: "Boxstripe" }
     end
 
+    assert_empty @ticket.tournament_participations
     assert_response :success
     assert_select_jquery :html, '#register' do
       assert_select 'div#active_ticket'
     end
   end
 
-  test "hook should correctly updates completed ticket" do
+  test "hook should update completed ticket & create tournament_participation" do
     VCR.use_cassette("paypal_api") do
       post :hook, {
         payment_status: "Completed",
         invoice: @ticket.id
       }
       assert_equal "Completed", @ticket.reload.status
+      assert_equal @ticket.tournament_id, @ticket.tournament_participations.first.tournament_id
     end
   end
 
-  test "hook should correctly updates pending ticket" do
+  test "hook should update pending ticket & create tournament_participation" do
     VCR.use_cassette("paypal_api") do
       post :hook, {
         payment_status: "Pending",
         invoice: @ticket.id
       }
       assert_equal "Pending", @ticket.reload.status
+      assert_equal @ticket.tournament_id, @ticket.tournament_participations.first.tournament_id
     end
   end
 

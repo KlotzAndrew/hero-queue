@@ -3,14 +3,9 @@ class TicketsController < ApplicationController
 
   def create
     @ticket = Ticket.new(ticket_params)
-
     if @ticket.summonerName
-      @ticket.new_with_summoner(ticket_params)
-      @ticket.teams_already_built?
-      @ticket.save
-      session[:ticket_id] = @ticket.id
+      create_new_ticket
       respond_to do |format|
-        flash[:success] = "Ticket ready for checkout!"
         format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
         format.js
       end
@@ -38,6 +33,14 @@ class TicketsController < ApplicationController
   end
 
   private
+
+    def create_new_ticket
+      @ticket.new_with_summoner(ticket_params)
+      @ticket.teams_already_built?
+      @ticket.save
+      session[:ticket_id] = @ticket.id
+    end
+
     def ticket_params
       params.require(:ticket).permit(:summonerName, :duoName, :contact_email, :contact_first_name, :contact_last_name, :tournament_id, :duo_selected)
     end

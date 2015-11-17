@@ -15,16 +15,22 @@ class TournamentsController < ApplicationController
 
   def update_summoners_elo
     @tournament.update_summoners_elo
+
+    flash[:success] = "Summoner elos updated!"
     redirect_to tournament_teams_path(@tournament)
   end
 
   def create_tournament_teams
     @tournament.create_tournament_teams
+
+    flash[:success] = "Teams created!"
     redirect_to tournament_teams_path(@tournament)
   end
 
   def approve_tournament_teams
     @tournament.approve_tournament_teams
+
+    flash[:success] = "Teams approved!"
     redirect_to tournament_teams_path(@tournament)
   end
 

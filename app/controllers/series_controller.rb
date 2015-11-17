@@ -8,8 +8,4 @@ class SeriesController < ApplicationController
     def set_series
       @series = Series.find(params[:id])
     end
-
-    # def series_params
-    #   params[:series]
-    # end
 end

@@ -10,11 +10,15 @@ class TournamentParticipationsController < ApplicationController
 
 	def update
 		update_team_or_absent
+
+		flash[:success] = "Team assignment updated!"
 		redirect_to tournament_team_tournament_participations_path(@tournament_participation.team.tournament, @tournament_participation.team)
 	end
 
 	def create
 		TournamentParticipation.add_to_team_as_ringer(params[:tournament_participation][:summonerName], params[:tournament_id], params[:team_id])
+
+		flash[:success] = "Ringer added!"
 		redirect_to tournament_team_tournament_participations_path(params[:tournament_id], params[:team_id])
 	end
 
@@ -23,6 +27,8 @@ class TournamentParticipationsController < ApplicationController
 			@tournament_participation.ticket.destroy
 			@tournament_participation.destroy
 		end
+
+		flash[:success] = "Ringer removed!"
 		redirect_to tournament_team_tournament_participations_path(params[:tournament_id], params[:team_id])
 	end
 

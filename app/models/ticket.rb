@@ -2,6 +2,7 @@ class Ticket < ActiveRecord::Base
 	belongs_to :tournament, touch: true
 	belongs_to :summoner
 	belongs_to :duo, :class_name => "Summoner"
+	has_many :tournament_participations
 
 	validates :tournament_id, presence: true
 	validates :summoner_id, presence: true
