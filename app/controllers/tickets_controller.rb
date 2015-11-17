@@ -10,19 +10,21 @@ class TicketsController < ApplicationController
       @ticket.save
       session[:ticket_id] = @ticket.id
       respond_to do |format|
+        flash[:success] = "Ticket ready for checkout!"
         format.html { redirect_to tournament_path(@ticket.tournament.id, :active_ticket => @ticket)}
         format.js
       end
     elsif @ticket.duo_selected
       respond_to do |format|
         format.html { redirect_to tournament_path(@ticket.tournament.id)}
-        format.js
+        format.js 
       end
     end
   end
 
   def reset_ticket_session
     session[:ticket_id] = nil
+    flash[:success] = "Ticket reset!"
     redirect_to controller: 'tournaments', action: 'show', id: session[:tournament_id]
   end
 

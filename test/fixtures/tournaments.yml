@@ -8,10 +8,10 @@ tournament_unsold:
   id: 1
   name: "Solo/Duo Queue League Tournament"
   game: "League of Legends"
-  total_players: 999
-  total_teams: 80
+  total_players: 10
+  total_teams: 2
   price: 15.00
-  start_date:  <%= 4.weeks.from_now %>
+  start_date:  <%= 2.weeks.from_now %>
   location_name: "Happy Turbo Internet Cafe"
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
@@ -35,7 +35,7 @@ tournament_with_teams:
   total_players: 15
   total_teams: 3
   price: 15.00
-  start_date:  <%= 4.weeks.from_now %>
+  start_date:  <%= 5.weeks.from_now %>
   location_name: "Happy Turbo Internet Cafe"
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"

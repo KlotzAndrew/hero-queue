@@ -1,1 +1,2 @@
 $('#register').html("<%= escape_javascript render(:partial => 'tickets/register', :object => @ticket) %>");
+$("#notice").html("<%= escape_javascript(render :partial => 'layouts/flash_message' , :locals => { :flash => flash }).html_safe %>");

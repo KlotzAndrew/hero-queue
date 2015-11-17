@@ -1,11 +1,9 @@
 <% provide(:title, "#{@tournament.name}") %>
 <section id="tournament_show">
 	<div class="container">
-		<p id="notice"><%= notice %></p>
 
 		<div class="col-md-8 col-md-offset-2">
 			
-
 		<% cache @tournament do %>
 			<div class="well semi_transparent">
 				<h2><%= @tournament.name %></h2>
