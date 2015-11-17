@@ -5,6 +5,7 @@ class TournamentParticipationTest < ActiveSupport::TestCase
     @tournament_participation = TournamentParticipation.new(
     	summoner_id: 1,
     	tournament_id: 1,
+    	ticket_id: 1,
     	team_id: nil, 
     	duo_id: nil,
     	duo_approved: false)
@@ -25,6 +26,11 @@ class TournamentParticipationTest < ActiveSupport::TestCase
 
 	test "tournament_id should be present" do
 		@tournament_participation.tournament_id = nil
+		assert_not @tournament_participation.valid?
+	end
+
+	test "ticket_id should be present" do
+		@tournament_participation.ticket_id = nil
 		assert_not @tournament_participation.valid?
 	end
 

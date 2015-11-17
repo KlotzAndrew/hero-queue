@@ -3,7 +3,7 @@ require 'test_helper'
 class TicketTest < ActiveSupport::TestCase
 	def setup
 		@tournament_sold = tournaments(:tournament_sold)
-		@tournament_sold.tickets.last.touch #low-level caching in ENV=test
+		@tournament_sold.tickets.last.touch # this was otherwise raising a low-level caching invalidation error for ENV=test
 		@summoner = summoners(:boxstripe)
 		@ticket = Ticket.new(
 			tournament_id: @tournament_sold.id,

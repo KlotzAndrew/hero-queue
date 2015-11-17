@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20151115203318) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.boolean  "absent",        default: false
+    t.integer  "ticket_id"
     t.integer  "tournament_id"
     t.integer  "duo_id"
     t.boolean  "duo_approved",  default: false

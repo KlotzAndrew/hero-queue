@@ -2,6 +2,7 @@ class TournamentParticipation < ActiveRecord::Base
 	belongs_to :summoner
 	belongs_to :team, touch: true
 	belongs_to :tournament
+	belongs_to :ticket
 
 	scope :present, -> {where.not(absent: true)}
 	scope :absent, -> {where(absent: true)}
@@ -11,6 +12,7 @@ class TournamentParticipation < ActiveRecord::Base
 
 	validates :summoner_id, presence: true
 	validates :tournament_id, presence: true
+	validates :ticket_id, presence: true
 
 	attr_accessor :summonerName
 
@@ -28,42 +30,43 @@ class TournamentParticipation < ActiveRecord::Base
 	def self.add_to_team_as_ringer(summonerName, tournament_id, team_id)
 		summoner = Summoner.find_or_create(summonerName)
 		if summoner.id 
-			fetcher = Fetcher::Lolkingelo.new([summoner])
-			fetcher.update_summoners_elo
 			TournamentParticipation.transaction do
-				summoner.tickets.create!(
+				ticket = summoner.tickets.create!(
 					tournament_id: tournament_id,
 					status: "Ringer")
-				add_summoners_to_tournament(tournament_id, summoner.id, nil, team_id)
+				add_summoners_to_tournament(ticket.id, tournament_id, summoner.id, nil, team_id)
 			end
 		end
 	end
 
-	def self.add_summoners_to_tournament(tournament_id, summoner_id, duo_id, team_id = nil)
+	def self.add_summoners_to_tournament(ticket_id, tournament_id, summoner_id, duo_id, team_id = nil)
 		if duo_id
-				create_participation_with_duo(tournament_id, summoner_id, duo_id)
+				create_participation_with_duo(ticket_id, tournament_id, summoner_id, duo_id)
 		else
-			create_participation_solo(tournament_id, summoner_id, team_id)
+			create_participation_solo(ticket_id, tournament_id, summoner_id, team_id)
 		end
 	end
 	
 	private
 
-		def self.create_participation_solo(tournament_id, summoner_id, team_id = nil)
+		def self.create_participation_solo(ticket_id, tournament_id, summoner_id, team_id = nil)
 			TournamentParticipation.create(
+				ticket_id: ticket_id,
 				tournament_id: tournament_id,
 				summoner_id: summoner_id,
 				team_id: team_id)
 		end
 
-		def self.create_participation_with_duo(tournament_id, summoner_id, duo_id)
+		def self.create_participation_with_duo(ticket_id, tournament_id, summoner_id, duo_id)
 			TournamentParticipation.transaction do
 				TournamentParticipation.create(
+					ticket_id: ticket_id,
 					tournament_id: tournament_id,
 					summoner_id: summoner_id,
 					duo_id: duo_id,
 					duo_approved: true)
 				TournamentParticipation.create(
+					ticket_id: ticket_id,
 					tournament_id: tournament_id,
 					summoner_id: duo_id,
 					duo_id: summoner_id,
