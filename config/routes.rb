@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :series_participations
   get 'confirmations/update'
 
   root 'static_pages#home'

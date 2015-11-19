@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Series Participations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @series_participations.each do |series_participation| %>
+      <tr>
+        <td><%= link_to 'Show', series_participation %></td>
+        <td><%= link_to 'Edit', edit_series_participation_path(series_participation) %></td>
+        <td><%= link_to 'Destroy', series_participation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Series participation', new_series_participation_path %>
