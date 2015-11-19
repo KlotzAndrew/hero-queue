@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115203318) do
+ActiveRecord::Schema.define(version: 20151119045753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(version: 20151115203318) do
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "series_participations", force: :cascade do |t|
+    t.integer  "series_id",   null: false
+    t.integer  "summoner_id", null: false
+    t.integer  "points"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "summoners", force: :cascade do |t|
@@ -70,14 +78,15 @@ ActiveRecord::Schema.define(version: 20151115203318) do
   create_table "tournament_participations", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "summoner_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.boolean  "absent",        default: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "absent",                  default: false
     t.integer  "ticket_id"
     t.integer  "tournament_id"
     t.integer  "duo_id"
-    t.boolean  "duo_approved",  default: false
+    t.boolean  "duo_approved",            default: false
     t.string   "status"
+    t.string   "series_participation_id"
   end
 
   add_index "tournament_participations", ["summoner_id"], name: "index_tournament_participations_on_summoner_id", using: :btree
