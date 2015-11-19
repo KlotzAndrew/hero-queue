@@ -12,24 +12,8 @@
 
 				<div class="row">
 					<div class="col-md-6">
-						<p>Cash prizing for performance across the series</p>
-					</div>
-					<div class="col-md-6">
-						<p>RP Prizing for each tournament</p>
-					</div>
-				</div>
-			</div>
-		
-			<% @series.tournaments.order(start_date: :asc).each do |tournament| %>
-				<%= render 'tournaments/tournament', tournament: tournament %>
-			<% end %>
-
-			<div class="well semi_transparent">
-				<h2>Series Prizing</h2>
-				<div class="row">
-					<div class="col-md-6">
 						<h4>Each Tournament</h4>
-							<p>RP Prizing (*PENDING RIOT APPORVAL):</p>
+							<p>RP Prizing:</p>
 							<ul>
 								<li>1st place: 4200 RP, Ryze, Triumphant Ryze, 10-Win IP Boost </li>
 								<li>2nd place: 3000 RP, 10-Win IP Boost </li>
@@ -38,7 +22,7 @@
 								<li>5th-8th place: 10-Win IP Boost</li>
 							</ul>
 
-							<p>Series points for each tournament:</p>
+							<p>Series points:</p>
 							<ul>
 								<li>1st place team: 1000 points per player</li>
 								<li>2nd place team: 800 points per player</li>
@@ -62,8 +46,12 @@
 						</ul>
 					</div>
 				</div>
-				<p class="text-center">*Cash prizing may be subject to change if a series tournament is canceled</p>
-			</div>
+				<p class="text-center">*Cash prizing may be subject to change if a series tournament is canceled</p>			</div>
+		
+			<% @series.tournaments.order(start_date: :asc).each do |tournament| %>
+				<%= render 'tournaments/tournament', tournament: tournament %>
+			<% end %>
+
 		</div>
 
 	</div>

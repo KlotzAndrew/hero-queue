@@ -4,6 +4,8 @@ class Series < ActiveRecord::Base
 
 	validates :name, presence: true
 
+	scope :newest, -> {order(created_at: :asc)}
+
 	def summoners
 		series_participations.includes(:summoner).map(&:summoner)
 	end

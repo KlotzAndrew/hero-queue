@@ -1,6 +1,7 @@
 class SeriesParticipation < ActiveRecord::Base
 	belongs_to :series
 	belongs_to :summoner
+	has_many :tournament_participations
 
 	validates :series_id, presence: true
 	validates :summoner_id, presence: true

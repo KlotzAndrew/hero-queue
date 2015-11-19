@@ -3,6 +3,7 @@ class TournamentParticipation < ActiveRecord::Base
 	belongs_to :team, touch: true
 	belongs_to :tournament
 	belongs_to :ticket
+	belongs_to :series_participation
 
 	scope :present, -> {where.not(absent: true)}
 	scope :absent, -> {where(absent: true)}

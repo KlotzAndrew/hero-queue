@@ -12,7 +12,8 @@
 		</div>
 		<div class="navbar-right navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><%= link_to "Tournaments", tournaments_path %></li>
+				<li><%= link_to @series.name, series_path(@series) %></li>
+				<li><%= link_to "Tournaments (Solo/Duo Queue)", tournaments_path %></li>
 				<li><%= link_to "Format", format_path %></li>
 				<li><%= link_to "Rules", rules_path %></li>
 				<li><%= link_to "Prizing", prizing_path %></li>
