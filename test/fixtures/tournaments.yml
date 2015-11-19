@@ -15,7 +15,8 @@ tournament_unsold:
   location_name: "Happy Turbo Internet Cafe"
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
-  facebook_url: "www.facebook.com"  
+  facebook_url: "www.facebook.com"
+  series: winter  
 
 tournament_sold:
   name: "Solo/Duo Queue League Tournament"
@@ -28,6 +29,7 @@ tournament_sold:
   location_address: "5171 Yonge St."
   location_url: "www.happyturbo.com"
   facebook_url: "www.facebook.com"
+  series: winter
 
 tournament_with_teams:
   name: "Solo/Duo Queue League Tournament"
@@ -41,3 +43,4 @@ tournament_with_teams:
   location_url: "www.happyturbo.com"
   facebook_url: "www.facebook.com"
   teams_approved: true
+  series: winter

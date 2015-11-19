@@ -70,6 +70,9 @@ class PurchaseTicketTest < ActionDispatch::IntegrationTest
         invoice: ticket.id
     end
     assert @tournament.summoners.include?(@summoner), msg = "summoner is not marked on tournament"
+    assert @tournament.summoners.include?(@duo), msg = "summoner is not marked on tournament"
+    assert @tournament.series.summoners.include?(@summoner), msg = "summoner is not marked on series"
+    assert @tournament.series.summoners.include?(@duo), msg = "summoner is not marked on series"
   end
 
   test "register with new summoner and duo" do

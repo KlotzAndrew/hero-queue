@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :series_participations
   get 'confirmations/update'
 
   root 'static_pages#home'
@@ -22,7 +21,9 @@ Rails.application.routes.draw do
   get 'ticket_reset' => 'tickets#reset_ticket_session'
 
   resources :users
-  resources :series,              only: [:show]
+  resources :series,              only: [:show] do
+    resources :series_participations, only: [:index]
+  end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :tickets,             only: [:create]
