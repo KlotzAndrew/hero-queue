@@ -89,8 +89,12 @@ duo_and_solo_summoner_array.last.each do |x|
 	ticket = tournament.tickets.create!(
 		summoner_id: x.id,
 		status: "Completed")
+	series_participation = SeriesParticipation.create!(
+			series_id: tournament.series.id,
+			summoner_id: x.id)
 	TournamentParticipation.create!(
 		ticket_id: ticket.id,
 		tournament_id: tournament.id,
-		summoner_id: x.id)
+		summoner_id: x.id,
+		series_participation_id: series_participation.id)
 end
