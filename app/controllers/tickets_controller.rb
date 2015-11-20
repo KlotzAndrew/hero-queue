@@ -1,5 +1,8 @@
 class TicketsController < ApplicationController
   protect_from_forgery except: [:hook]
+  before_action :logged_in_user, only: [:update]
+  before_action :admin_user, only: [:update]
+  before_action :set_ticket, only: [:update]
 
   def create
     @ticket = Ticket.new(ticket_params)
@@ -15,6 +18,12 @@ class TicketsController < ApplicationController
         format.js 
       end
     end
+  end
+
+  def update
+    tournament = @ticket.tournament
+    @ticket.update_ticket_remove_participation(refund_params)
+    redirect_to tournament_teams_path(tournament)
   end
 
   def reset_ticket_session
@@ -34,11 +43,23 @@ class TicketsController < ApplicationController
 
   private
 
+    def admin_user
+      redirect_to(root_url) unless current_user.admin?
+    end
+
+    def set_ticket
+      @ticket = Ticket.find(params[:id])
+    end
+
     def create_new_ticket
       @ticket.new_with_summoner(ticket_params)
       @ticket.teams_already_built?
       @ticket.save
       session[:ticket_id] = @ticket.id
+    end
+
+    def refund_params
+      params.require(:ticket).permit(:status)
     end
 
     def ticket_params

@@ -53,3 +53,9 @@ summoner_team_duo2_<%= n+1 %>:
   status: "Player"
 <% i += 2 %>
 <% end %>
+
+boxstripe_tournament_participation:
+  tournament: tournament_unsold
+  summoner: boxstripe
+  ticket: boxstripe_ticket_sold
+  status: "Player"

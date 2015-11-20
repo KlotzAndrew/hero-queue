@@ -20,6 +20,15 @@ class Ticket < ActiveRecord::Base
 
 	attr_accessor :summonerName, :duoName, :duo_selected
 
+	def update_ticket_remove_participation(refund_params)
+		if refund_params[:status] == "Refunded"
+			ActiveRecord::Base.transaction do
+				self.update(status: refund_params[:status])
+				self.tournament_participations.destroy_all
+			end
+		end
+	end
+
 	def new_with_summoner(ticket_params)
 	    add_summoner(ticket_params[:summonerName]) if ticket_params[:summonerName]
 	    add_duo(ticket_params[:duoName]) if ticket_params[:duoName]

@@ -4,6 +4,9 @@ class TicketsControllerTest < ActionController::TestCase
   setup do
     @tournament = tournaments(:tournament_unsold)
     @ticket = tickets(:unpaid)
+    @admin = users(:grok)
+    @user = users(:thrall)
+    @refund_ticket = tickets(:boxstripe_ticket_sold)
   end
 
   test "should create ticket without tournament participation" do
@@ -54,4 +57,41 @@ class TicketsControllerTest < ActionController::TestCase
     end
   end
 
+  test "update should mark ticket as refunded for admin" do
+    log_in_as(@admin)
+    tournament = @refund_ticket.tournament
+    patch :update, 
+      id: @refund_ticket.id, 
+      ticket: {
+        status: "Refunded"
+    }
+    assert_equal 0, @refund_ticket.tournament_participations.count
+    assert_equal "Refunded", @refund_ticket.reload.status
+    assert_redirected_to tournament_teams_path(tournament)
+  end
+
+  test "update can only be triggered by admin" do
+    tournament = @refund_ticket.tournament
+    log_in_as(@user)
+    patch :update, 
+      id: @refund_ticket.id, 
+      ticket: {
+        status: "Refunded"
+    }
+    assert_equal 1, @refund_ticket.tournament_participations.count
+    assert_equal "Completed", @refund_ticket.reload.status
+    assert_redirected_to root_url
+  end
+
+  test "update can only be triggered when logged in" do
+    tournament = @refund_ticket.tournament
+    patch :update, 
+      id: @refund_ticket.id, 
+      ticket: {
+        status: "Refunded"
+    }
+    assert_equal 1, @refund_ticket.tournament_participations.count
+    assert_equal "Completed", @refund_ticket.reload.status
+    assert_redirected_to login_url
+  end
 end

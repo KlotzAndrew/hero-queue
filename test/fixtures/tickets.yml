@@ -30,3 +30,8 @@ tournament_with_teams<%= n %>:
   summoner: dummy_summoner<%= n %>
   status: "Completed"
 <% end %>
+
+boxstripe_ticket_sold:
+  tournament_id: 1
+  summoner_id: 1
+  status: "Completed"

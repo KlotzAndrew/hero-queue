@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
-  resources :tickets,             only: [:create]
+  resources :tickets,             only: [:create, :update]
   resources :tournaments,         only: [:index, :show] do
     member do
       patch 'update_summoners_elo'
