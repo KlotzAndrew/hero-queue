@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :series,              only: [:show] do
-    resources :series_participations, only: [:index]
+    # resources :series_participations, only: [:index]
   end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]

@@ -37,23 +37,27 @@ class TicketsControllerTest < ActionController::TestCase
 
   test "hook should update completed ticket & create tournament_participation" do
     VCR.use_cassette("paypal_api") do
+      assert_not @ticket.tournament.series.summoners.include?(@ticket.summoner)
       post :hook, {
         payment_status: "Completed",
         invoice: @ticket.id
       }
       assert_equal "Completed", @ticket.reload.status
       assert_equal @ticket.tournament_id, @ticket.tournament_participations.first.tournament_id
+      assert @ticket.tournament.series.summoners.include?(@ticket.summoner)
     end
   end
 
   test "hook should update pending ticket & create tournament_participation" do
     VCR.use_cassette("paypal_api") do
+      assert_not @ticket.tournament.series.summoners.include?(@ticket.summoner)
       post :hook, {
         payment_status: "Pending",
         invoice: @ticket.id
       }
       assert_equal "Pending", @ticket.reload.status
       assert_equal @ticket.tournament_id, @ticket.tournament_participations.first.tournament_id
+      assert @ticket.tournament.series.summoners.include?(@ticket.summoner)
     end
   end
 
