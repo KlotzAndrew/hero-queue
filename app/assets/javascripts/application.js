@@ -15,3 +15,13 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+// $(document).on('page:load', function() {
+//   console.log("working? i + s")
+// })
+
+$(document).ready(function() {
+  series_info_toggle();
+})
+
+var series_info_toggle
