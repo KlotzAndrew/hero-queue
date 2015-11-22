@@ -14,26 +14,23 @@
 
 		<div class="col-md-8 col-md-offset-2">
 			<ul class="nav nav-tabs">
-			  <li role="presentation" class="active"><a href="#">Home</a></li>
-			  <li role="presentation"><a href="#">Profile</a></li>
-			  <li role="presentation"><a href="#">Messages</a></li>
+			  <li role="presentation" id="crumb_1" class=""><a href="#">Prizing</a></li>
+			  <li role="presentation" id="crumb_2"><a href="#">Tournaments</a></li>
+			  <li role="presentation" id="crumb_3"><a href="#">Standings</a></li>
 			</ul>
-			<div id="prizing" class="well semi_transparent">
+			<div id="bread_1" class="well semi_transparent">
 				<h2>Prizing</h2>
-				<h2 id="a1" class="">1</h2>
-				<h2 id="a2" class="hide">2</h2>
-				<h2 id="a3" class="hide">3</h2>
 				<%= render 'prizing' %>
 			</div>
 	
-			<div id="tournaments" class="well semi_transparent">
+			<div id="bread_2" class="well semi_transparent hide">
 				<h2>Tournaments</h2>
 					<% @series.tournaments.order(start_date: :asc).each do |tournament| %>
 						<%= render 'tournaments/tournament', tournament: tournament %>
 					<% end %>
 				</div>		
 
-			<div id="standings" class="well semi_transparent">
+			<div id="bread_3" class="well semi_transparent hide">
 				<h2>Standings</h2>
 		    <table class="table table-hover">
 		      <thead>
@@ -41,7 +38,7 @@
 		        	<th>Position</th>
 		          <th>Summoner</th>
 		          <% @series.tournaments.count.times do |x| %>
-		          	<th>Tournament #<%= x %></th>
+		          	<th>Tournament #<%= x + 1%></th>
 		          <% end %>
 		        </tr>
 		      </thead>

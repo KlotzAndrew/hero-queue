@@ -74,7 +74,7 @@ nav {
 	.semi_transparent {
 	  background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
 	  color: black;
-	  margin-top: 25px;
+	  margin-top: 0px;
 	  h1 {
 	  	text-align: center;
 	  }
@@ -135,6 +135,11 @@ nav {
 			text-align: center;
 		}
 	}
+	.nav-tabs {
+		li {
+			background: rgba(225, 225, 225, 0.75) none repeat scroll 0% 0%;
+		}
+	}
 }
 
 #tournaments_index {
@@ -165,3 +170,4 @@ nav {
 .hide {
 	display: none;
 }
+
