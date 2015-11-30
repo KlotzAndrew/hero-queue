@@ -4,7 +4,7 @@ class Tournament < ActiveRecord::Base
 	belongs_to :series
 
 	scope :upcoming, -> {where("start_date > ?", Time.now).order(start_date: :asc)}
-	scope :past, -> {where("start_date < ?", Time.now).order(start_date: :asc)}
+	scope :past, -> {where("start_date < ?", Time.now).order(start_date: :desc)}
 
 	has_many :ringer_tickets, -> {ringers}, :class_name => 'Ticket'
 	has_many :ringers, :source => :summoner, :through => :ringer_tickets
@@ -62,7 +62,7 @@ class Tournament < ActiveRecord::Base
 		Rails.cache.fetch("#{cache_key}.team_statistics") do
 			return false if self.teams.empty?
 			team_sums = self.teams.includes(:summoners).map {|x| x.summoners.map(&:elo).sum }
-			{ 
+			{
 				team_avg: team_sums.sum/team_sums.count,
 				team_std: team_sums.standard_deviation.round(2),
 				team_max: team_sums.max,
@@ -95,7 +95,7 @@ class Tournament < ActiveRecord::Base
 				start_date: Time.at(1407578400),
 				facebook_url: "https://www.facebook.com/events/836624339681535")
 			return array
-		end	
+		end
 	end
 
 	private
