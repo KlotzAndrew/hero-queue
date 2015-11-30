@@ -10,7 +10,7 @@
 				<h2><%= @series.name %></h2>
 				<h4>This series has <%= @series.tournaments.count %> tournaments</h4>
 			</div>
-		</div>		
+		</div>
 
 		<div class="col-md-8 col-md-offset-2">
 			<ul class="nav nav-tabs">
@@ -22,28 +22,30 @@
 				<h2>Prizing</h2>
 				<%= render 'prizing' %>
 			</div>
-	
+
 			<div id="bread_2" class="well semi_transparent hide">
 				<h2>Tournaments</h2>
 					<% @series.tournaments.order(start_date: :asc).each do |tournament| %>
 						<%= render 'tournaments/tournament', tournament: tournament %>
 					<% end %>
-				</div>		
+				</div>
 
 			<div id="bread_3" class="well semi_transparent hide">
 				<h2>Standings</h2>
 		    <table class="table table-hover">
 		      <thead>
 		        <tr>
-		        	<th>Position</th>
 		          <th>Summoner</th>
+		        	<th>Points</th>
 		          <% @series.tournaments.count.times do |x| %>
 		          	<th>Tournament #<%= x + 1%></th>
 		          <% end %>
 		        </tr>
 		      </thead>
 		      <tbody>
-		        <%= render :partial => 'series_participations/series_participations', :collection => @series_participations, locals:{total_tournaments: @series.tournaments.count} %>
+		      	<% @series_points.each do |series_point| %>
+						  <%= render partial: "series_participations/series_participations", locals: { series_point: series_point } %>
+						<% end %>
 		      </tbody>
 		    </table>
 			</div>

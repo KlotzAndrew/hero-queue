@@ -3,6 +3,7 @@ class SeriesController < ApplicationController
 
   def show
   	@series_participations = Series.find(params[:id]).series_participations.includes(:summoner).order(points: :desc)
+    @series_points = @series.calculate_stats
   end
 
   private

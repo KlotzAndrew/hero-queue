@@ -41,11 +41,11 @@ class TicketTest < ActiveSupport::TestCase
 		assert_not @ticket.save
 	end
 
-	test "tickets cannot be purchased after teams approved" do
-		@tournament_sold.increment!(:total_players)
-		@tournament_sold.update(teams_approved: true)
-		assert_not @ticket.save
-	end
+	# test "tickets cannot be purchased after teams approved" do
+	# 	@tournament_sold.increment!(:total_players)
+	# 	@tournament_sold.update(teams_approved: true)
+	# 	assert_not @ticket.save
+	# end
 
 	test "summoner can only appear once on tournament[:id]/tickets" do
 	end
