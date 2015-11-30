@@ -12,9 +12,9 @@ class Series < ActiveRecord::Base
 		3 => 600,
 		4 => 500,
 		5 => 400,
-		6 => 300,
+		6 => 400,
 		7 => 200,
-		8 => 100
+		8 => 200
 	}
 
 	def summoners
