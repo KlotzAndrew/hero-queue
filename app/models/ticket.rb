@@ -6,9 +6,10 @@ class Ticket < ActiveRecord::Base
 
 	validates :tournament_id, presence: true
 	validates :summoner_id, presence: true
-	
+
 	before_create :are_remaining_tickets?
 	before_create :duo_is_not_you?
+	before_create :is_tournament_canceled?
 	# before_create :teams_already_built?
 
 	scope :paid, -> {where(status: ["Completed","Pending","Ringer"])}
@@ -37,7 +38,7 @@ class Ticket < ActiveRecord::Base
 
 	def teams_already_built?
 		if self.tournament.teams_approved && self.status != "Ringer"
-			self.errors.add(:too_late, ", sorry teams have already been built!") 
+			self.errors.add(:too_late, ", sorry teams have already been built!")
 			return false
 		end
 	end
@@ -49,36 +50,43 @@ class Ticket < ActiveRecord::Base
 	    	# elsif response.body == VERIFIED or INVALID
 	      ticket = Ticket.find(params[:invoice])
 	      ticket.update(
-	        notification_params: params, 
-	        status: status, 
-	        transaction_id: params[:txn_id], 
+	        notification_params: params,
+	        status: status,
+	        transaction_id: params[:txn_id],
 	        purchased_at: Time.now)
 	      self.paypal_verify(ticket)
 	      ticket.add_players_to_tournament
 	     elsif status == "Pending"
 	     	ticket = Ticket.find(params[:invoice])
 	      ticket.update(
-	        notification_params: params, 
-	        status: status, 
-	        transaction_id: params[:txn_id], 
+	        notification_params: params,
+	        status: status,
+	        transaction_id: params[:txn_id],
 	        purchased_at: Time.now)
 	      self.paypal_verify(ticket)
 	      ticket.add_players_to_tournament
 	    end
-	end	
+	end
 
 	def add_players_to_tournament
 		TournamentParticipation.add_summoners_to_tournament(self.id, self.tournament_id, self.summoner_id, self.duo_id)
 		Series.add_summoners_to_series(self.tournament, self.summoner_id, self.duo_id) if self.tournament.series
-	end	
+	end
 
 	private
+
+		def is_tournament_canceled?
+			if self.tournament.canceled?
+				self.errors.add(:too_late, ", sorry tournament has been canceled!")
+				return false
+			end
+		end
 
 		def self.paypal_verify(ticket)
 			raw_body = JSON.parse(ticket.notification_params.gsub('\\','').gsub('=>',':'))
 			uri = URI.parse('https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate')
 			request = Net::HTTP.post_form(uri, raw_body)
-		end	
+		end
 
 
 		def duo_is_not_you?
@@ -94,7 +102,7 @@ class Ticket < ActiveRecord::Base
 		    if duoName && duoName.length > 1
 		    	duo = Summoner.find_or_create(duoName, "duo name")
 	      		self.duo_id = duo.id unless duo.id.nil?
-		    end		
+		    end
 		end
 
 		def are_remaining_tickets?

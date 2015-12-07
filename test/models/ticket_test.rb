@@ -10,6 +10,10 @@ class TicketTest < ActiveSupport::TestCase
 			summoner_id: @summoner.id)
 	end
 
+	test "ticket should be valid" do
+		assert @ticket.valid?
+	end
+
 	test "ticket tournament_id should be present" do
 		@ticket.tournament_id = nil
 		assert_not @ticket.valid?
@@ -48,5 +52,10 @@ class TicketTest < ActiveSupport::TestCase
 	# end
 
 	test "summoner can only appear once on tournament[:id]/tickets" do
+	end
+
+	test "ticket cannot be saved for canceled tournament" do
+		@ticket.tournament.update(canceled: true)
+		assert_not @ticket.save
 	end
 end
