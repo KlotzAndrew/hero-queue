@@ -1,6 +1,6 @@
 class StaticPagesController < ApplicationController
   def home
-  	@tournament = Tournament.upcoming.first
+    @tournament = Tournament.upcoming.first || Tournament.last
   end
 
   def rules
